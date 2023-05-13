@@ -14,9 +14,7 @@ export default function RootLayout({
           <span>Omar Diab</span>
           <span>Yo</span>
         </header>
-        <main>
-          {children}
-        </main>
+        <main>{children}</main>
       </body>
     </html>
   );
