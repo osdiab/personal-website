@@ -1,3 +1,7 @@
+import { stackCss } from "./stack.css";
+import "./reset.css";
+import { siteHeaderCss } from "./layout.css";
+
 export default function RootLayout({
   children,
 }: {
@@ -5,7 +9,15 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <header className={siteHeaderCss}>
+          <span>Omar Diab</span>
+          <span>Yo</span>
+        </header>
+        <main>
+          {children}
+        </main>
+      </body>
     </html>
   );
 }
