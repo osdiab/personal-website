@@ -25,8 +25,10 @@ importers:
       '@vanilla-extract/sprinkles': ^1.6.0
       eslint-config-custom: workspace:*
       next: ^13.4.1
+      radash: ^10.8.1
       react: ^18.2.0
       react-dom: ^18.2.0
+      ts-essentials: ^9.3.2
       tsconfig: workspace:*
       typescript: ^5.0.4
       ui: workspace:*
@@ -35,6 +37,7 @@ importers:
       '@vanilla-extract/recipes': 0.4.0_sj7ql4kjoy7ivqenazaubmmhp4
       '@vanilla-extract/sprinkles': 1.6.0_sj7ql4kjoy7ivqenazaubmmhp4
       next: 13.4.1_3j7hb26pwgm6spbxoejtjx6xja
+      radash: 10.8.1
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
       ui: link:../../packages/ui
@@ -44,6 +47,7 @@ importers:
       '@types/react-dom': 18.2.3
       '@vanilla-extract/next-plugin': 2.1.2_uncxvrf6qaw2a5axp7kaa2vgra
       eslint-config-custom: link:../../packages/eslint-config-custom
+      ts-essentials: 9.3.2_typescript@5.0.4
       tsconfig: link:../../packages/tsconfig
       typescript: 5.0.4
 
@@ -3153,6 +3157,11 @@ packages:
     resolution: {integrity: sha512-NuaNSa6flKT5JaSYQzJok04JzTL1CA6aGhv5rfLW3PgqA+M2ChpZQnAC8h8i4ZFkBS8X5RqkDBHA7r4hej3K9A==}
     dev: false
 
+  /radash/10.8.1:
+    resolution: {integrity: sha512-NzYo3XgM9Tzjf5iFPIMG2l5+LSOCi2H7Axe3Ry/1PrhlvuqxUoiLsmcTBtw4CfKtzy5Fzo79STiEj9JZWMfDQg==}
+    engines: {node: '>=14.18.0'}
+    dev: false
+
   /randombytes/2.1.0:
     resolution: {integrity: sha512-vYl3iOX+4CKUWuxGi9Ukhie6fsqXqS9FE2Zaic4tNFD2N2QQaXOMFbuKK4QmDHC0JO6B1Zp41J0LpT0oR68amQ==}
     dependencies:
@@ -3570,6 +3579,14 @@ packages:
     dependencies:
       is-number: 7.0.0
     dev: false
+
+  /ts-essentials/9.3.2_typescript@5.0.4:
+    resolution: {integrity: sha512-JxKJzuWqH1MmH4ZFHtJzGEhkfN3QvVR3C3w+4BIoWeoY68UVVoA2Np/Bca9z0IPSErVCWhv439aT0We4Dks8kQ==}
+    peerDependencies:
+      typescript: '>=4.1.0'
+    dependencies:
+      typescript: 5.0.4
+    dev: true
 
   /tsconfig-paths/3.14.2:
     resolution: {integrity: sha512-o/9iXgCYc5L/JxCHPe3Hvh8Q/2xm5Z+p18PESBU6Ff33695QnCHBEjcytY2q19ua7Mbl/DavtBOLq+oG0RCL+g==}
