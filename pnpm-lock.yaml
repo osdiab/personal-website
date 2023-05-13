@@ -6,7 +6,7 @@ importers:
     specifiers:
       eslint: ^7.32.0
       eslint-config-custom: workspace:*
-      prettier: ^2.5.1
+      prettier: ^2.8.8
       turbo: ^1.9.3
     devDependencies:
       eslint: 7.32.0
