@@ -1,6 +1,6 @@
 import { recipe } from "@vanilla-extract/recipes";
 import { space, sprinkles } from "./sprinkles.css";
-import { mapKeys, mapValues } from "radash";
+import { mapValues } from "radash";
 
 export const stackCss = recipe({
   base: [sprinkles({ display: "flex", alignItems: "center" })],
