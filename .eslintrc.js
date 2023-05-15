@@ -2,7 +2,7 @@ const path = require("path");
 
 /* eslint-env node */
 module.exports = {
-  plugins: ["@typescript-eslint"],
+  plugins: ["@typescript-eslint", "unused-imports"],
   ignorePatterns: [".eslintrc.js", "next.config.js"],
   extends: [
     "plugin:@typescript-eslint/recommended",
@@ -14,6 +14,20 @@ module.exports = {
   parserOptions: {
     tsconfigRootDir: __dirname,
     project: ["./packages/*/tsconfig.json", "./apps/*/tsconfig.json"],
+  },
+  rules: {
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": "off",
+    "unused-imports/no-unused-imports": "error",
+    "unused-imports/no-unused-vars": [
+      "warn",
+      {
+        vars: "all",
+        varsIgnorePattern: "^_",
+        args: "after-used",
+        argsIgnorePattern: "^_",
+      },
+    ],
   },
   root: true,
   overrides: [
