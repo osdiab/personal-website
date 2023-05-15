@@ -5,8 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
+    "start": "next start"
   },
   "dependencies": {
     "@vanilla-extract/css": "^1.11.0",
@@ -23,7 +22,6 @@
     "@types/react": "^18.0.22",
     "@types/react-dom": "^18.0.7",
     "@vanilla-extract/next-plugin": "^2.1.2",
-    "eslint-config-custom": "workspace:*",
     "ts-essentials": "^9.3.2",
     "tsconfig": "workspace:*",
     "typescript": "^5.0.4"
