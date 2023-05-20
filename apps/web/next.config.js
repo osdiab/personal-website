@@ -13,6 +13,20 @@ const nextConfig = {
     appDir: true,
     typedRoutes: true,
   },
+  webpack(config) {
+    config.module.rules.push({
+      test: /\.svg$/i,
+      use: [
+        {
+          loader: "@svgr/webpack",
+          // `removeDimensions` also sets a `viewBox` which we want
+          options: { removeDimensions: true },
+        },
+      ],
+      resourceQuery: { not: /url/ }, // exclude if *.svg?url
+    });
+    return config;
+  },
 };
 
 module.exports = withVanillaExtract(nextConfig);
