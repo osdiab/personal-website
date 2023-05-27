@@ -1,7 +1,7 @@
 import { siteHeaderCss } from "./layout.css";
 import Logo from "@/app/logo.svg";
 
-import "./reset.css";
+import "../common/styles/reset.css";
 
 export default function RootLayout({
   children,
@@ -10,14 +10,6 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <head>
-        <link
-          rel="icon"
-          href="/icon?<generated>"
-          type="image/<generated>"
-          sizes="<generated>"
-        />
-      </head>
       <body>
         <header className={siteHeaderCss}>
           <Logo />
