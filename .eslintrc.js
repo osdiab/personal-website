@@ -30,11 +30,7 @@ module.exports = {
       parser: "@typescript-eslint/parser",
       parserOptions: {
         tsconfigRootDir: __dirname,
-        project: [
-          "./tsconfig.json",
-          "./packages/*/tsconfig.json",
-          "./apps/*/tsconfig.json",
-        ],
+        project: true,
       },
       rules: {
         "@typescript-eslint/no-unused-vars": "off",
