@@ -1,6 +1,6 @@
 import { recipe } from "@vanilla-extract/recipes";
-import { space, sprinkles } from "./sprinkles.css";
-import { mapValues } from "radash";
+import { alignItems, justifyContent, space, sprinkles } from "./sprinkles.css";
+import { mapValues, objectify } from "radash";
 
 export const stackCss = recipe({
   base: [sprinkles({ display: "flex", alignItems: "center" })],
@@ -10,5 +10,13 @@ export const stackCss = recipe({
       x: [sprinkles({ flexDirection: "row" })],
       y: [sprinkles({ flexDirection: "column" })],
     },
+    alignItems: mapValues(
+      objectify(alignItems, (v) => v),
+      (v) => [sprinkles({ alignItems: v })]
+    ),
+    justifyContent: mapValues(
+      objectify(justifyContent, (v) => v),
+      (v) => [sprinkles({ justifyContent: v })]
+    ),
   },
 });
