@@ -11,11 +11,11 @@ import Logo from "@/app/logo.svg";
 import clsx from "clsx";
 import { useEffect, useRef, useState } from "react";
 
-export function RootHeader() {
+export function RootHeader({ className }: { className?: string }) {
   const [isScrolled, setIsScrolled] = useState(false);
 
-  const ref = useRef<HTMLSpanElement | null>(null);
-  useEffect(() => {
+  const dummyRef = useRef<HTMLSpanElement | null>(null);
+  useEffect(function setScrollStateByDummyVisibility() {
     const observer = new IntersectionObserver(
       ([entry]) => {
         setIsScrolled(entry ? !entry.isIntersecting : false);
@@ -23,21 +23,28 @@ export function RootHeader() {
       { threshold: [1] }
     );
 
-    if (ref.current) {
-      observer.observe(ref.current);
+    if (dummyRef.current) {
+      observer.observe(dummyRef.current);
     }
 
     return () => {
-      if (ref.current) {
-        observer.unobserve(ref.current);
+      if (dummyRef.current) {
+        observer.unobserve(dummyRef.current);
       }
     };
   }, []);
+
   return (
     <>
-      <span ref={ref} />
+      {/* dummy element to watch if still on screen to determine if we've
+      scrolled down */}
+      <span ref={dummyRef} />
       <header
-        className={clsx(siteHeaderCss, isScrolled && siteHeaderScrolledCss)}
+        className={clsx(
+          siteHeaderCss,
+          isScrolled && siteHeaderScrolledCss,
+          className
+        )}
       >
         <Logo className={logoCss} />
         <span className={siteTitleCss}>Omar Diab</span>

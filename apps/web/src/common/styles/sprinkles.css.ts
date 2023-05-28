@@ -3,9 +3,9 @@ import { defineProperties, createSprinkles } from "@vanilla-extract/sprinkles";
 export const space = {
   none: "0px",
   xs: "2px",
-  s: "4px",
-  m: "8px",
-  l: "12px",
+  sm: "4px",
+  md: "8px",
+  lg: "12px",
   xl: "16px",
 };
 

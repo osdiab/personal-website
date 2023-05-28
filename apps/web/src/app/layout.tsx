@@ -1,4 +1,5 @@
 import { RootHeader } from "@/app/header";
+import { contentCss } from "@/app/layout.css";
 import "@/common/styles/reset.css";
 
 export default function RootLayout({
@@ -8,7 +9,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>
+      <body className={contentCss}>
         <RootHeader />
         <main>{children}</main>
       </body>

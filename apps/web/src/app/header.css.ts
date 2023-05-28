@@ -2,9 +2,10 @@ import { fontSize, grayColors, sprinkles } from "@/common/styles/sprinkles.css";
 import { stackCss } from "@/common/styles/stack.css";
 import { style } from "@vanilla-extract/css";
 
+export const headerPaddingX = "lg";
 export const siteHeaderCss = style([
-  stackCss({ direction: "x", gap: "l" }),
-  sprinkles({ fontSize: "lg", padding: "m" }),
+  stackCss({ direction: "x", gap: "lg" }),
+  sprinkles({ fontSize: "lg", paddingX: headerPaddingX, paddingY: "md" }),
   {
     position: "sticky",
     top: 0,

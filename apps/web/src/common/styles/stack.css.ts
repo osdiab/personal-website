@@ -3,7 +3,7 @@ import { alignItems, justifyContent, space, sprinkles } from "./sprinkles.css";
 import { mapValues, objectify } from "radash";
 
 export const stackCss = recipe({
-  base: [sprinkles({ display: "flex", alignItems: "center" })],
+  base: [sprinkles({ display: "flex" })],
   variants: {
     gap: mapValues(space, (_value, key) => sprinkles({ gap: key })),
     direction: {
