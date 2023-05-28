@@ -20,7 +20,11 @@ const nextConfig = {
         {
           loader: "@svgr/webpack",
           // `removeDimensions` also sets a `viewBox` which we want
-          options: { removeDimensions: true },
+          options: {
+            svgoConfig: {
+              plugins: [{ name: "removeDimensions", active: true }],
+            },
+          },
         },
       ],
       resourceQuery: { not: /url/ }, // exclude if *.svg?url
