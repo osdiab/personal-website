@@ -3,6 +3,7 @@ services:
     name: web
     plan: starter
     runtime: node
+    region: frankfurt
     repo: https://github.com/osdiab/personal-website.git
     scaling:
       minInstances: 1
@@ -15,3 +16,21 @@ services:
     domains:
       - next.omardiab.com
       - next2.omardiab.com
+  - type: web
+    name: hasura
+    region: frankfurt
+    plan: starter
+    runtime: image
+    image:
+      url: docker.io/hasura/graphql-engine:v2.27.0
+    envVars:
+      - key: HASURA_GRAPHQL_DATABASE_URL
+        fromDatabase:
+          name: web-app
+          property: connectionString
+
+databases:
+  - name: main
+    region: frankfurt
+    databaseName: web-app
+    user: web-app
