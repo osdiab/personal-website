@@ -1,6 +1,6 @@
 import { headerPaddingX } from "@/app/header.css";
-import { sprinkles } from "@/common/styles/sprinkles.css";
-import { stackCss } from "@/common/styles/stack.css";
+import { sprinkles } from "ui/sprinkles.css";
+import { stackCss } from "ui/stack.css";
 import { style } from "@vanilla-extract/css";
 
 export const pageContentCss = style([stackCss({ direction: "y", gap: "xl" })]);

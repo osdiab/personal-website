@@ -1,4 +1,4 @@
-import { stackCss } from "@/common/styles/stack.css";
+import { stackCss } from "ui/stack.css";
 import { style } from "@vanilla-extract/css";
 
 export const contentCss = style([

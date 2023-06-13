@@ -1,5 +1,5 @@
-import { fontSize, grayColors, sprinkles } from "@/common/styles/sprinkles.css";
-import { stackCss } from "@/common/styles/stack.css";
+import { fontSize, grayColors, sprinkles } from "ui/sprinkles.css";
+import { stackCss } from "ui/stack.css";
 import { style } from "@vanilla-extract/css";
 
 export const headerPaddingX = "lg";
