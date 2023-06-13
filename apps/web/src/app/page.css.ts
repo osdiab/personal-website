@@ -2,6 +2,7 @@ import { headerPaddingX } from "@/app/header.css";
 import { sprinkles } from "ui/sprinkles.css";
 import { stackCss } from "ui/stack.css";
 import { style } from "@vanilla-extract/css";
+import { fontSize } from "ui/sprinkles.css";
 
 export const pageContentCss = style([stackCss({ direction: "y", gap: "xl" })]);
 export const sectionCss = style([
@@ -20,3 +21,4 @@ export const jobEntryCss = style([
   stackCss({ direction: "y", gap: "md" }),
   { maxWidth: "60ch" },
 ]);
+export const companyLogoSvgCss = style({ height: fontSize.xl4 });

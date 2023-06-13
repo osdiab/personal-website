@@ -1,4 +1,5 @@
 import {
+  companyLogoSvgCss,
   heroTitleCss,
   jobEntryCss,
   jobEntrySectionCss,
@@ -7,8 +8,13 @@ import {
   sectionHeadingCss,
 } from "@/app/page.css";
 import { proseCss } from "ui/prose.css";
-import { ReactNode } from "react";
+import { ComponentProps, ReactNode } from "react";
 import { hyperlinkCss } from "ui/hyperlink.css";
+import CleverLogo from "@/assets/logos/clever.svg";
+import SpinachLogo from "@/assets/logos/spinach.svg";
+import EveryOrgLogo from "@/assets/logos/every-org.svg";
+
+type SvgComponent = (props: ComponentProps<"svg">) => JSX.Element;
 
 export default function Page() {
   return (
@@ -23,14 +29,16 @@ export default function Page() {
         <h2 className={sectionHeadingCss}>Work History</h2>
         <div className={jobEntrySectionCss}>
           <Entry
+            CompanyLogoType={SpinachLogo as SvgComponent}
             companyName="Spinach HR"
             companyUrl="https://www.gotofu.com"
             jobTitle="Co-Founder"
             periodStart="2021"
             periodEnd="2023"
-            description="Powers the operations of a major Employer of Record global payroll company, from their sales pipeline to payroll to invoicing. I designed the initial product concept, and built a team that implemented and successfully deployed it at scale at multiple companies. Acquired 2023."
+            description="A whitelabel platform that powers the operations of major Employer of Record global payroll companies, from sales pipeline to payroll to invoicing. I designed the initial product concept, and built a team that implemented and successfully deployed it at scale at multiple companies. Acquired 2023."
           />
           <Entry
+            CompanyLogoType={EveryOrgLogo as SvgComponent}
             companyName="Every.org"
             companyUrl="https://www.every.org"
             jobTitle="Co-Founder, Head of Engineering"
@@ -39,6 +47,7 @@ export default function Page() {
             description="The easiest and most efficient way to donate to any U.S. nonprofit. I helped research issues in philanthropy, and built the core of the app. By the time I departed, it was facilitating tens of millions of dollars in donations yearly. Still running!"
           />
           <Entry
+            CompanyLogoType={CleverLogo as SvgComponent}
             companyName="Clever"
             companyUrl="https://www.clever.com"
             jobTitle="Full-Stack Engineer"
@@ -62,7 +71,9 @@ export default function Page() {
     </div>
   );
 }
+
 interface EntryProps {
+  CompanyLogoType: SvgComponent;
   companyName: string;
   companyUrl?: string;
   jobTitle: string;
@@ -72,6 +83,7 @@ interface EntryProps {
 }
 
 function Entry({
+  CompanyLogoType: CompanyLogoType,
   companyName,
   companyUrl,
   jobTitle,
@@ -79,15 +91,22 @@ function Entry({
   periodEnd,
   description,
 }: EntryProps) {
+  const companyLogo = (
+    <CompanyLogoType
+      className={companyLogoSvgCss}
+      role="img"
+      aria-label={companyName}
+    />
+  );
   return (
     <article className={jobEntryCss}>
       <h3>
         {companyUrl ? (
           <a className={hyperlinkCss} href={companyUrl} target="_blank">
-            {companyName}
+            {companyLogo}
           </a>
         ) : (
-          companyName
+          companyLogo
         )}
       </h3>
       <span>{jobTitle}</span>
