@@ -1,8 +1,8 @@
 import { headerPaddingX } from "@/app/header.css";
-import { sprinkles } from "ui/sprinkles.css";
-import { stackCss } from "ui/stack.css";
+import { sprinkles } from "@osdiab-website/ui/sprinkles.css";
+import { stackCss } from "@osdiab-website/ui/stack.css";
 import { style } from "@vanilla-extract/css";
-import { fontSize } from "ui/sprinkles.css";
+import { fontSize } from "@osdiab-website/ui/sprinkles.css";
 
 export const pageContentCss = style([stackCss({ direction: "y", gap: "xl" })]);
 export const sectionCss = style([

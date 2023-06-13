@@ -1,5 +1,5 @@
 {
-  "name": "web",
+  "name": "@osdiab-website/web",
   "version": "1.0.0",
   "private": true,
   "scripts": {
@@ -16,7 +16,7 @@
     "radash": "^10.8.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "ui": "workspace:*"
+    "@osdiab-website/ui": "workspace:*"
   },
   "devDependencies": {
     "@svgr/webpack": "^8.0.1",
@@ -25,7 +25,7 @@
     "@types/react-dom": "^18.0.7",
     "@vanilla-extract/next-plugin": "^2.1.2",
     "ts-essentials": "^9.3.2",
-    "tsconfig": "workspace:*",
+    "@osdiab-website/tsconfig": "workspace:*",
     "typescript": "^5.0.4",
     "webpack-merge": "^5.8.0"
   }

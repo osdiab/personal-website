@@ -1,5 +1,9 @@
-import { fontSize, grayColors, sprinkles } from "ui/sprinkles.css";
-import { stackCss } from "ui/stack.css";
+import {
+  fontSize,
+  grayColors,
+  sprinkles,
+} from "@osdiab-website/ui/sprinkles.css";
+import { stackCss } from "@osdiab-website/ui/stack.css";
 import { style } from "@vanilla-extract/css";
 
 export const headerPaddingX = "lg";

@@ -4,7 +4,7 @@ const withVanillaExtract = createVanillaExtractPlugin();
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  transpilePackages: ["ui"],
+  transpilePackages: ["@osdiab-website/ui"],
   experimental: {
     // The App Router is stable, but the Vanilla Extract Next Plugin
     // currently requires that `experimental.appDir` is `true`.

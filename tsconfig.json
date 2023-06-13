@@ -1,5 +1,5 @@
 {
-  "extends": "tsconfig/base.json",
+  "extends": "@osdiab-website/tsconfig/base.json",
   "compilerOptions": {},
   "include": ["**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules"]

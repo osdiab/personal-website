@@ -1,7 +1,7 @@
 // converted the Tailwind Preflight to vanilla extract with ChatGPT
 // https://tailwindcss.com/docs/preflight
 import { globalStyle } from "@vanilla-extract/css";
-import { grayColors } from "ui/sprinkles.css";
+import { grayColors } from "@osdiab-website/ui/sprinkles.css";
 
 // Prevent padding and border from affecting element width. (https://github.com/mozdevs/cssremedy/issues/4)
 // Allow adding a border to an element by just adding a border-width. (https://github.com/tailwindcss/tailwindcss/pull/116)

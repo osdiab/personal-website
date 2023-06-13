@@ -5,6 +5,7 @@ importers:
   .:
     specifiers:
       '@next/eslint-plugin-next': ^13.4.2
+      '@osdiab-website/tsconfig': workspace:*
       '@typescript-eslint/eslint-plugin': ^5.59.5
       '@typescript-eslint/parser': ^5.59.5
       eslint: ^8.40.0
@@ -16,11 +17,11 @@ importers:
       jest: ^29.5.0
       jest-runner-eslint: ^2.0.0
       prettier: ^2.8.8
-      tsconfig: workspace:*
       turbo: ^1.9.8
       typescript: ^5.0.4
     devDependencies:
       '@next/eslint-plugin-next': 13.4.2
+      '@osdiab-website/tsconfig': link:packages/tsconfig
       '@typescript-eslint/eslint-plugin': 5.59.5_zaj6dsh3leplki3sfxgbx2w2za
       '@typescript-eslint/parser': 5.59.5_3qfatcekpgbllh6uk5ivyhkbxq
       eslint: 8.40.0
@@ -32,12 +33,13 @@ importers:
       jest: 29.5.0
       jest-runner-eslint: 2.0.0_eslint@8.40.0+jest@29.5.0
       prettier: 2.8.8
-      tsconfig: link:packages/tsconfig
       turbo: 1.9.8
       typescript: 5.0.4
 
   apps/web:
     specifiers:
+      '@osdiab-website/tsconfig': workspace:*
+      '@osdiab-website/ui': workspace:*
       '@svgr/webpack': ^8.0.1
       '@types/node': ^17.0.12
       '@types/react': ^18.0.22
@@ -52,11 +54,10 @@ importers:
       react: ^18.2.0
       react-dom: ^18.2.0
       ts-essentials: ^9.3.2
-      tsconfig: workspace:*
       typescript: ^5.0.4
-      ui: workspace:*
       webpack-merge: ^5.8.0
     dependencies:
+      '@osdiab-website/ui': link:../../packages/ui
       '@vanilla-extract/css': 1.11.0
       '@vanilla-extract/recipes': 0.4.0_sj7ql4kjoy7ivqenazaubmmhp4
       '@vanilla-extract/sprinkles': 1.6.0_sj7ql4kjoy7ivqenazaubmmhp4
@@ -65,15 +66,14 @@ importers:
       radash: 10.8.1
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
-      ui: link:../../packages/ui
     devDependencies:
+      '@osdiab-website/tsconfig': link:../../packages/tsconfig
       '@svgr/webpack': 8.0.1
       '@types/node': 17.0.45
       '@types/react': 18.2.5
       '@types/react-dom': 18.2.3
       '@vanilla-extract/next-plugin': 2.1.2_uncxvrf6qaw2a5axp7kaa2vgra
       ts-essentials: 9.3.2_typescript@5.0.4
-      tsconfig: link:../../packages/tsconfig
       typescript: 5.0.4
       webpack-merge: 5.8.0
 
@@ -85,6 +85,7 @@ importers:
 
   packages/ui:
     specifiers:
+      '@osdiab-website/tsconfig': workspace:*
       '@types/react': ^18.2.0
       '@types/react-dom': ^18.2.0
       '@vanilla-extract/css': ^1
@@ -92,7 +93,6 @@ importers:
       '@vanilla-extract/sprinkles': ^1
       radash: ^10.8.1
       react: ^17.0.2
-      tsconfig: workspace:*
       typescript: ^4.5.2
     dependencies:
       '@vanilla-extract/css': 1.11.0
@@ -100,10 +100,10 @@ importers:
       '@vanilla-extract/sprinkles': 1.6.0_sj7ql4kjoy7ivqenazaubmmhp4
       radash: 10.8.1
     devDependencies:
+      '@osdiab-website/tsconfig': link:../tsconfig
       '@types/react': 18.2.5
       '@types/react-dom': 18.2.3
       react: 17.0.2
-      tsconfig: link:../tsconfig
       typescript: 4.9.5
 
 packages:
