@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: web
+    name: personal-website
     plan: free
     runtime: node
     region: frankfurt
@@ -16,21 +16,21 @@ services:
     domains:
       - next.omardiab.com
       - next2.omardiab.com
-  - type: web
-    name: hasura
-    region: frankfurt
-    plan: free
-    runtime: image
-    image:
-      url: docker.io/hasura/graphql-engine:v2.27.0
-    envVars:
-      - key: HASURA_GRAPHQL_DATABASE_URL
-        fromDatabase:
-          name: main
-          property: connectionString
+  # - type: web
+  #   name: personal-website-hasura
+  #   region: frankfurt
+  #   plan: free
+  #   runtime: image
+  #   image:
+  #     url: docker.io/hasura/graphql-engine:v2.27.0
+  #   envVars:
+  #     - key: HASURA_GRAPHQL_DATABASE_URL
+  #       fromDatabase:
+  #         name: personal-website-main
+  #         property: connectionString
 
 databases:
-  - name: main
+  - name: personal-website-main
     region: frankfurt
     databaseName: omardiab
     plan: free
