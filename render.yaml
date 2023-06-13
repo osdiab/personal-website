@@ -18,6 +18,7 @@ services:
     runtime: image
     image:
       url: docker.io/hasura/graphql-engine:v2.27.0
+    healthCheckPath: /healthz
     envVars:
       - key: HASURA_GRAPHQL_DATABASE_URL
         fromDatabase:
