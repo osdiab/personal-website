@@ -31,6 +31,8 @@ const nextConfig = {
     });
     return config;
   },
+  // we handle ESLint outside of NextJS
+  eslint: { ignoreDuringBuilds: true },
 };
 
 module.exports = withVanillaExtract(nextConfig);
