@@ -12,7 +12,7 @@
     "@vanilla-extract/recipes": "^0.4.0",
     "@vanilla-extract/sprinkles": "^1.6.0",
     "clsx": "^1.2.1",
-    "next": "^13.4.1",
+    "next": "^13.4.5",
     "radash": "^10.8.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
