@@ -1,5 +1,6 @@
-import { NextRequest, NextResponse } from "next/server";
+import { ApiRoute } from "@/app/api/api-route";
+import { NextResponse } from "next/server";
 
-export function GET(_req: NextRequest) {
+export const GET: ApiRoute = (_req) => {
   return NextResponse.json({ success: true }, { status: 200 });
-}
+};
