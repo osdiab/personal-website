@@ -1,10 +1,16 @@
 const { createVanillaExtractPlugin } = require("@vanilla-extract/next-plugin");
+const packageJson = require("./package.json");
 const withVanillaExtract = createVanillaExtractPlugin();
+
+const referencedPackageNames = Object.keys(packageJson.dependencies).filter(
+  (v) => v.startsWith("@osdiab-website/")
+);
+console.log("Transpiling", { referencedPackageNames });
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  transpilePackages: ["@osdiab-website/ui"],
+  transpilePackages: referencedPackageNames,
   experimental: {
     // The App Router is stable, but the Vanilla Extract Next Plugin
     // currently requires that `experimental.appDir` is `true`.
