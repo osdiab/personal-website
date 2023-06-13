@@ -6,6 +6,9 @@ import {
   sectionCss,
   sectionHeadingCss,
 } from "@/app/page.css";
+import { proseCss } from "ui/prose.css";
+import { ReactNode } from "react";
+import { hyperlinkCss } from "ui/hyperlink.css";
 
 export default function Page() {
   return (
@@ -21,13 +24,15 @@ export default function Page() {
         <div className={jobEntrySectionCss}>
           <Entry
             companyName="Spinach HR"
-            jobTitle="Co-Founder, Head of Engineering"
+            companyUrl="https://www.gotofu.com"
+            jobTitle="Co-Founder"
             periodStart="2021"
             periodEnd="2023"
             description="Powers the operations of a major Employer of Record global payroll company, from their sales pipeline to payroll to invoicing. I designed the initial product concept, and built a team that implemented and successfully deployed it at scale at multiple companies. Acquired 2023."
           />
           <Entry
             companyName="Every.org"
+            companyUrl="https://www.every.org"
             jobTitle="Co-Founder, Head of Engineering"
             periodStart="2018"
             periodEnd="2021"
@@ -35,10 +40,22 @@ export default function Page() {
           />
           <Entry
             companyName="Clever"
+            companyUrl="https://www.clever.com"
             jobTitle="Full-Stack Engineer"
             periodStart="2014"
             periodEnd="2017"
-            description="Single sign-on and simple APIs to query fragmented student databases. I implemented Clever Badges, allowing young children to access education tech at school. Majority U.S. public school market share and powers millions of student logins daily. Acquired 2021."
+            description={
+              <>
+                Single sign-on and simple APIs to query fragmented student
+                databases. I{" "}
+                <a href="https://clever.com/products/badges">
+                  implemented Clever Badges
+                </a>
+                , allowing young children to access education tech at school.
+                Majority U.S. public school market share and powers millions of
+                student logins daily. Acquired 2021.
+              </>
+            }
           />
         </div>
       </section>
@@ -47,14 +64,16 @@ export default function Page() {
 }
 interface EntryProps {
   companyName: string;
+  companyUrl?: string;
   jobTitle: string;
   periodStart: string;
   periodEnd: string;
-  description: string;
+  description: ReactNode;
 }
 
 function Entry({
   companyName,
+  companyUrl,
   jobTitle,
   periodStart,
   periodEnd,
@@ -62,12 +81,22 @@ function Entry({
 }: EntryProps) {
   return (
     <article className={jobEntryCss}>
-      <h3>{companyName}</h3>
+      <h3>
+        {companyUrl ? (
+          <a className={hyperlinkCss} href={companyUrl} target="_blank">
+            {companyName}
+          </a>
+        ) : (
+          companyName
+        )}
+      </h3>
       <span>{jobTitle}</span>
       <span>
         {periodStart}–{periodEnd}
       </span>
-      <p>{description}</p>
+      <div className={proseCss}>
+        <p>{description}</p>
+      </div>
     </article>
   );
 }

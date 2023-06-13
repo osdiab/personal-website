@@ -2,7 +2,6 @@ import { headerPaddingX } from "@/app/header.css";
 import { sprinkles } from "@/common/styles/sprinkles.css";
 import { stackCss } from "@/common/styles/stack.css";
 import { style } from "@vanilla-extract/css";
-import { cardCss } from "ui/card.css";
 
 export const pageContentCss = style([stackCss({ direction: "y", gap: "xl" })]);
 export const sectionCss = style([
@@ -19,5 +18,5 @@ export const jobEntrySectionCss = style([
 ]);
 export const jobEntryCss = style([
   stackCss({ direction: "y", gap: "md" }),
-  cardCss,
+  { maxWidth: "60ch" },
 ]);
