@@ -5,29 +5,29 @@ services:
     runtime: node
     region: frankfurt
     repo: https://github.com/osdiab/personal-website.git
-    scaling:
-      minInstances: 1
-      maxInstances: 3
-      targetMemoryPercent: 60
-      targetCPUPercent: 60
+    # scaling:
+    #   minInstances: 1
+    #   maxInstances: 3
+    #   targetMemoryPercent: 60
+    #   targetCPUPercent: 60
     buildCommand: pnpm install --filter "@osdiab-website/web..."; pnpm run --filter "@osdiab-website/web" build
     startCommand: pnpm run --filter "@osdiab-website/web" start
     healthCheckPath: /api/health
     domains:
       - next.omardiab.com
       - next2.omardiab.com
-  - type: web
-    name: personal-website-hasura
-    region: frankfurt
-    plan: free
-    runtime: image
-    image:
-      url: docker.io/hasura/graphql-engine:v2.27.0
-    envVars:
-      - key: HASURA_GRAPHQL_DATABASE_URL
-        fromDatabase:
-          name: personal-website-main
-          property: connectionString
+  # - type: web
+  #   name: personal-website-hasura
+  #   region: frankfurt
+  #   plan: free
+  #   runtime: image
+  #   image:
+  #     url: docker.io/hasura/graphql-engine:v2.27.0
+  #   envVars:
+  #     - key: HASURA_GRAPHQL_DATABASE_URL
+  #       fromDatabase:
+  #         name: personal-website-main
+  #         property: connectionString
 
 databases:
   - name: personal-website-main
