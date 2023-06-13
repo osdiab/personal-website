@@ -5,7 +5,6 @@ const withVanillaExtract = createVanillaExtractPlugin();
 const referencedPackageNames = Object.keys(packageJson.dependencies).filter(
   (v) => v.startsWith("@osdiab-website/")
 );
-console.log("Transpiling", { referencedPackageNames });
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
