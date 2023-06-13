@@ -9,7 +9,7 @@ services:
       maxInstances: 3
       targetMemoryPercent: 60
       targetCPUPercent: 60
-    buildCommand: pnpm install --filter "@osdiab-website/web"; pnpm run --filter "@osdiab-website/web" build
+    buildCommand: pnpm install --filter "@osdiab-website/web..."; pnpm run --filter "@osdiab-website/web" build
     startCommand: pnpm run --filter "@osdiab-website/web" start
     healthCheckPath: /api/health
     domains:
