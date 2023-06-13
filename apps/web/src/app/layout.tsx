@@ -1,6 +1,7 @@
 import { RootHeader } from "@/app/header";
 import { contentCss } from "@/app/layout.css";
-import "@/common/styles/reset.css";
+
+import "@/app/reset.css";
 
 export default function RootLayout({
   children,
