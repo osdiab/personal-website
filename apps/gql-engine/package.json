@@ -1,0 +1,11 @@
+{
+  "name": "@osdiab-website/gql-engine",
+  "version": "1.0.0",
+  "description": "Hasura GraphQL Engine instance",
+  "scripts": {
+    "dev": "docker compose up"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
