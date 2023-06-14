@@ -8,7 +8,8 @@
     "dev": "turbo run dev",
     "lint": "jest",
     "lint:fix": "eslint . --fix",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "setup:doppler": "turbo run setup:doppler --concurrency=1"
   },
   "devDependencies": {
     "@next/eslint-plugin-next": "^13.4.2",

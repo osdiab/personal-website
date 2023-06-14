@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "setup:doppler": "doppler setup --no-interactive"
   },
   "dependencies": {
     "@vanilla-extract/css": "^1.11.0",

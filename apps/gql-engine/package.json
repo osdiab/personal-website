@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "Hasura GraphQL Engine instance",
   "scripts": {
-    "dev": "docker compose up"
+    "dev": "docker compose up",
+    "setup:doppler": "doppler setup --no-interactive"
   },
   "keywords": [],
   "author": "",
