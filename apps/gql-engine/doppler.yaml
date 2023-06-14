@@ -1,0 +1,3 @@
+setup:
+  project: gql-engine
+  config: dev
