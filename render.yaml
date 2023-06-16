@@ -9,7 +9,7 @@ services:
     startCommand: pnpm run --filter "@osdiab-website/web" start
     healthCheckPath: /api/health
     envVars:
-      - key: HASURA_GRAPHQL_ENDPOINT
+      - key: HASURA_GRAPHQL_HOST_PORT
         fromService:
           type: web
           name: personal-website-hasura
