@@ -43,18 +43,25 @@ services:
   ## staging versions of these
   - <<: *web-service
     name: personal-website--stg
+    plan: free
     branch: main
     envVars:
-      - key: HASURA_GRAPHQL_HOST_PORT
+      - key: HASURA_GRAPHQL_HOST
         fromService:
           type: web
           name: personal-website-gql-engine--stg
-          property: hostport
+          property: host
+      - key: HASURA_GRAPHQL_PORT
+        fromService:
+          type: web
+          name: personal-website-gql-engine--stg
+          property: port
     domains:
       - staging.next.omardiab.com
       - staging.next2.omardiab.com
   - <<: *gql-engine-service
     name: personal-website-gql-engine--stg
+    plan: free
     branch: main
     envVars:
       - key: HASURA_GRAPHQL_DATABASE_URL
