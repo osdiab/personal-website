@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
+    "start:noDoppler": "next start",
+    "start": "doppler run -- pnpm start:noDoppler",
     "setup:doppler": "doppler setup --no-interactive"
   },
   "dependencies": {
