@@ -25,7 +25,6 @@ jobs:
         run: pnpm install --filter "@osdiab-website/web..." --filter "@osdiab-website/monorepo"
       - name: Pull Vercel config
         run: pnpm vercel pull --yes --token=${VERCEL_TOKEN}
-        working-directory: example/nextjs
         env:
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_WEB_APP }}
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
