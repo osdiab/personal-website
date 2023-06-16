@@ -17,13 +17,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - name: Read .tool-versions
+        uses: marocchino/tool-versions-action@v1
+        id: versions
       - uses: pnpm/action-setup@v2
         with:
-          version: 8
+          version: ${{ steps.versions.outputs.pnpm }}
       - name: Use Node.js 18
         uses: actions/setup-node@v3
         with:
-          node-version: 18
+          node-version: ${{ steps.versions.outputs.nodejs }}
           cache: "pnpm"
       - name: Install Doppler CLI
         uses: dopplerhq/cli-action@v2
