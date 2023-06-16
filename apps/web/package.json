@@ -3,8 +3,10 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
+    "dev:noDoppler": "next dev",
+    "dev": "doppler run -- pnpm dev:noDoppler",
+    "build:noDoppler": "next build",
+    "build": "doppler run -- pnpm build:noDoppler",
     "start:noDoppler": "next start",
     "start": "doppler run -- pnpm start:noDoppler",
     "setup:doppler": "doppler setup --no-interactive"
