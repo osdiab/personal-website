@@ -13,12 +13,12 @@ services:
       - key: HASURA_GRAPHQL_HOST_PORT
         fromService:
           type: web
-          name: personal-website-hasura
+          name: personal-website-gql-engine
           property: hostport
     domains:
       - next.omardiab.com
       - next2.omardiab.com
-  - &hasura-service
+  - &gql-engine-service
     type: web
     name: personal-website-gql-engine--prd
     region: frankfurt
@@ -43,13 +43,13 @@ services:
       - key: HASURA_GRAPHQL_HOST_PORT
         fromService:
           type: web
-          name: personal-website-hasura--stg
+          name: personal-website-gql-engine--stg
           property: hostport
     domains:
       - staging.next.omardiab.com
       - staging.next2.omardiab.com
-  - <<: *hasura-service
-    name: personal-website-hasura--stg
+  - <<: *gql-engine-service
+    name: personal-website-gql-engine--stg
     branch: main
     envVars:
       - key: HASURA_GRAPHQL_DATABASE_URL
