@@ -22,15 +22,15 @@ jobs:
       - name: Read .tool-versions
         uses: marocchino/tool-versions-action@v1
         id: versions
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: ${{ steps.versions.outputs.pnpm }}
       - name: Install Node.js
         uses: actions/setup-node@v3
         with:
           node-version: ${{ steps.versions.outputs.nodejs }}
           cache: "pnpm"
-      - name: Install pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: ${{ steps.versions.outputs.pnpm }}
       - name: Install Doppler CLI
         uses: dopplerhq/cli-action@v2
       - name: Install dependencies
