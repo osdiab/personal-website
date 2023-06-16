@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "Hasura GraphQL Engine instance",
   "scripts": {
-    "dev": "doppler run -- exits \"docker compose down && docker compose up\" \"echo 'docker compose down\"",
+    "dev:noDoppler": "exits \"docker compose down && docker compose up\" \"docker compose down\"",
+    "dev": "doppler run -- pnpm dev:noDoppler",
     "setup:doppler": "doppler setup --no-interactive"
   },
   "keywords": [],
