@@ -36,9 +36,9 @@ const nextConfig = {
     });
     return config;
   },
-  // we handle ESLint outside of NextJS
+  // we handle ESLint and type checking outside of NextJS
   eslint: { ignoreDuringBuilds: true },
-  typescript: { ignoreDuringBuilds: true },
+  typescript: { ignoreBuildErrors: true },
 };
 
 module.exports = withVanillaExtract(nextConfig);
