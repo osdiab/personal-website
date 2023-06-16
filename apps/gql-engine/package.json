@@ -3,10 +3,13 @@
   "version": "1.0.0",
   "description": "Hasura GraphQL Engine instance",
   "scripts": {
-    "dev": "docker compose down && docker compose up",
+    "dev": "doppler run -- exits \"docker compose down && docker compose up\" \"echo 'docker compose down\"",
     "setup:doppler": "doppler setup --no-interactive"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "exits": "^2.0.1"
+  }
 }
