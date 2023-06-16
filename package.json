@@ -1,4 +1,5 @@
 {
+  "name": "@osdiab-website/monorepo",
   "private": true,
   "engines": {
     "node": "18.16.0"
@@ -26,8 +27,8 @@
     "jest-runner-eslint": "^2.0.0",
     "prettier": "^2.8.8",
     "turbo": "^1.10.3",
-    "typescript": "^5.0.4"
+    "typescript": "^5.0.4",
+    "vercel": "^30.2.2"
   },
-  "packageManager": "pnpm@7.15.0",
-  "name": "personal-website"
+  "packageManager": "pnpm@7.15.0"
 }
