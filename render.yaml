@@ -61,7 +61,7 @@ databases:
   - name: personal-website-main--prd
     region: frankfurt
     databaseName: omardiab
-    plan: free
+    plan: starter
     user: web
   - name: personal-website-main--stg
     region: frankfurt
