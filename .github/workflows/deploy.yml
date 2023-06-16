@@ -22,7 +22,7 @@ jobs:
           node-version: 18
           cache: "pnpm"
       - name: Install dependencies
-        run: pnpm install --filter "@osdiab-website/app..." --filter "@osdiab-website/monorepo"
+        run: pnpm install --filter "@osdiab-website/web..." --filter "@osdiab-website/monorepo"
       - name: Pull Vercel config
         run: pnpm vercel pull --yes --token=${VERCEL_TOKEN}
         working-directory: example/nextjs
