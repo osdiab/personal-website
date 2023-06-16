@@ -42,7 +42,7 @@ jobs:
         env:
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_WEB_APP }}
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-      - name: Deploy Vercel
+      - name: Deploy Vercel Preview
         uses: amondnet/vercel-action@v20
         if: github.event_name == 'pull_request_target'
         with:
@@ -51,6 +51,14 @@ jobs:
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID_WEB_APP }}
           vercel-args: --prebuilt
-          working-directory: example/nextjs
           alias-domains: |
             pr-{{PR_NUMBER}}.next-vercel.omardiab.com
+      - name: Deploy Vercel Production
+        uses: amondnet/vercel-action@v20
+        if: github.ref == 'refs/head/main'
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID_WEB_APP }}
+          vercel-args: --prebuilt --prod
