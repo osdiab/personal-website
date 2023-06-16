@@ -1,0 +1,3 @@
+setup:
+  project: gql-web-codegen
+  config: dev

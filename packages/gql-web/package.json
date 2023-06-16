@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "codegen": "graphql-codegen --config codegen.ts",
+    "codegen:noDoppler": "graphql-codegen --config codegen.ts",
+    "codegen": "doppler run -- pnpm codegen:noDoppler",
+    "setup:doppler": "doppler setup --no-interactive",
     "dev": "wait-on http-get://localhost:8002/healthz && pnpm codegen --watch"
   },
   "keywords": [],
