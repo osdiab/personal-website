@@ -36,6 +36,9 @@ importers:
       turbo: 1.9.8
       typescript: 5.0.4
 
+  apps/gql-engine:
+    specifiers: {}
+
   apps/web:
     specifiers:
       '@osdiab-website/tsconfig': workspace:*
