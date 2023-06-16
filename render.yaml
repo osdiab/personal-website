@@ -56,6 +56,8 @@ services:
         fromDatabase:
           name: personal-website-main--stg
           property: connectionString
+      - key: HASURA_ENABLE_CONSOLE
+        value: true
 
 databases:
   - name: personal-website-main--prd
