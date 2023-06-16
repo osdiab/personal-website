@@ -10,11 +10,16 @@ services:
     startCommand: pnpm run --filter "@osdiab-website/web" start
     healthCheckPath: /api/health
     envVars:
-      - key: HASURA_GRAPHQL_HOST_PORT
+      - key: HASURA_GRAPHQL_HOST
         fromService:
           type: web
-          name: personal-website-gql-engine
-          property: hostport
+          name: personal-website-gql-engine--prd
+          property: host
+      - key: HASURA_GRAPHQL_PORT
+        fromService:
+          type: web
+          name: personal-website-gql-engine--prd
+          property: port
     domains:
       - next.omardiab.com
       - next2.omardiab.com
