@@ -8,6 +8,12 @@ services:
     buildCommand: pnpm install --filter "@osdiab-website/web..."; pnpm run --filter "@osdiab-website/web" build
     startCommand: pnpm run --filter "@osdiab-website/web" start
     healthCheckPath: /api/health
+    envVars:
+      - key: HASURA_GRAPHQL_ENDPOINT
+        fromService:
+          type: web
+          name: personal-website-hasura
+          property: hostport
     domains:
       - next.omardiab.com
       - next2.omardiab.com
