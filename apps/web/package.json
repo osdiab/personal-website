@@ -9,7 +9,8 @@
     "build": "doppler run -- pnpm build:noDoppler",
     "start:noDoppler": "next start",
     "start": "doppler run -- pnpm start:noDoppler",
-    "setup:doppler": "doppler setup --no-interactive"
+    "setup:doppler": "doppler setup --no-interactive",
+    "typecheck": "pnpm tsc"
   },
   "dependencies": {
     "@vanilla-extract/css": "^1.11.0",
