@@ -9,7 +9,9 @@
     "dev": "turbo run dev",
     "lint": "jest",
     "lint:fix": "eslint . --fix",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "format:base": "prettier \"**/*.{ts,tsx,md}\"",
+    "format": "pnpm format:base --write",
+    "format:check": "pnpm format:base --check",
     "setup:doppler": "turbo run setup:doppler --concurrency=1"
   },
   "devDependencies": {
