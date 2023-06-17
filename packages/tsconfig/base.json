@@ -12,7 +12,8 @@
     "preserveWatchOutput": true,
     "strictNullChecks": true,
     "esModuleInterop": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "noEmit": true
   },
   "exclude": ["node_modules"]
 }
