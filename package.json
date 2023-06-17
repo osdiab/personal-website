@@ -12,6 +12,7 @@
     "format:base": "prettier \"**/*.{ts,tsx,md}\"",
     "format": "pnpm format:base --write",
     "format:check": "pnpm format:base --check",
+    "typecheck": "turbo run typecheck",
     "setup:doppler": "turbo run setup:doppler --concurrency=1"
   },
   "devDependencies": {
