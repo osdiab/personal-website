@@ -160,8 +160,6 @@ jobs:
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID_WEB_APP }}
           vercel-args: --prebuilt
-          # alias-domains: |
-          #   pr-{{PR_NUMBER}}.next-vercel.omardiab.com
       - name: Deploy Vercel Production
         uses: amondnet/vercel-action@v25
         if: github.event_name == 'push'
