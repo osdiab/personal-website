@@ -1,0 +1,10 @@
+{
+  "extends": "@osdiab-website/tsconfig/base.json",
+  "compilerOptions": {
+    "types": ["node"],
+    "noUnusedLocals": false,
+    "noImplicitAny": false
+  },
+  "include": ["."],
+  "exclude": ["node_modules"]
+}
