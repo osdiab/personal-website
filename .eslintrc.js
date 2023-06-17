@@ -3,7 +3,7 @@ const path = require("path");
 /* eslint-env node */
 module.exports = {
   plugins: ["unused-imports"],
-  ignorePatterns: [".eslintrc.js", "next.config.js"],
+  ignorePatterns: [".eslintrc.js", "next.config.js", "generated/", "build/"],
   extends: ["turbo", "prettier"],
   rules: {
     "no-unused-vars": "off",
