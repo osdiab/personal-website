@@ -103,21 +103,23 @@ jobs:
         uses: dopplerhq/cli-action@v2
       - name: Install dependencies
         run: pnpm install --filter "@osdiab-website/web..."
+      - name: Install Vercel CLI
+        run: pnpm install --global vercel
       - name: Pull Vercel config
-        run: pnpx vercel pull --yes --token=${VERCEL_TOKEN}
+        run: vercel pull --yes --token=${VERCEL_TOKEN}
         env:
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_WEB_APP }}
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
       - name: Preview Build
-        run: pnpx vercel build
+        run: vercel build
         if: github.event_name == 'pull_request_target'
         env:
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_WEB_APP }}
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           DOPPLER_TOKEN: ${{ secrets.DOPPLER_TOKEN_WEB_APP_STG }}
       - name: Production Build
-        run: pnpx vercel build --prod
+        run: vercel build --prod
         if: github.event_name == 'push'
         env:
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_WEB_APP }}
