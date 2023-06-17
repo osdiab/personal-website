@@ -8,7 +8,8 @@
     "codegen:noDoppler": "graphql-codegen --config codegen.ts",
     "codegen": "doppler run -- pnpm codegen:noDoppler",
     "setup:doppler": "doppler setup --no-interactive",
-    "dev": "wait-on http-get://localhost:8002/healthz && pnpm codegen --watch"
+    "dev": "wait-on http-get://localhost:8002/healthz && pnpm codegen --watch",
+    "typecheck": "tsc"
   },
   "keywords": [],
   "author": "",
@@ -16,10 +17,12 @@
     "@graphql-codegen/cli": "3.0.0",
     "@graphql-codegen/client-preset": "^2.0.0",
     "@graphql-codegen/introspection": "3.0.0",
+    "@types/node": "^17.0.12",
     "typescript": "^4.8.4",
     "wait-on": "^7.0.1"
   },
   "dependencies": {
+    "@graphql-typed-document-node/core": "^3.2.0",
     "graphql": "^16.6.0"
   }
 }
