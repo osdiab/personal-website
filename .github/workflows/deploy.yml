@@ -24,6 +24,66 @@ jobs:
         uses: marocchino/tool-versions-action@v1
         id: versions
 
+  check-web-types:
+    name: Check Web Types
+    runs-on: ubuntu-latest
+    needs: [get-tool-versions]
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: ${{ needs.get-tool-versions.outputs.pnpm }}
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ needs.get-tool-versions.outputs.nodejs }}
+          cache: "pnpm"
+      - name: Install dependencies
+        run: pnpm install --filter "@osdiab-website/web..."
+      - name: Check Web App Types
+        run: pnpm run --filter @osdiab-website/app typecheck
+
+  check-lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    needs: [get-tool-versions]
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: ${{ needs.get-tool-versions.outputs.pnpm }}
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ needs.get-tool-versions.outputs.nodejs }}
+          cache: "pnpm"
+      - name: Install dependencies
+        run: pnpm install --filter "@osdiab-website/monorepo..."
+      - name: Run Lint
+        run: pnpm lint
+
+  check-format:
+    name: Check format
+    runs-on: ubuntu-latest
+    needs: [get-tool-versions]
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: ${{ needs.get-tool-versions.outputs.pnpm }}
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ needs.get-tool-versions.outputs.nodejs }}
+          cache: "pnpm"
+      - name: Install dependencies
+        run: pnpm install --filter "@osdiab-website/monorepo"
+      - name: Run Format
+        run: pnpm format:check
+
   build-web-app:
     name: Build Web App
     runs-on: ubuntu-latest
@@ -76,7 +136,14 @@ jobs:
       contents: write
     name: Deploy to Vercel
     runs-on: ubuntu-latest
-    needs: [get-tool-versions, build-web-app]
+    needs:
+      [
+        get-tool-versions,
+        check-web-types,
+        check-lint,
+        check-format,
+        build-web-app,
+      ]
     steps:
       - uses: actions/download-artifact@v3
         with:
