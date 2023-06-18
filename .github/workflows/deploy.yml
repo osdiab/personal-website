@@ -216,7 +216,7 @@ jobs:
     if: github.event_name == 'pull_request_target' && github.event.action != 'closed'
     steps:
       - uses: actions/checkout@v2
-      - uses: hasura/hasura-cloud-preview-apps@v0.1.9
+      - uses: osdiab/hasura-cloud-preview-apps@main
         with:
           name: "personal-website-pr-${{github.event.number}}"
           hasuraProjectDirectoryPath: apps/gql-engine
@@ -232,7 +232,7 @@ jobs:
     if: github.event_name == 'pull_request_target' && github.event.action == 'closed'
     steps:
       - uses: actions/checkout@v2
-      - uses: hasura/hasura-cloud-preview-apps@v0.1.9
+      - uses: osdiab/hasura-cloud-preview-apps@main
         with:
           name: "personal-website-pr-${{github.event.number}}"
           delete: true
