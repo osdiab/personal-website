@@ -85,6 +85,160 @@ jobs:
       - name: Run Format
         run: pnpm format:check
 
+  delete-existing-neon-branch:
+    name: "Delete old Neon postgres branch"
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request_target'
+    steps:
+      - name: List Neon branches
+        id: list-branches
+        env:
+          NEON_PROJECT_ID: ${{secrets.NEON_PROJECT_ID_APP_DB_STG}}
+          NEON_API_KEY: ${{secrets.NEON_API_KEY}}
+        run: |
+          curl "https://console.neon.tech/api/v2/projects/$NEON_PROJECT_ID/branches" \
+            --header 'accept: application/json' \
+            --header "Authorization: Bearer $NEON_API_KEY" \
+            --fail-with-body \
+            --output list-neon-branches-response.json
+      - name: Upload list branches failure
+        if: failure() && steps.list-branches.outcome == 'failure'
+        uses: actions/upload-artifact@v3
+        with:
+          name: list-neon-branches-failure.json
+          path: list-neon-branches-response.json
+      - name: Get existing Neon branch for this PR
+        id: get-existing-branch
+        run: |
+          echo "branch_id=$(
+            jq --raw-output '.branches[] | select(.name | startswith("#${{ github.event.number }} ")).id' list-neon-branches-response.json
+          )" >> $GITHUB_OUTPUT
+      - name: Delete existing branch for this PR
+        id: delete-existing-branch
+        if: ${{ steps.get-existing-branch.outputs.branch_id != '' }}
+        env:
+          NEON_PROJECT_ID: ${{secrets.NEON_PROJECT_ID_APP_DB_STG}}
+          NEON_API_KEY: ${{secrets.NEON_API_KEY}}
+        # due to Neon operations concurrency limit, need to retry for now
+        # https://community.neon.tech/t/project-already-has-running-operations-scheduling-of-new-ones-is-prohibited/242
+        uses: nick-fields/retry@v2
+        with:
+          timeout_seconds: 1
+          max_attempts: 3
+          retry_on: error
+          command: |
+            curl "https://console.neon.tech/api/v2/projects/$NEON_PROJECT_ID/branches/${{ steps.get-existing-branch.outputs.branch_id }}" \
+              --request DELETE \
+              --header 'Accept: application/json' \
+              --header "Authorization: Bearer $NEON_API_KEY" \
+              --header 'Content-Type: application/json' \
+              --fail-with-body \
+              --output delete-neon-branch-response.json
+      - name: Upload existing branch deletion failure
+        if: failure() && steps.delete-existing-branch.outcome == 'failure'
+        uses: actions/upload-artifact@v3
+        with:
+          name: delete-neon-branch-failure.json
+          path: delete-neon-branch-response.json
+
+  preview-neon:
+    if: github.event_name == 'pull_request_target' && github.event.action != 'closed'
+    name: "Make Neon preview postgres branch"
+    runs-on: ubuntu-latest
+    outputs:
+      preview_branch_id: ${{ steps.parse-preview-branch-id.outputs.branch_id}}
+    steps:
+      - name: List Neon branches
+        id: list-branches
+        env:
+          NEON_PROJECT_ID: ${{secrets.NEON_PROJECT_ID_APP_DB}}
+          NEON_API_KEY: ${{secrets.NEON_API_KEY}}
+        run: |
+          curl "https://console.neon.tech/api/v2/projects/$NEON_PROJECT_ID/branches" \
+            --header 'accept: application/json' \
+            --header "Authorization: Bearer $NEON_API_KEY" \
+            --fail-with-body \
+            --output list-neon-branches-response.json
+      - name: Upload list branches failure
+        if: failure() && steps.list-branches.outcome == 'failure'
+        uses: actions/upload-artifact@v3
+        with:
+          name: list-neon-branches-failure.json
+          path: list-neon-branches-response.json
+      - name: Get main Neon branch
+        id: get-main-branch
+        run: |
+          echo "branch_id=$(
+            jq --raw-output '.branches[] | select(.name=="main").id' list-neon-branches-response.json
+          )" >> $GITHUB_OUTPUT
+      - name: Create Neon branch
+        id: create-branch
+        env:
+          NEON_PROJECT_ID: ${{secrets.NEON_PROJECT_ID_APP_DB}}
+          NEON_API_KEY: ${{secrets.NEON_API_KEY}}
+        uses: nick-fields/retry@v2
+        with:
+          timeout_seconds: 1
+          max_attempts: 3
+          retry_on: error
+          command: |
+            curl "https://console.neon.tech/api/v2/projects/$NEON_PROJECT_ID/branches" \
+              --header 'Accept: application/json' \
+              --header "Authorization: Bearer $NEON_API_KEY" \
+              --header 'Content-Type: application/json' \
+              --fail-with-body \
+              --output create-neon-branch-response.json \
+              --data "{
+                \"endpoints\": [{ \"type\": \"read_write\" }],
+                \"branch\": {
+                  \"parent_id\": \"${{steps.get-main-branch.outputs.branch_id}}\",
+                  \"name\": \"#${{ github.event.number }} (${{ github.head_ref }} SHA: ${{ github.sha }})\"
+                }
+              }"
+      - name: Upload create branch failure
+        if: failure() && steps.create-branch.outcome == 'failure'
+        uses: actions/upload-artifact@v3
+        with:
+          name: create-neon-branch-failure.json
+          path: create-neon-branch-response.json
+      - name: Output preview Neon branch endpoint
+        id: parse-preview-branch-id
+        run: |
+          echo "branch_id=$(
+            jq --raw-output '.endpoints[0].host' create-neon-branch-response.json
+          )" >> $GITHUB_OUTPUT
+
+  preview-hasura:
+    name: Create Hasura preview
+    runs-on: ubuntu-latest
+    needs: [preview-neon]
+    if: github.event_name == 'pull_request_target' && github.event.action != 'closed'
+    steps:
+      - uses: actions/checkout@v2
+      - uses: hasura/hasura-cloud-preview-apps@v0.1.9
+        with:
+          name: "personal-website-pr-${{github.event.number}}"
+          hasuraProjectDirectoryPath: apps/gql-engine
+          hasuraEnv: |
+            HASURA_GRAPHQL_DATABASE_URL=postgres://${{secrets.APP_DB_USER}}:${{secrets.APP_DB_PASSWORD}}@${{needs.preview-neon.outputs.preview_branch_id}}/${{secrets.APP_DB_NAME}}
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          HASURA_CLOUD_ACCESS_TOKEN: ${{secrets.HASURA_CLOUD_ACCESS_TOKEN}}
+
+  delete-hasura-preview-app:
+    name: Delete Hasura preview
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request_target' && github.event.action == 'closed'
+    steps:
+      - uses: actions/checkout@v2
+      - uses: hasura/hasura-cloud-preview-apps@v0.1.9
+        with:
+          name: "personal-website-pr-${{github.event.number}}"
+          delete: true
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          HASURA_CLOUD_ACCESS_TOKEN: ${{secrets.HASURA_CLOUD_ACCESS_TOKEN}}
+
   build-web-app:
     name: Build Web App
     runs-on: ubuntu-latest
