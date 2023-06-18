@@ -151,7 +151,7 @@ jobs:
       - name: List Neon branches
         id: list-branches
         env:
-          NEON_PROJECT_ID: ${{secrets.NEON_PROJECT_ID_APP_DB}}
+          NEON_PROJECT_ID: ${{secrets.NEON_PROJECT_ID_APP_DB_STG}}
           NEON_API_KEY: ${{secrets.NEON_API_KEY}}
         run: |
           curl "https://console.neon.tech/api/v2/projects/$NEON_PROJECT_ID/branches" \
@@ -174,7 +174,7 @@ jobs:
       - name: Create Neon branch
         id: create-branch
         env:
-          NEON_PROJECT_ID: ${{secrets.NEON_PROJECT_ID_APP_DB}}
+          NEON_PROJECT_ID: ${{secrets.NEON_PROJECT_ID_APP_DB_STG}}
           NEON_API_KEY: ${{secrets.NEON_API_KEY}}
         uses: nick-fields/retry@v2
         with:
