@@ -221,7 +221,7 @@ jobs:
           name: "personal-website-pr-${{github.event.number}}"
           hasuraProjectDirectoryPath: apps/gql-engine
           hasuraEnv: |
-            HASURA_GRAPHQL_DATABASE_URL=postgres://${{secrets.APP_DB_USER}}:${{secrets.APP_DB_PASSWORD}}@${{needs.preview-neon.outputs.preview_branch_id}}/${{secrets.APP_DB_NAME}}
+            HASURA_GRAPHQL_DATABASE_URL=postgres://${{secrets.APP_DB_USER_STG}}:${{secrets.APP_DB_PASSWORD_STG}}@${{needs.preview-neon.outputs.preview_branch_id}}/${{secrets.APP_DB_DATABASE_STG}}
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
           HASURA_CLOUD_ACCESS_TOKEN: ${{secrets.HASURA_CLOUD_ACCESS_TOKEN}}
