@@ -5,6 +5,7 @@
   "scripts": {
     "dev:noDoppler": "exits \"docker compose down && docker compose up\" \"docker compose down\"",
     "dev": "doppler run -- pnpm dev:noDoppler",
+    "hasura": "doppler run --project gql-engine-cli --config dev -- hasura --skip-update-check",
     "setup:doppler": "doppler setup --no-interactive"
   },
   "keywords": [],
