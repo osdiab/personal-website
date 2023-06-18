@@ -5,6 +5,7 @@ on:
       - stg
       - prd
   pull_request_target:
+    types: [opened, closed, reopened, synchronize]
     branches:
       - stg
 
@@ -111,7 +112,7 @@ jobs:
         id: get-existing-branch
         run: |
           echo "branch_id=$(
-            jq --raw-output '.branches[] | select(.name | startswith("#${{ github.event.number }} ")).id' list-neon-branches-response.json
+            jq --raw-output '.branches[] | select(.name | startswith("PR #${{ github.event.number }} ")).id' list-neon-branches-response.json
           )" >> $GITHUB_OUTPUT
       - name: Delete existing branch for this PR
         id: delete-existing-branch
@@ -192,7 +193,7 @@ jobs:
                 \"endpoints\": [{ \"type\": \"read_write\" }],
                 \"branch\": {
                   \"parent_id\": \"${{steps.get-main-branch.outputs.branch_id}}\",
-                  \"name\": \"#${{ github.event.number }} (${{ github.head_ref }} SHA: ${{ github.sha }})\"
+                  \"name\": \"PR #${{ github.event.number }} (${{ github.head_ref }} SHA: ${{ github.sha }})\"
                 }
               }"
       - name: Upload create branch failure
@@ -268,7 +269,7 @@ jobs:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
       - name: Preview Build
         run: vercel build
-        if: github.event_name == 'pull_request_target' || github.ref == 'refs/heads/stg'
+        if: (github.event_name == 'pull_request_target' && github.event.action != 'closed') || github.ref == 'refs/heads/stg'
         env:
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_WEB_APP }}
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
@@ -310,7 +311,7 @@ jobs:
         run: tar -xf vercel-build.tar
       - name: Deploy Vercel Preview
         uses: amondnet/vercel-action@v20
-        if: github.event_name == 'pull_request_target' || github.ref == 'refs/heads/stg'
+        if: (github.event_name == 'pull_request_target' && github.event.action != 'closed') || github.ref == 'refs/heads/stg'
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
