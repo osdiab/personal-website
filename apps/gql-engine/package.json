@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "description": "Hasura GraphQL Engine instance",
   "scripts": {
-    "dev:noDoppler": "exits \"docker compose down && docker compose up\" \"docker compose down\"",
+    "dev:down": "docker compose down",
+    "dev:logs": "docker compose logs --follow",
+    "dev:noDoppler": "docker compose up --detach",
     "dev": "doppler run -- pnpm dev:noDoppler",
     "hasura": "doppler run --project gql-engine-cli --config dev -- hasura --skip-update-check",
     "setup:doppler": "doppler setup --no-interactive"
