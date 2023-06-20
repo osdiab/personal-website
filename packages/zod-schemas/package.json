@@ -1,0 +1,15 @@
+{
+  "name": "@osdiab-website/zod-schemas",
+  "scripts": {
+    "typecheck": "tsc"
+  },
+  "dependencies": {
+    "@osdiab-website/base64-url-uuid": "workspace:*"
+  },
+  "devDependencies": {
+    "zod": "^3.21.4"
+  },
+  "peerDependencies": {
+    "zod": "^3.21.4"
+  }
+}
