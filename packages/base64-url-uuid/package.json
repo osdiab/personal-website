@@ -1,7 +1,8 @@
 {
   "name": "@osdiab-website/base64-url-uuid",
   "scripts": {
-    "test": "vitest",
+    "test:watch": "vitest watch",
+    "test": "vitest run",
     "typecheck": "tsc"
   },
   "devDependencies": {

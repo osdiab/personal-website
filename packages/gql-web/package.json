@@ -4,7 +4,6 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "codegen:noDoppler": "graphql-codegen --config codegen.ts",
     "codegen": "doppler run -- pnpm codegen:noDoppler",
     "setup:doppler": "doppler setup --no-interactive",
