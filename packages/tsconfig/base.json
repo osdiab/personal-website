@@ -4,6 +4,7 @@
   "display": "Default",
   "compilerOptions": {
     "target": "ES2022",
+    "lib": ["ES2022"],
     "composite": false,
     "declaration": true,
     "declarationMap": true,
