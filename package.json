@@ -7,6 +7,7 @@
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev",
+    "hasura": "pnpm run --filter gql-engine hasura",
     "lint": "jest",
     "lint:fix": "eslint . --fix",
     "format:base": "prettier \"**/*.{ts,tsx,md}\"",
