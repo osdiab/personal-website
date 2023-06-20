@@ -4,7 +4,8 @@
     "typecheck": "tsc"
   },
   "dependencies": {
-    "@osdiab-website/base64-url-uuid": "workspace:*"
+    "@osdiab-website/base64-url-uuid": "workspace:*",
+    "email-regex": "^5.0.0"
   },
   "devDependencies": {
     "zod": "^3.21.4"
