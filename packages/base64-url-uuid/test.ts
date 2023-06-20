@@ -14,6 +14,15 @@ test("Encodes and decodes consistently", async () => {
   );
 });
 
+const validCharactersRegex = /^[a-zA-Z0-9_-]+$/;
+test("Results is properly encoded", async () => {
+  await fc.assert(
+    fc.asyncProperty(fc.uuid(), async (uuidString) =>
+      validCharactersRegex.test(await uuidToBase64Url(uuidString))
+    ),
+    { numRuns: 10_000 }
+  );
+});
 test("Results in shorter encoding", async () => {
   await fc.assert(
     fc.asyncProperty(

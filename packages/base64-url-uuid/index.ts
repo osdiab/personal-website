@@ -1,5 +1,9 @@
 const isBrowser = typeof window !== "undefined";
 const dashRegex = /-/g;
+const plusRegex = /\+/g;
+const forwardSlashRegex = /\//g;
+const trailingEqualsRegex = /=+$/;
+const underscoreRegex = /_/g;
 
 const hexStringToBytes = (hex: string): Uint8Array => {
   const bytes = new Uint8Array(hex.length / 2);
@@ -25,11 +29,14 @@ const base64UrlEncode = async (bytes: Uint8Array): Promise<string> => {
   } else {
     base64 = Buffer.from(bytes).toString("base64");
   }
-  return base64.replace("+", "-").replace("/", "_").replace(/=+$/, "");
+  return base64
+    .replace(plusRegex, "-")
+    .replace(forwardSlashRegex, "_")
+    .replace(trailingEqualsRegex, "");
 };
 
 const base64UrlDecode = async (base64Url: string): Promise<Uint8Array> => {
-  base64Url = base64Url.replace("-", "+").replace("_", "/");
+  base64Url = base64Url.replace(dashRegex, "+").replace(underscoreRegex, "/");
   while (base64Url.length % 4) base64Url += "=";
   if (isBrowser) {
     const response = await fetch(
