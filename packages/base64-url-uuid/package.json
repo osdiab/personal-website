@@ -1,0 +1,10 @@
+{
+  "name": "@osdiab-website/base64-url-uuid",
+  "scripts": {
+    "test": "vitest"
+  },
+  "devDependencies": {
+    "fast-check": "^3.10.0",
+    "vitest": "^0.32.2"
+  }
+}
