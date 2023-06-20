@@ -7,6 +7,7 @@
       "outputs": [".next/**", "!.next/cache/**"]
     },
     "setup:doppler": { "cache": false },
+    "test": {},
     "lint": {},
     "typecheck": {},
     "dev": {
