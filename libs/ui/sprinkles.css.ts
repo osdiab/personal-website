@@ -12,6 +12,7 @@ export const space = {
   xl4: "48px",
   xl5: "64px",
 };
+const spaceWithAuto = { ...space, auto: "auto" };
 
 export const fontWeight = {
   base: 400,
@@ -91,6 +92,10 @@ const responsiveProperties = defineProperties({
     paddingBlockEnd: space,
     paddingInlineStart: space,
     paddingInlineEnd: space,
+    marginBlockStart: spaceWithAuto,
+    marginBlockEnd: spaceWithAuto,
+    marginInlineStart: spaceWithAuto,
+    marginInlineEnd: spaceWithAuto,
   },
   shorthands: {
     textSize: ["fontSize", "lineHeight"],
@@ -104,8 +109,20 @@ const responsiveProperties = defineProperties({
     paddingY: ["paddingBlockStart", "paddingBlockEnd"],
     paddingLeft: ["paddingInlineStart"],
     paddingRight: ["paddingInlineEnd"],
-    paddingTop: ["paddingInlineStart"],
-    paddingL: ["paddingInlineStart"],
+    paddingTop: ["paddingBlockStart"],
+    paddingBottom: ["paddingBlockEnd"],
+    margin: [
+      "marginBlockStart",
+      "marginBlockEnd",
+      "marginInlineStart",
+      "marginInlineEnd",
+    ],
+    marginX: ["marginInlineStart", "marginInlineEnd"],
+    marginY: ["marginBlockStart", "marginBlockEnd"],
+    marginLeft: ["marginInlineStart"],
+    marginRight: ["marginInlineEnd"],
+    marginTop: ["marginBlockStart"],
+    marginBottom: ["marginBlockEnd"],
     placeItems: ["justifyContent", "alignItems"],
   },
 });
