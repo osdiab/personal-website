@@ -1,8 +1,7 @@
 {
   "name": "@osdiab-website/gql-web",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "main": "generated/index.js",
   "scripts": {
     "codegen:noDoppler": "graphql-codegen --config codegen.ts",
     "codegen": "doppler run -- pnpm codegen:noDoppler",
@@ -10,8 +9,6 @@
     "dev": "wait-on http-get://localhost:8002/healthz && pnpm codegen --watch",
     "typecheck": "tsc"
   },
-  "keywords": [],
-  "author": "",
   "devDependencies": {
     "@graphql-codegen/cli": "3.0.0",
     "@graphql-codegen/client-preset": "^2.0.0",
