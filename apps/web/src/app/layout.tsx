@@ -1,5 +1,10 @@
 import { RootHeader } from "@/app/header";
-import { contentCss, mainContentCss } from "@/app/layout.css";
+import {
+  bodyCss,
+  footerContentCss,
+  footerCss,
+  mainContentCss,
+} from "@/app/layout.css";
 
 import "@/app/reset.css";
 
@@ -10,9 +15,14 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={contentCss}>
+      <body className={bodyCss}>
         <RootHeader />
         <main className={mainContentCss}>{children}</main>
+        <footer className={footerCss}>
+          <div className={footerContentCss}>
+            © Omar Diab, {new Date().getFullYear()}
+          </div>
+        </footer>
       </body>
     </html>
   );
