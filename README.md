@@ -1,81 +1,71 @@
-# Turborepo starter
+# omardiab.com
 
-This is an official starter Turborepo.
+This app uses [`turborepo`](https://turbo.build/repo) and a monorepo structure
+to deploy a web app with a database and a Hasura GraphQL Engine instance. Each
+package/app is 100% [TypeScript](https://www.typescriptlang.org/).
 
-## Using this example
+## Installation
 
-Run the following command:
+1. [Install Docker](https://docs.docker.com/engine/install/)
+1. [Install `asdf`](https://asdf-vm.com/guide/getting-started.html)
+1. Install `asdf` plugins
+   1. [nodejs](https://github.com/asdf-vm/asdf-nodejs#install)
+   1. [hasura-cli](https://github.com/gurukulkarni/asdf-hasura#install)
+   1. [doppler](https://github.com/takutakahashi/asdf-doppler#install)
+   1. [act](https://github.com/grimoh/asdf-act#install)
+   1. [pnpm](https://github.com/jonathanmorley/asdf-pnpm#installing)
+1. Run `asdf install` to install system dependencies
+1. Run `pnpm install` to install node dependencies
+1. Run `pnpm setup:doppler` to set up Doppler to inject environment variables
+
+## Run dev environment
 
 ```sh
-npx create-turbo@latest
-```
-
-## What's inside?
-
-This Turborepo includes the following packages/apps:
-
-### Apps and Packages
-
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `ui`: a stub React component library shared by both `web` and `docs` applications
-- `eslint-config-custom`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `tsconfig`: `tsconfig.json`s used throughout the monorepo
-
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
-
-### Utilities
-
-This Turborepo has some additional tools already setup for you:
-
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
-
-### Build
-
-To build all apps and packages, run the following command:
-
-```
-cd my-turborepo
-pnpm build
-```
-
-### Develop
-
-To develop all apps and packages, run the following command:
-
-```
-cd my-turborepo
 pnpm dev
 ```
 
-### Remote Caching
+The web app will be accessible on http://localhost:3000
 
-Turborepo can use a technique known as [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
+## What's inside?
 
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup), then enter the following commands:
+### Apps and Packages
 
+- Apps are in the `apps/` directory
+  - `apps/web`: NextJS web app
+  - `apps/gql-engine`: Hasura GraphQL Engine instance
+- Scripts are in the `scripts/` directory
+- Shared libraries are in the `libs/` directory
+  - `libs/gql-web`: Auto-generated bindings to call the GraphQL engine generated
+    by Hasura with TypeScript
+
+### Style/Linting
+
+These tools are used:
+
+- [ESLint](https://eslint.org/) for code linting, run with
+  [`jest-runner-eslint`](https://github.com/jest-community/jest-runner-eslint)
+  for parallelism
+- [Prettier](https://prettier.io) for code formatting
+
+They are configured at the workspace root and run once across the whole repo.
+Invoke them at the workspace root:
+
+```sh
+pnpm lint
+pnpm lint:fix
+pnpm format
+pnpm format:check
 ```
-cd my-turborepo
-npx turbo login
+
+### Type Checking
+
+Each project has a `tsconfig.json`. Calling `pnpm typecheck` at the workspace
+root runs type-checking on all subpackages.
+
+### Build
+
+To build the web app, run the following command:
+
+```sh
+pnpm build
 ```
-
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
-
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
-
-```
-npx turbo link
-```
-
-## Useful Links
-
-Learn more about the power of Turborepo:
-
-- [Tasks](https://turbo.build/repo/docs/core-concepts/monorepos/running-tasks)
-- [Caching](https://turbo.build/repo/docs/core-concepts/caching)
-- [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching)
-- [Filtering](https://turbo.build/repo/docs/core-concepts/monorepos/filtering)
-- [Configuration Options](https://turbo.build/repo/docs/reference/configuration)
-- [CLI Usage](https://turbo.build/repo/docs/reference/command-line-reference)
