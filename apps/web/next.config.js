@@ -19,6 +19,9 @@ const nextConfig = {
     typedRoutes: true,
   },
   webpack(config) {
+    // https://github.com/vanilla-extract-css/vanilla-extract/issues/1085#issuecomment-1555986222
+    config.optimization.splitChunks = false;
+
     config.module.rules.push({
       test: /\.svg$/i,
       use: [
