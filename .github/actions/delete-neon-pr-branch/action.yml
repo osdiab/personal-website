@@ -4,6 +4,12 @@ inputs:
   pr-number:
     description: "PR Number"
     required: true
+  neon-project-id:
+    description: "Neon Project ID"
+    required: true
+  neon-api-key:
+    description: "Neon API Key"
+    required: true
 
 runs:
   using: composite
@@ -11,8 +17,8 @@ runs:
     - name: List Neon branches
       id: list-branches
       env:
-        NEON_PROJECT_ID: ${{secrets.NEON_PROJECT_ID_APP_DB_STG}}
-        NEON_API_KEY: ${{secrets.NEON_API_KEY}}
+        NEON_PROJECT_ID: ${{inputs.neon-project-id}}
+        NEON_API_KEY: ${{inputs.neon-api-key}}
       run: |
         curl "https://console.neon.tech/api/v2/projects/$NEON_PROJECT_ID/branches" \
           --header 'accept: application/json' \
@@ -35,8 +41,8 @@ runs:
       id: delete-existing-branch
       if: ${{ steps.get-existing-branch.outputs.branch_id != '' }}
       env:
-        NEON_PROJECT_ID: ${{secrets.NEON_PROJECT_ID_APP_DB_STG}}
-        NEON_API_KEY: ${{secrets.NEON_API_KEY}}
+        NEON_PROJECT_ID: ${{inputs.neon-project-id}}
+        NEON_API_KEY: ${{inputs.neon-api-key}}
       # due to Neon operations concurrency limit, need to retry for now
       # https://community.neon.tech/t/project-already-has-running-operations-scheduling-of-new-ones-is-prohibited/242
       uses: nick-fields/retry@v2
