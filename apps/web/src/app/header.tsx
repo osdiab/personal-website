@@ -1,6 +1,7 @@
 "use client"; // for scrolled interactivity
 
 import {
+  headerContentCss,
   logoCss,
   siteHeaderCss,
   siteHeaderScrolledCss,
@@ -46,8 +47,10 @@ export function RootHeader({ className }: { className?: string }) {
           className
         )}
       >
-        <Logo className={logoCss} />
-        <span className={siteTitleCss}>Omar Diab</span>
+        <div className={headerContentCss}>
+          <Logo className={logoCss} />
+          <span className={siteTitleCss}>Omar Diab</span>
+        </div>
       </header>
     </>
   );

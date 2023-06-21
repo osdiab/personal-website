@@ -1,5 +1,18 @@
 import { defineProperties, createSprinkles } from "@vanilla-extract/sprinkles";
 
+export const grayColors = {
+  "gray-50": "#f9fafb",
+  "gray-100": "#f3f4f6",
+  "gray-200": "#e5e7eb",
+  "gray-300": "#d1d5db",
+  "gray-400": "#9ca3af",
+  "gray-500": "#6b7280",
+  "gray-600": "#4b5563",
+  "gray-700": "#374151",
+  "gray-800": "#1f2937",
+  "gray-900": "#111827",
+};
+
 export const space = {
   none: "0px",
   xs: "2px",
@@ -11,6 +24,8 @@ export const space = {
   xl3: "32px",
   xl4: "48px",
   xl5: "64px",
+  xl6: "96px",
+  xl7: "128px",
 };
 const spaceWithAuto = { ...space, auto: "auto" };
 
@@ -78,7 +93,7 @@ const responsiveProperties = defineProperties({
   },
   defaultCondition: "mobile",
   properties: {
-    display: ["none", "flex", "block", "inline"],
+    display: ["none", "flex", "inline-flex", "block", "inline"],
     flexDirection: ["row", "column"],
     gap: space,
     justifyContent,
@@ -86,6 +101,9 @@ const responsiveProperties = defineProperties({
     fontSize,
     lineHeight,
     fontWeight,
+    fontStyle: ["normal", "italic"],
+    textAlign: ["start", "center", "end"],
+    textWrap: ["balance"],
     // logical directions
     // https://github.com/csstools/stylelint-use-logical
     paddingBlockStart: space,
@@ -96,6 +114,7 @@ const responsiveProperties = defineProperties({
     marginBlockEnd: spaceWithAuto,
     marginInlineStart: spaceWithAuto,
     marginInlineEnd: spaceWithAuto,
+    color: grayColors,
   },
   shorthands: {
     textSize: ["fontSize", "lineHeight"],
@@ -126,18 +145,5 @@ const responsiveProperties = defineProperties({
     placeItems: ["justifyContent", "alignItems"],
   },
 });
-
-export const grayColors = {
-  "gray-50": "#f9fafb",
-  "gray-100": "#f3f4f6",
-  "gray-200": "#e5e7eb",
-  "gray-300": "#d1d5db",
-  "gray-400": "#9ca3af",
-  "gray-500": "#6b7280",
-  "gray-600": "#4b5563",
-  "gray-700": "#374151",
-  "gray-800": "#1f2937",
-  "gray-900": "#111827",
-};
 
 export const sprinkles = createSprinkles(responsiveProperties);

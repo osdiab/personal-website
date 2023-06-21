@@ -1,5 +1,5 @@
 import { RootHeader } from "@/app/header";
-import { contentCss } from "@/app/layout.css";
+import { contentCss, mainContentCss } from "@/app/layout.css";
 
 import "@/app/reset.css";
 
@@ -12,7 +12,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={contentCss}>
         <RootHeader />
-        <main>{children}</main>
+        <main className={mainContentCss}>{children}</main>
       </body>
     </html>
   );

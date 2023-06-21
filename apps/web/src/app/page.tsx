@@ -3,9 +3,12 @@ import {
   heroTitleCss,
   jobEntryCss,
   jobEntrySectionCss,
+  jobHeaderCss,
+  jobMetadataCss,
+  jobTitleCss,
   pageContentCss,
   sectionCss,
-  sectionHeadingCss,
+  timeCss,
 } from "@/app/page.css";
 import { proseCss } from "@osdiab-website/ui/prose.css";
 import { ComponentProps, ReactNode } from "react";
@@ -26,13 +29,12 @@ export default function Page() {
         </h1>
       </section>
       <section className={sectionCss}>
-        <h2 className={sectionHeadingCss}>Work History</h2>
         <div className={jobEntrySectionCss}>
           <Entry
             CompanyLogoType={SpinachLogo as SvgComponent}
             companyName="Spinach HR"
             companyUrl="https://www.gotofu.com"
-            jobTitle="Co-Founder"
+            jobTitle="Co-Founder, Head of Engineering"
             periodStart="2021"
             periodEnd="2023"
             description="A whitelabel platform that powers the operations of major Employer of Record global payroll companies, from sales pipeline to payroll to invoicing. I designed the initial product concept, and built a team that implemented and successfully deployed it at scale at multiple companies. Acquired 2023."
@@ -100,19 +102,23 @@ function Entry({
   );
   return (
     <article className={jobEntryCss}>
-      <h3>
-        {companyUrl ? (
-          <a className={hyperlinkCss} href={companyUrl} target="_blank">
-            {companyLogo}
-          </a>
-        ) : (
-          companyLogo
-        )}
-      </h3>
-      <span>{jobTitle}</span>
-      <span>
-        {periodStart}–{periodEnd}
-      </span>
+      <header className={jobHeaderCss}>
+        <h3>
+          {companyUrl ? (
+            <a className={hyperlinkCss} href={companyUrl} target="_blank">
+              {companyLogo}
+            </a>
+          ) : (
+            companyLogo
+          )}
+        </h3>
+        <div className={jobMetadataCss}>
+          <span className={jobTitleCss}>{jobTitle}</span>
+          <span className={timeCss}>
+            {periodStart}–{periodEnd}
+          </span>
+        </div>
+      </header>
       <div className={proseCss}>
         <p>{description}</p>
       </div>
