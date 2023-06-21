@@ -69,3 +69,20 @@ To build the web app, run the following command:
 ```sh
 pnpm build
 ```
+
+## Deployments
+
+### Architecture
+
+- Web app is hosted on [Vercel](https://vercel.com/)
+- Postgres database is hosted on [Neon](https://neon.tech/)
+- Hasura GraphQL Engine is hosted on [Hasura Cloud](https://hasura.io/cloud/)
+- Deploys are orchestrated with [Github
+  Actions](https://github.com/features/actions)
+  - We skip Vercel's build system altogether to gain more control over
+    full-stack deployments and preview apps
+  - See `.github/workflows/deploy.yml` for details
+- Every pull request gets a full-stack preview environment, including:
+  - A branch of the staging database
+  - A Hasura Cloud preview app (currently not stable; may switch to Render)
+  - A Vercel preview deploy configured to query the Hasura preview app
