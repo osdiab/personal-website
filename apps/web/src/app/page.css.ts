@@ -15,7 +15,7 @@ export const heroTitleCss = style([
 ]);
 export const sectionHeadingCss = style([sprinkles({ textSize: "xl2" })]);
 export const jobEntrySectionCss = style([
-  stackCss({ direction: "y", gap: "lg" }),
+  stackCss({ direction: "y", gap: "xl4" }),
 ]);
 export const jobEntryCss = style([
   stackCss({ direction: "y", gap: "md" }),

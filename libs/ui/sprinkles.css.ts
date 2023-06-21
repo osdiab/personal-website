@@ -7,6 +7,10 @@ export const space = {
   md: "8px",
   lg: "12px",
   xl: "16px",
+  xl2: "24px",
+  xl3: "32px",
+  xl4: "48px",
+  xl5: "64px",
 };
 
 export const fontWeight = {
