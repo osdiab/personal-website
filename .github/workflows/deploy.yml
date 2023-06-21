@@ -5,7 +5,7 @@ on:
       - stg
       - prd
   pull_request_target:
-    types: [opened, closed, reopened, synchronize]
+    types: [opened, reopened, synchronize]
     branches:
       - stg
 
@@ -143,7 +143,7 @@ jobs:
           path: delete-neon-branch-response.json
 
   preview-neon:
-    if: github.event_name == 'pull_request_target' && github.event.action != 'closed'
+    if: github.event_name == 'pull_request_target'
     name: "Make Neon preview postgres branch"
     runs-on: ubuntu-latest
     outputs:
@@ -213,7 +213,7 @@ jobs:
     name: Create Hasura preview
     runs-on: ubuntu-latest
     needs: [preview-neon]
-    if: github.event_name == 'pull_request_target' && github.event.action != 'closed'
+    if: github.event_name == 'pull_request_target'
     steps:
       - uses: actions/checkout@v2
       - uses: osdiab/hasura-cloud-preview-apps@main
@@ -222,20 +222,6 @@ jobs:
           hasuraProjectDirectoryPath: apps/gql-engine
           hasuraEnv: |
             HASURA_GRAPHQL_DATABASE_URL=postgres://${{secrets.APP_DB_USER_STG}}:${{secrets.APP_DB_PASSWORD_STG}}@${{needs.preview-neon.outputs.preview_branch_id}}/${{secrets.APP_DB_DATABASE_STG}}
-        env:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-          HASURA_CLOUD_ACCESS_TOKEN: ${{secrets.HASURA_CLOUD_ACCESS_TOKEN}}
-
-  delete-hasura-preview-app:
-    name: Delete Hasura preview
-    runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request_target' && github.event.action == 'closed'
-    steps:
-      - uses: actions/checkout@v2
-      - uses: osdiab/hasura-cloud-preview-apps@main
-        with:
-          name: "personal-website-pr-${{github.event.number}}"
-          delete: true
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
           HASURA_CLOUD_ACCESS_TOKEN: ${{secrets.HASURA_CLOUD_ACCESS_TOKEN}}
@@ -269,7 +255,7 @@ jobs:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
       - name: Preview Build
         run: vercel build
-        if: (github.event_name == 'pull_request_target' && github.event.action != 'closed') || github.ref != 'refs/heads/prd'
+        if: github.event_name == 'pull_request_target' || github.ref != 'refs/heads/prd'
         env:
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_WEB_APP }}
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
@@ -293,7 +279,6 @@ jobs:
       pull-requests: write
       contents: write
     name: Deploy to Vercel
-    if: github.event_name != 'pull_request_target' || github.event.action != 'closed'
     runs-on: ubuntu-latest
     needs:
       [
@@ -312,7 +297,7 @@ jobs:
         run: tar -xf vercel-build.tar
       - name: Deploy Vercel Preview
         uses: amondnet/vercel-action@v20
-        if: (github.event_name == 'pull_request_target' && github.event.action != 'closed') || github.ref != 'refs/heads/prd'
+        if: github.event_name == 'pull_request_target' || github.ref != 'refs/heads/prd'
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
