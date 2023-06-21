@@ -1,0 +1,60 @@
+name: Delete Neon PR Branch
+description: Deletes Neon database branch corresponding to a Pull Request
+inputs:
+  pr-number:
+    description: "PR Number"
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: List Neon branches
+      id: list-branches
+      env:
+        NEON_PROJECT_ID: ${{secrets.NEON_PROJECT_ID_APP_DB_STG}}
+        NEON_API_KEY: ${{secrets.NEON_API_KEY}}
+      run: |
+        curl "https://console.neon.tech/api/v2/projects/$NEON_PROJECT_ID/branches" \
+          --header 'accept: application/json' \
+          --header "Authorization: Bearer $NEON_API_KEY" \
+          --fail-with-body \
+          --output list-neon-branches-response.json
+    - name: Upload list branches failure
+      if: failure() && steps.list-branches.outcome == 'failure'
+      uses: actions/upload-artifact@v3
+      with:
+        name: list-neon-branches-failure.json
+        path: list-neon-branches-response.json
+    - name: Get existing Neon branch for this PR
+      id: get-existing-branch
+      run: |
+        echo "branch_id=$(
+          jq --raw-output '.branches[] | select(.name | startswith("PR #${{ inputs.pr-number }} ")).id' list-neon-branches-response.json
+        )" >> $GITHUB_OUTPUT
+    - name: Delete existing branch for this PR
+      id: delete-existing-branch
+      if: ${{ steps.get-existing-branch.outputs.branch_id != '' }}
+      env:
+        NEON_PROJECT_ID: ${{secrets.NEON_PROJECT_ID_APP_DB_STG}}
+        NEON_API_KEY: ${{secrets.NEON_API_KEY}}
+      # due to Neon operations concurrency limit, need to retry for now
+      # https://community.neon.tech/t/project-already-has-running-operations-scheduling-of-new-ones-is-prohibited/242
+      uses: nick-fields/retry@v2
+      with:
+        timeout_seconds: 1
+        max_attempts: 3
+        retry_on: error
+        command: |
+          curl "https://console.neon.tech/api/v2/projects/$NEON_PROJECT_ID/branches/${{ steps.get-existing-branch.outputs.branch_id }}" \
+            --request DELETE \
+            --header 'Accept: application/json' \
+            --header "Authorization: Bearer $NEON_API_KEY" \
+            --header 'Content-Type: application/json' \
+            --fail-with-body \
+            --output delete-neon-branch-response.json
+    - name: Upload existing branch deletion failure
+      if: failure() && steps.delete-existing-branch.outcome == 'failure'
+      uses: actions/upload-artifact@v3
+      with:
+        name: delete-neon-branch-failure.json
+        path: delete-neon-branch-response.json
