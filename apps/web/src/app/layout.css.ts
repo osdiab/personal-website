@@ -4,6 +4,7 @@ import { stackCss } from "@osdiab-website/ui/stack.css";
 import { style } from "@vanilla-extract/css";
 
 export const bodyCss = style([
+  { minHeight: ["100dvh", "100vh"] },
   stackCss({ direction: "y", gap: "lg", alignItems: "stretch" }),
 ]);
 export const mainContentCss = style([sprinkles({ paddingBottom: "xl7" })]);
@@ -13,6 +14,7 @@ export const footerCss = style([
     paddingX: headerPaddingX,
     paddingTop: "xl7",
     paddingBottom: "xl4",
+    marginTop: "auto",
   }),
   {
     background:
