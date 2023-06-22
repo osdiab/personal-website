@@ -11,18 +11,34 @@ export const mainContentCss = style([sprinkles({ paddingBottom: "xl7" })]);
 
 export const footerCss = style([
   sprinkles({
-    paddingX: headerPaddingX,
-    paddingTop: "xl7",
-    paddingBottom: "xl4",
     marginTop: "auto",
+    position: "relative",
   }),
   {
-    background:
-      "linear-gradient(0deg, rgba(255,125,80,.15) 30%, rgba(0,0,0,0) 100%)",
+    ":before": {
+      display: "block",
+      position: "absolute",
+      top: "0",
+      left: "0",
+      width: "100%",
+      height: "100%",
+      content: '""',
+      zIndex: -1,
+      background:
+        "linear-gradient(135deg, #ff7D0055 25%, transparent 25%) -19px 0/ 38px 38px, linear-gradient(225deg, #ff7D00 25%, transparent 25%) -19px 0/ 38px 38px, linear-gradient(315deg, #ff7D0055 25%, transparent 25%) 0px 0/ 38px 38px, linear-gradient(45deg, #ff7D00 25%, #e5e5f7 25%) 0px 0/ 38px 38px",
+      opacity: 0.25,
+      maskImage:
+        "linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%)",
+    },
   },
 ]);
 
 export const footerContentCss = style([
-  sprinkles({ marginX: "auto" }),
+  sprinkles({
+    paddingX: headerPaddingX,
+    paddingTop: "xl7",
+    paddingBottom: "xl4",
+    marginX: "auto",
+  }),
   { maxWidth: maxContentWidth },
 ]);

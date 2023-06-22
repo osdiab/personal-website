@@ -95,6 +95,7 @@ const responsiveProperties = defineProperties({
   properties: {
     display: ["none", "flex", "inline-flex", "block", "inline"],
     flexDirection: ["row", "column"],
+    position: ["relative", "absolute", "fixed", "sticky"],
     gap: space,
     justifyContent,
     alignItems,
