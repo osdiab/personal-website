@@ -22,7 +22,7 @@ export default function RootLayout({
         <footer className={footerCss}>
           <div className={footerWrapperCss}>
             <div className={footerContentCss}>
-              © Omar Diab, {new Date().getFullYear()}
+              <span>© Omar Diab, {new Date().getFullYear()}</span>
             </div>
           </div>
         </footer>

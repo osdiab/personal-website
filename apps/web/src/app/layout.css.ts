@@ -45,5 +45,6 @@ export const footerContentCss = style([
   sprinkles({
     marginX: "auto",
   }),
+  stackCss({ direction: "x", gap: "lg", justifyContent: "space-between" }),
   { maxWidth: maxContentWidth },
 ]);
