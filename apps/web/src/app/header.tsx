@@ -56,13 +56,16 @@ export function RootHeader({ className }: { className?: string }) {
             <span className={siteTitleCss}>Omar Diab</span>
           </div>
           <div className={headerRightCss}>
-            <a href="https://www.linkedin.com/in/osdiab/">
+            <a href="https://www.linkedin.com/in/osdiab/" target="_blank">
               <Linkedin className={logoCss} aria-label="LinkedIn" />
             </a>
-            <a href="mailto:hello@omardiab.com">
+            <a href="mailto:hello@omardiab.com" target="_blank">
               <Mail className={logoCss} aria-label="Email" />
             </a>
-            <a href="https://github.com/osdiab/personal-website">
+            <a
+              href="https://github.com/osdiab/personal-website"
+              target="_blank"
+            >
               <Github className={logoCss} aria-label="Github" />
             </a>
           </div>
