@@ -9,12 +9,11 @@ import {
   siteHeaderScrolledCss,
   siteTitleCss,
 } from "@/app/header.css";
-import GithubLogo from "@/assets/logos/github.svg";
 import Logo from "@/app/logo.svg";
 
 import clsx from "clsx";
 import { useEffect, useRef, useState } from "react";
-import { Mail } from "lucide-react";
+import { Github, Linkedin, Mail } from "lucide-react";
 
 export function RootHeader({ className }: { className?: string }) {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -57,11 +56,14 @@ export function RootHeader({ className }: { className?: string }) {
             <span className={siteTitleCss}>Omar Diab</span>
           </div>
           <div className={headerRightCss}>
+            <a href="https://www.linkedin.com/in/osdiab/">
+              <Linkedin className={logoCss} aria-label="LinkedIn" />
+            </a>
             <a href="mailto:hello@omardiab.com">
-              <Mail className={logoCss} aria-label="Github" />
+              <Mail className={logoCss} aria-label="Email" />
             </a>
             <a href="https://github.com/osdiab/personal-website">
-              <GithubLogo class={logoCss} aria-label="Github" />
+              <Github className={logoCss} aria-label="Github" />
             </a>
           </div>
         </div>
