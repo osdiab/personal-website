@@ -41,7 +41,7 @@ jobs:
         run: |
           echo "branch_id=$(
             jq --raw-output '.branches[] | select(.name | startswith("PR #${{ inputs.pr-number }} ")).id' list-neon-branches-response.json
-          )" >> $GITHUB_OUTPUT
+          )" >> "$GITHUB_OUTPUT"
       - name: Delete existing branch for this PR
         id: delete-existing-branch
         if: ${{ steps.get-existing-branch.outputs.branch_id != '' }}

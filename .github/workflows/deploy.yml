@@ -124,7 +124,7 @@ jobs:
         run: |
           echo "branch_id=$(
             jq --raw-output '.branches[] | select(.name=="main").id' list-neon-branches-response.json
-          )" >> $GITHUB_OUTPUT
+          )" >> "$GITHUB_OUTPUT"
       - name: Create Neon branch
         id: create-branch
         env:
@@ -160,7 +160,7 @@ jobs:
         run: |
           echo "branch_id=$(
             jq --raw-output '.endpoints[0].host' create-neon-branch-response.json
-          )" >> $GITHUB_OUTPUT
+          )" >> "$GITHUB_OUTPUT"
 
   preview-hasura:
     name: Create Hasura preview
