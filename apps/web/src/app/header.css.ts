@@ -7,7 +7,11 @@ import { stackCss } from "@osdiab-website/ui/stack.css";
 import { style } from "@vanilla-extract/css";
 
 export const maxContentWidth = "800px";
-export const headerPaddingX = "xl3";
+export const headerPaddingX: Parameters<typeof sprinkles>[0]["paddingX"] = {
+  mobile: "xl2",
+  tablet: "xl3",
+};
+
 export const siteHeaderCss = style([
   sprinkles({ fontSize: "lg", paddingX: headerPaddingX, paddingY: "md" }),
   {
