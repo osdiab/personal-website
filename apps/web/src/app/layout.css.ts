@@ -33,11 +33,16 @@ export const footerCss = style([
   },
 ]);
 
-export const footerContentCss = style([
+export const footerWrapperCss = style([
   sprinkles({
     paddingX: headerPaddingX,
     paddingTop: "xl7",
     paddingBottom: "xl4",
+  }),
+]);
+
+export const footerContentCss = style([
+  sprinkles({
     marginX: "auto",
   }),
   { maxWidth: maxContentWidth },

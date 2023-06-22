@@ -3,6 +3,7 @@ import {
   bodyCss,
   footerContentCss,
   footerCss,
+  footerWrapperCss,
   mainContentCss,
 } from "@/app/layout.css";
 
@@ -19,8 +20,10 @@ export default function RootLayout({
         <RootHeader />
         <main className={mainContentCss}>{children}</main>
         <footer className={footerCss}>
-          <div className={footerContentCss}>
-            © Omar Diab, {new Date().getFullYear()}
+          <div className={footerWrapperCss}>
+            <div className={footerContentCss}>
+              © Omar Diab, {new Date().getFullYear()}
+            </div>
           </div>
         </footer>
       </body>
