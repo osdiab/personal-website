@@ -8,14 +8,12 @@ on:
 jobs:
   delete-existing-neon-branch:
     name: "Delete old Neon postgres branch"
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: ./.github/actions/delete-neon-pr-branch
-        with:
-          pr-number: ${{github.event.number}}
-          neon-project-id: ${{secrets.NEON_PROJECT_ID_APP_DB_STG}}
-          neon-api-key: ${{secrets.NEON_API_KEY}}
+    uses: "./.github/workflows/delete-neon-pr-branch.yml"
+    with:
+      pr-number: ${{github.event.number}}
+    secrets:
+      neon-project-id: ${{secrets.NEON_PROJECT_ID_APP_DB_STG}}
+      neon-api-key: ${{secrets.NEON_API_KEY}}
 
   delete-hasura-preview-app:
     name: Delete Hasura preview
