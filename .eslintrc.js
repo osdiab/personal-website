@@ -1,5 +1,3 @@
-const path = require("path");
-
 /* eslint-env node */
 module.exports = {
   plugins: ["unused-imports"],
@@ -37,7 +35,18 @@ module.exports = {
       },
     },
     {
-      files: ["apps/web/**/*"],
+      files: ["./**/*.{j,t}sx"],
+      extends: [
+        "plugin:react/recommended",
+        "plugin:react-hooks/recommended",
+        "plugin:jsx-a11y/strict",
+      ],
+      rules: {
+        "react/react-in-jsx-scope": "off",
+      },
+    },
+    {
+      files: ["./apps/web/**/*"],
       extends: ["plugin:@next/next/core-web-vitals"],
       settings: { next: { rootDir: "apps/web" } },
     },
