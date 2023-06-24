@@ -27,13 +27,14 @@ export function RootHeader({ className }: { className?: string }) {
       { threshold: [1] }
     );
 
-    if (dummyRef.current) {
-      observer.observe(dummyRef.current);
+    const { current: dummySpan } = dummyRef;
+    if (dummySpan) {
+      observer.observe(dummySpan);
     }
 
     return () => {
-      if (dummyRef.current) {
-        observer.unobserve(dummyRef.current);
+      if (dummySpan) {
+        observer.unobserve(dummySpan);
       }
     };
   }, []);
