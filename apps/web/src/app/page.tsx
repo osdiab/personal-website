@@ -1,10 +1,12 @@
 import {
   companyLogoSvgCss,
+  companyTitleCss,
   heroTitleCss,
   jobDescriptionCss,
   jobEntryCss,
   jobEntrySectionCss,
   jobHeaderCss,
+  jobLinkIconCss,
   jobMetadataCss,
   jobTitleCss,
   pageContentCss,
@@ -17,6 +19,7 @@ import { hyperlinkCss } from "@osdiab-website/ui/hyperlink.css";
 import CleverLogo from "@/assets/logos/clever.svg";
 import SpinachLogo from "@/assets/logos/spinach.svg";
 import EveryOrgLogo from "@/assets/logos/every-org.svg";
+import { ExternalLink } from "lucide-react";
 
 type SvgComponent = (props: ComponentProps<"svg">) => JSX.Element;
 
@@ -97,11 +100,19 @@ function Entry({
   description,
 }: EntryProps) {
   const companyLogo = (
-    <CompanyLogoType
-      className={companyLogoSvgCss}
-      role="img"
-      aria-label={companyName}
-    />
+    <span className={companyTitleCss}>
+      <CompanyLogoType
+        className={companyLogoSvgCss}
+        role="img"
+        aria-label={companyName}
+      />
+      {companyUrl && (
+        <ExternalLink
+          className={jobLinkIconCss}
+          aria-label={`Visit ${companyName} website`}
+        />
+      )}
+    </span>
   );
   return (
     <article className={jobEntryCss}>

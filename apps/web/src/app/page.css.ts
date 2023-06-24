@@ -41,8 +41,11 @@ export const jobHeaderCss = style([
     justifyContentTablet: "space-between",
     gap: "lg",
   }),
-  sprinkles({}),
 ]);
+export const companyTitleCss = style([
+  stackCss({ direction: "x", alignItems: "center", gap: "lg" }),
+]);
+export const jobLinkIconCss = style([{ height: fontSize.lg }]);
 export const jobTitleCss = style([
   sprinkles({ fontWeight: "bold", color: "gray-600" }),
 ]);
