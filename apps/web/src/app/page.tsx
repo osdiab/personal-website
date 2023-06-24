@@ -119,7 +119,12 @@ function Entry({
       <header className={jobHeaderCss}>
         <h3>
           {companyUrl ? (
-            <a className={hyperlinkCss} href={companyUrl} target="_blank">
+            <a
+              className={hyperlinkCss}
+              href={companyUrl}
+              target="_blank"
+              rel="noreferrer"
+            >
               {companyLogo}
             </a>
           ) : (
