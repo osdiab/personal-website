@@ -167,29 +167,12 @@ jobs:
     runs-on: ubuntu-latest
     name: Delete Hasura Preview Tenant
     steps:
-      - name: Download Tenant ID
-        uses: actions/download-artifact@v3
-        with:
-          name: pr-${{ github.event.number }}-hasura-tenant-id
-        continue-on-error: true
-
-      - name: Check if Artifact exists
-        id: check-artifact
-        run: |
-          if [ ! -f "hasura_preview_tenant_id.txt" ]; then
-            echo "No tenant ID file found, no tenant to delete."
-            echo "file_exists=false" >> "$GITHUB_OUTPUT"
-          else
-            echo "file_exists=true" >> "$GITHUB_OUTPUT"
-          fi
-
       - name: Get Existing Tenant
         id: get-existing-tenant
-        if: steps.check-artifact.outputs.file_exists == 'true'
         run: |
           GQL_QUERY=$(cat <<-GQL
-            query GetTenant(\$tenantId: uuid!) {
-              tenant_by_pk(id: \$tenantId) {
+            query GetTenantByName(\$tenantName: String!) {
+              tenant(where: {name: {_eq: \$tenantName}}) {
                 id
               }
             }
@@ -198,8 +181,8 @@ jobs:
 
           REQUEST_PAYLOAD=$(jq -n \
             --arg gqlQuery "$GQL_QUERY" \
-            --arg tenantId "$(cat hasura_preview_tenant_id.txt)" \
-            '{ "query": $gqlQuery, "variables": { "tenantId": $tenantId } }')
+            --arg tenantName "personal-website-pr-${{ github.event.number }}" \
+            '{ "query": $gqlQuery, "variables": { "tenantName": $tenantName } }')
 
           # Send the request using curl
           RESPONSE=$(curl \
@@ -223,7 +206,7 @@ jobs:
             exit 1
           fi
 
-          found_tenant_id=$(echo "$RESPONSE" | jq -r '.data.tenant_by_pk.id')
+          found_tenant_id=$(echo "$RESPONSE" | jq -r '.data.tenant[0].id')
           if [ "$found_tenant_id" == "null" ]; then
             echo "tenant_exists=false" > "$GITHUB_OUTPUT"
           else
@@ -313,14 +296,7 @@ jobs:
 
           tenant_id=$(echo "$RESPONSE" | jq -r '.data.createTenant.id')
           echo "Tenant ID: $tenant_id"
-          echo "$tenant_id" > hasura_preview_tenant_id.txt
           echo "tenant_id=$tenant_id" >> "$GITHUB_OUTPUT"
-
-      - name: Upload Tenant ID
-        uses: actions/upload-artifact@v3
-        with:
-          name: pr-${{ github.event.number }}-hasura-tenant-id
-          path: hasura_preview_tenant_id.txt
 
   configure-hasura-preview-tenant:
     runs-on: ubuntu-latest
