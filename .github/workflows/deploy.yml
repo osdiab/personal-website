@@ -291,6 +291,7 @@ jobs:
             -H 'Authorization: pat ${{ secrets.HASURA_CLOUD_ACCESS_TOKEN }}' \
             -d "$REQUEST_PAYLOAD"
           )
+          echo $RESPONSE
           ENV_HASH=$(echo "${RESPONSE}" | jq -r '.data.getTenantEnv.hash')
           GQL_ADMIN_SECRET=$(echo "${RESPONSE}" | jq -r '.data.getTenantEnv.envVars.HASURA_GRAPHQL_ADMIN_SECRET')
           echo "env_hash=$ENV_HASH" >> $GITHUB_OUTPUT
