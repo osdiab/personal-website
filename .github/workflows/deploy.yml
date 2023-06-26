@@ -164,12 +164,35 @@ jobs:
 
   create-hasura-preview-tenant:
     runs-on: ubuntu-latest
-    name: Create tenant
+    name: Get or Create Hasura Preview Tenant
+    if: github.event_name == 'pull_request_target' && github.event.action != 'closed'
     outputs:
-      tenant_id: ${{ steps.createTenant.outputs.tenant_id }}
+      tenant_id: ${{ steps.setTenantId.outputs.tenant_id }}
     steps:
+      - name: Try to Download Tenant ID
+        id: downloadTenantId
+        uses: actions/download-artifact@v3
+        with:
+          name: pr-${{ github.event.number }}-hasura-tenant-id
+          path: tenant_id.txt
+        continue-on-error: true
+
+      - name: Check if Tenant ID is available
+        id: checkTenantId
+        run: |
+          if [[ -f "tenant_id.txt" ]]; then
+            echo "Tenant ID exists. No need to create a new tenant."
+            TENANT_ID=$(cat tenant_id.txt)
+            echo "tenant_id=$TENANT_ID" >> $GITHUB_OUTPUT
+            echo "needs_new_tenant=false" >> $GITHUB_OUTPUT
+          else
+            echo "No Tenant ID found. Creating a new tenant."
+            echo "needs_new_tenant=true" >> $GITHUB_OUTPUT
+          fi
+
       - name: Create Tenant
         id: createTenant
+        if: steps.checkTenantId.outputs.needs_new_tenant == 'true'
         run: |
           QUERY=$(cat <<-GQL
             mutation CreateTenant {
@@ -189,18 +212,27 @@ jobs:
             EOF
           )
           TENANT_ID=$(echo "${RESPONSE}" | jq -r '.data.createTenant.id')
+          echo "$TENANT_ID" > tenant_id.txt
           echo "tenant_id=$TENANT_ID" >> $GITHUB_OUTPUT
-      - name: Upload createTenant response
-        id: uploadCreateTenantResponse
-        if: failure()
-        uses: actions/upload-artifact@v2
+
+      - name: Set Tenant ID output
+        id: setTenantId
+        run: |
+          if [[ "${{ steps.checkTenantId.outputs.needs_new_tenant }}" == "true" ]]; then
+            echo "tenant_id=${{ steps.createTenant.outputs.tenant_id }}" >> $GITHUB_OUTPUT
+          else
+            echo "tenant_id=${{ steps.checkTenantId.outputs.tenant_id }}" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Upload Tenant ID
+        uses: actions/upload-artifact@v3
         with:
-          name: createTenantResponse
-          path: createTenantResponse.json
+          name: pr-${{ github.event.number }}-hasura-tenant-id
+          path: tenant_id.txt
 
   configure-hasura-preview-tenant:
     runs-on: ubuntu-latest
-    name: Configure tenant
+    name: Configure Hasura Preview Tenant
     needs: [create-hasura-preview-tenant, preview-neon]
     outputs:
       endpoint: ${{ steps.updateTenantEnvAndName.outputs.endpoint }}
@@ -237,7 +269,7 @@ jobs:
       - name: Upload getTenantEnv response
         id: uploadGetTenantEnvResponse
         if: failure()
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: getTenantEnvResponse
           path: getTenantEnvResponse.json
@@ -286,10 +318,52 @@ jobs:
       - name: Upload updateTenantEnvAndName response
         id: uploadUpdateTenantEnvAndNameResponse
         if: failure()
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: updateTenantEnvAndNameResponse
           path: updateTenantEnvAndNameResponse.json
+
+  delete-hasura-tenant:
+    if: github.event_name == 'pull_request_target' && github.event.action == 'closed'
+    runs-on: ubuntu-latest
+    name: Delete Hasura Preview Tenant
+    steps:
+      - name: Download Tenant ID
+        uses: actions/download-artifact@v3
+        with:
+          name: pr-${{ github.event.number }}-hasura-tenant-id
+          path: tenant_id.txt
+      - name: Delete Tenant
+        id: deleteTenant
+        run: |
+          TENANT_ID=$(cat tenant_id.txt)
+          QUERY=$(cat <<-GQL
+            mutation DeleteTenant(\$tenantId: uuid!) {
+              deleteTenant(tenantId: \$tenantId) {
+                status
+              }
+            }
+          GQL
+          )
+          RESPONSE=$(curl --silent --show-error --fail-with-body -X POST 'https://data.pro.hasura.io/v1/graphql' \
+            -H 'Content-Type: application/json' \
+            -H 'Authorization: pat ${{ secrets.HASURA_CLOUD_ACCESS_TOKEN }}' \
+            -d @- <<EOF
+            {
+              "query": "$(echo $QUERY | tr -d '\n')",
+              "variables": {
+                "tenantId": "${TENANT_ID}"
+              }
+            }
+            EOF
+          )
+          echo "$RESPONSE" > deleteTenantResponse.json
+      - name: Upload deleteTenant response
+        if: failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: deleteTenantResponse
+          path: deleteTenantResponse.json
 
   build-web-app:
     name: Build Web App
