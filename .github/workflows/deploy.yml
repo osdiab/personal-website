@@ -342,6 +342,7 @@ jobs:
 
           ENV_HASH=$(echo "${RESPONSE}" | jq -r '.data.getTenantEnv.hash')
           GQL_ADMIN_SECRET=$(echo "${RESPONSE}" | jq -r '.data.getTenantEnv.envVars.HASURA_GRAPHQL_ADMIN_SECRET')
+          echo "::add-mask::$GQL_ADMIN_SECRET"
           echo "env_hash=$ENV_HASH" >> "$GITHUB_OUTPUT"
           echo "gql_admin_secret=$GQL_ADMIN_SECRET" >> "$GITHUB_OUTPUT"
 
@@ -531,7 +532,7 @@ jobs:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID_WEB_APP }}
-          vercel-args: --prebuilt --env HASURA_GRAPHQL_ENDPOINT=${{needs.configure-hasura-preview-tenant.outputs.endpoint}} HASURA_GRAPHQL_ADMIN_SECRET=${{needs.configure-hasura-preview-tenant.outputs.admin_secret}}
+          vercel-args: --prebuilt --env HASURA_GRAPHQL_ENDPOINT=${{needs.configure-hasura-preview-tenant.outputs.endpoint}} --env HASURA_GRAPHQL_ADMIN_SECRET=${{needs.configure-hasura-preview-tenant.outputs.admin_secret}}
 
   deploy-to-vercel-stg-prd:
     permissions:
