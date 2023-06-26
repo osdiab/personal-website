@@ -198,17 +198,16 @@ jobs:
             }
           GQL
           )
+          REQUEST_PAYLOAD=$(cat <<-JSON
+            {
+              "query": "$(echo $QUERY | tr -d '\n')"
+            }
+          JSON
+          )
           RESPONSE=$(curl --silent --show-error --fail-with-body -X POST 'https://data.pro.hasura.io/v1/graphql' \
             -H 'Content-Type: application/json' \
             -H 'Authorization: pat ${{ secrets.HASURA_CLOUD_ACCESS_TOKEN }}' \
-            -d @- <<EOF
-            {
-              "query": "$(echo $QUERY | tr -d '\n')",
-              "variables": {
-                "tenantId": "${TENANT_ID}"
-              }
-            }
-            EOF
+            -d "$REQUEST_PAYLOAD"
           )
           echo "$RESPONSE" > deleteTenantResponse.json
       - name: Upload deleteTenant response
@@ -237,14 +236,16 @@ jobs:
             }
           GQL
           )
-          RESPONSE=$(curl --silent --show-error --fail-with-body -X POST 'https://data.pro.hasura.io/v1/graphql' \
-            -H 'Content-Type: application/json' \
-            -H 'Authorization: pat ${{ secrets.HASURA_CLOUD_ACCESS_TOKEN }}' \
-            -d @- <<EOF
+          REQUEST_PAYLOAD=$(cat <<-JSON
             {
               "query": "$(echo $QUERY | tr -d '\n')"
             }
-            EOF
+          JSON
+          )
+          RESPONSE=$(curl --silent --show-error --fail-with-body -X POST 'https://data.pro.hasura.io/v1/graphql' \
+            -H 'Content-Type: application/json' \
+            -H 'Authorization: pat ${{ secrets.HASURA_CLOUD_ACCESS_TOKEN }}' \
+            -d "$REQUEST_PAYLOAD"
           )
           TENANT_ID=$(echo "${RESPONSE}" | jq -r '.data.createTenant.id')
           echo "$TENANT_ID" > tenant_id.txt
@@ -276,17 +277,19 @@ jobs:
             }
           GQL
           )
-          RESPONSE=$(curl --silent --show-error --fail-with-body -X POST 'https://data.pro.hasura.io/v1/graphql' \
-            -H 'Content-Type: application/json' \
-            -H 'Authorization: pat ${{ secrets.HASURA_CLOUD_ACCESS_TOKEN }}' \
-            -d @- <<EOF
+          REQUEST_PAYLOAD=$(cat <<-JSON
             {
               "query": "$(echo $QUERY | tr -d '\n')",
               "variables": {
                 "tenantId": "${{ needs.create-hasura-preview-tenant.outputs.tenant_id }}"
               }
             }
-            EOF
+          JSON
+          )
+          RESPONSE=$(curl --silent --show-error --fail-with-body -X POST 'https://data.pro.hasura.io/v1/graphql' \
+            -H 'Content-Type: application/json' \
+            -H 'Authorization: pat ${{ secrets.HASURA_CLOUD_ACCESS_TOKEN }}' \
+            -d "$REQUEST_PAYLOAD"
           )
           ENV_HASH=$(echo "${RESPONSE}" | jq -r '.data.getTenantEnv.hash')
           GQL_ADMIN_SECRET=$(echo "${RESPONSE}" | jq -r '.data.getTenantEnv.envVars.HASURA_GRAPHQL_ADMIN_SECRET')
@@ -324,10 +327,7 @@ jobs:
             }
           GQL
           )
-          RESPONSE=$(curl --silent --show-error --fail-with-body -X POST 'https://data.pro.hasura.io/v1/graphql' \
-            -H 'Content-Type: application/json' \
-            -H 'Authorization: pat ${{ secrets.HASURA_CLOUD_ACCESS_TOKEN }}' \
-            -d @- <<EOF
+          REQUEST_PAYLOAD=$(cat <<-JSON
             {
               "query": "$(echo $QUERY | tr -d '\n')",
               "variables": {
@@ -337,7 +337,12 @@ jobs:
                 "currentHash": "${{ steps.getTenantEnv.outputs.env_hash }}"
               }
             }
-            EOF
+          JSON
+          )
+          RESPONSE=$(curl --silent --show-error --fail-with-body -X POST 'https://data.pro.hasura.io/v1/graphql' \
+            -H 'Content-Type: application/json' \
+            -H 'Authorization: pat ${{ secrets.HASURA_CLOUD_ACCESS_TOKEN }}' \
+            -d "$REQUEST_PAYLOAD"
           )
           ENDPOINT=$(echo "${RESPONSE}" | jq -r '.data.updateTenantName.tenant.project.endpoint')
           echo "endpoint=$ENDPOINT" >> $GITHUB_OUTPUT
