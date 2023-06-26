@@ -175,7 +175,7 @@ jobs:
         continue-on-error: true
 
       - name: Check if Artifact exists
-        id: checkArtifact
+        id: check-artifact
         run: |
           if [ ! -f "hasura_preview_tenant_id.txt" ]; then
             echo "No tenant ID file found, no tenant to delete."
@@ -184,11 +184,60 @@ jobs:
             echo "file_exists=true" >> "$GITHUB_OUTPUT"
           fi
 
+      - name: Get Existing Tenant
+        id: get-existing-tenant
+        if: steps.check-artifact.outputs.file_exists == 'true'
+        run: |
+          GQL_QUERY=$(cat <<-GQL
+            query GetTenant(\$tenantId: uuid!) {
+              tenant_by_pk(id: \$tenantId) {
+                id
+              }
+            }
+          GQL
+          )
+
+          REQUEST_PAYLOAD=$(jq -n \
+            --arg gqlQuery "$GQL_QUERY" \
+            --arg tenantId "$(cat hasura_preview_tenant_id.txt)" \
+            '{ "query": $gqlQuery, "variables": { "tenantId": $tenantId } }')
+
+          # Send the request using curl
+          RESPONSE=$(curl \
+            --fail-with-body \
+            --silent \
+            --show-error \
+            --location \
+            --request POST \
+            --header 'Content-Type: application/json' \
+            --header 'Authorization: pat ${{ secrets.HASURA_CLOUD_ACCESS_TOKEN }}' \
+            --data "$REQUEST_PAYLOAD" \
+            'https://data.pro.hasura.io/v1/graphql'
+          )
+
+          echo "Payload: $REQUEST_PAYLOAD"
+          echo "Response: $RESPONSE"
+
+          # Check if the response contains errors
+          if [[ $(echo "$RESPONSE" | jq -e '.errors') != "null" ]]; then
+            echo "Error occurred: $RESPONSE"
+            exit 1
+          fi
+
+          found_tenant_id=$(echo "$RESPONSE" | jq -r '.data.tenant_by_pk.id')
+          if [ "$found_tenant_id" == "null" ]; then
+            echo "tenant_exists=false" > "$GITHUB_OUTPUT"
+          else
+            echo "tenant_exists=true" > "$GITHUB_OUTPUT"
+            echo "tenant_id=$found_tenant_id" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Delete Tenant
         id: deleteTenant
-        if: steps.checkArtifact.outputs.file_exists == 'true'
+        if: steps.get-existing-tenant.outputs.tenant_exists == 'true'
         run: |
-          TENANT_ID=$(cat hasura_preview_tenant_id.txt)
+          TENANT_ID="$(${{ steps.get-existing-tenant.outputs.tenant_id}})"
+
           GQL_QUERY=$(cat <<-GQL
             mutation DeleteTenant(\$tenantId: uuid!) {
               deleteTenant(tenantId: \$tenantId) {
