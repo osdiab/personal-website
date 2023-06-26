@@ -436,12 +436,19 @@ jobs:
       - name: Install Hasura CLI
         run: curl -L https://github.com/hasura/graphql-engine/raw/stable/cli/get.sh | bash
 
-      - name: Apply Hasura Migrations
+      - name: Wait for Hasura to be ready
+        env:
+          GQL_ENDPOINT: ${{needs.configure-hasura-preview-tenant.outputs.endpoint}}
+        run: pnpx wait-on "${GQL_ENDPOINT/https:/https-get:}/healthz"
+
+      - name: Apply Hasura Staging Metadata and initialize metadata
         run: |
           cd apps/gql-engine
-          HASURA_GRAPHQL_ENDPOINT=${{ needs.configure-hasura-preview-tenant.outputs.endpoint }} \
-          HASURA_GRAPHQL_ADMIN_SECRET=${{ needs.configure-hasura-preview-tenant.outputs.admin_secret }} \
+          hasura metadata apply
           hasura migrate apply --skip-execution
+        env:
+          HASURA_GRAPHQL_ENDPOINT: ${{needs.configure-hasura-preview-tenant.outputs.endpoint}}
+          HASURA_GRAPHQL_ADMIN_SECRET: ${{needs.configure-hasura-preview-tenant.outputs.admin_secret}}
 
       - name: Checkout PR branch
         uses: actions/checkout@v2
@@ -451,9 +458,10 @@ jobs:
       - name: Deploy Hasura
         run: |
           cd apps/gql-engine
-          HASURA_GRAPHQL_ENDPOINT=${{ needs.configure-hasura-preview-tenant.outputs.endpoint }} \
-          HASURA_GRAPHQL_ADMIN_SECRET=${{ needs.configure-hasura-preview-tenant.outputs.admin_secret }} \
           hasura deploy
+        env:
+          HASURA_GRAPHQL_ENDPOINT: ${{needs.configure-hasura-preview-tenant.outputs.endpoint}}
+          HASURA_GRAPHQL_ADMIN_SECRET: ${{needs.configure-hasura-preview-tenant.outputs.admin_secret}}
 
   build-web-app:
     name: Build Web App
