@@ -171,13 +171,13 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: pr-${{ github.event.number }}-hasura-tenant-id
-          path: tenant_id.txt
+          path: hasura_preview_tenant_id.txt
         continue-on-error: true
 
       - name: Check if Artifact exists
         id: checkArtifact
         run: |
-          if [ ! -f "tenantId.txt" ]; then
+          if [ ! -f "hasura_preview_tenant_id.txt" ]; then
             echo "No tenant ID file found, no tenant to delete."
             echo "file_exists=false" >> "$GITHUB_OUTPUT"
           else
@@ -188,7 +188,7 @@ jobs:
         id: deleteTenant
         if: steps.checkArtifact.outputs.file_exists == 'true'
         run: |
-          TENANT_ID=$(cat tenant_id.txt)
+          TENANT_ID=$(cat hasura_preview_tenant_id.txt)
           GQL_QUERY=$(cat <<-GQL
             mutation DeleteTenant(\$tenantId: uuid!) {
               deleteTenant(tenantId: \$tenantId) {
@@ -265,14 +265,14 @@ jobs:
 
           tenant_id=$(echo "$RESPONSE" | jq -r '.data.createTenant.id')
           echo "Tenant ID: $tenant_id"
-          echo "$tenant_id" > tenant_id.txt
+          echo "$tenant_id" > hasura_preview_tenant_id.txt
           echo "tenant_id=$tenant_id" >> "$GITHUB_OUTPUT"
 
       - name: Upload Tenant ID
         uses: actions/upload-artifact@v3
         with:
           name: pr-${{ github.event.number }}-hasura-tenant-id
-          path: tenant_id.txt
+          path: hasura_preview_tenant_id.txt
 
   configure-hasura-preview-tenant:
     runs-on: ubuntu-latest
