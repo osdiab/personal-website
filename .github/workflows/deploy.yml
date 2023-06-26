@@ -201,11 +201,9 @@ jobs:
           # Escape the QUERY variable using jq
           ESCAPED_QUERY=$(echo "$QUERY" | jq -sRr @sh)
 
-          # Create the request payload
-          REQUEST_PAYLOAD=$(jq -n
-            # --arg: Assign the value of the shell variable to the corresponding variable in jq
-            --arg tenantId "$TENANT_ID"
-            # The jq program defining the structure of the output JSON object
+          REQUEST_PAYLOAD=$(jq -n \
+            --arg escapedQuery "$ESCAPED_QUERY" \
+            --arg tenantId "$TENANT_ID" \
             '{ "query": $escapedQuery, "variables": { "tenantId": $tenantId } }'
           )
 
@@ -257,7 +255,8 @@ jobs:
             --request POST \
             --header 'Content-Type: application/json' \
             --header 'Authorization: pat ${{ secrets.HASURA_CLOUD_ACCESS_TOKEN }}' \
-            --data "{\"query\":$ESCAPED_QUERY}"
+            --data "{\"query\":$ESCAPED_QUERY}" \
+            'https://data.pro.hasura.io/v1/graphql'
           )
 
           echo "Payload: $ESCAPED_QUERY"
@@ -299,11 +298,9 @@ jobs:
           # Escape the QUERY variable using jq
           ESCAPED_QUERY=$(echo "$QUERY" | jq -sRr @sh)
 
-          # Create the request payload
-          REQUEST_PAYLOAD=$(jq -n
-            # --arg: Assign the value of the shell variable to the corresponding variable in jq
-            --arg tenantId "${{ needs.create-hasura-preview-tenant.outputs.tenant_id }}"
-            # The jq program defining the structure of the output JSON object
+          REQUEST_PAYLOAD=$(jq -n \
+            --arg escapedQuery "$ESCAPED_QUERY" \
+            --arg tenantId "${{ needs.create-hasura-preview-tenant.outputs.tenant_id }}" \
             '{ "query": $escapedQuery, "variables": { "tenantId": $tenantId } }'
           )
 
@@ -356,14 +353,12 @@ jobs:
           # Escape the QUERY variable using jq
           ESCAPED_QUERY=$(echo "$QUERY" | jq -sRr @sh)
 
-          # Create the request payload
-          REQUEST_PAYLOAD=$(jq -n
-            # --arg: Assign the value of the shell variables to the corresponding variables in jq
-            --arg tenantId "${{ needs.create-hasura-preview-tenant.outputs.tenant_id }}"
-            --arg tenantName "$tenantName"
-            --arg dbUrl "$dbUrl"
-            --arg currentHash "${{ steps.getTenantEnv.outputs.env_hash }}"
-            # The jq program defining the structure of the output JSON object
+          REQUEST_PAYLOAD=$(jq -n \
+            --arg escapedQuery "$ESCAPED_QUERY" \
+            --arg tenantId "${{ needs.create-hasura-preview-tenant.outputs.tenant_id }}" \
+            --arg tenantName "$tenantName" \
+            --arg dbUrl "$dbUrl" \
+            --arg currentHash "${{ steps.getTenantEnv.outputs.env_hash }}" \
             '{ "query": $escapedQuery, "variables": { "tenantId": $tenantId, "tenantName": $tenantName, "dbUrl": $dbUrl, "currentHash": $currentHash } }'
           )
 
