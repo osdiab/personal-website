@@ -365,6 +365,38 @@ jobs:
           name: deleteTenantResponse
           path: deleteTenantResponse.json
 
+  deploy-hasura-preview:
+    needs: [configure-hasura-preview-tenant]
+    runs-on: ubuntu-latest
+    name: Deploy Hasura
+    steps:
+      - name: Checkout stg branch
+        uses: actions/checkout@v2
+        with:
+          ref: stg
+
+      - name: Install Hasura CLI
+        run: curl -L https://github.com/hasura/graphql-engine/raw/stable/cli/get.sh | bash
+
+      - name: Apply Hasura Migrations
+        run: |
+          cd apps/gql-engine
+          HASURA_GRAPHQL_ENDPOINT=${{ needs.configure-hasura-preview-tenant.outputs.endpoint }} \
+          HASURA_GRAPHQL_ADMIN_SECRET=${{ needs.configure-hasura-preview-tenant.outputs.admin_secret }} \
+          hasura migrate apply --skip-execution
+
+      - name: Checkout PR branch
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.head_ref }}
+
+      - name: Deploy Hasura
+        run: |
+          cd apps/gql-engine
+          HASURA_GRAPHQL_ENDPOINT=${{ needs.configure-hasura-preview-tenant.outputs.endpoint }} \
+          HASURA_GRAPHQL_ADMIN_SECRET=${{ needs.configure-hasura-preview-tenant.outputs.admin_secret }} \
+          hasura deploy
+
   build-web-app:
     name: Build Web App
     runs-on: ubuntu-latest
