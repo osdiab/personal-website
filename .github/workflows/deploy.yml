@@ -422,10 +422,15 @@ jobs:
         run: npx wait-on "${GQL_ENDPOINT/https:/https-get:}/healthz" && npx wait-on "${GQL_ENDPOINT/https:/https-get:}/v1/version"
 
       - name: Apply Hasura Staging Metadata and initialize metadata
-        run: |
-          cd apps/gql-engine
-          hasura metadata apply
-          hasura migrate apply --skip-execution --database-name main
+        uses: nick-fields/retry@v2
+        with:
+          timeout_seconds: 10
+          max_attempts: 3
+          retry_on: error
+          command: |
+            cd apps/gql-engine
+            hasura metadata apply
+            hasura migrate apply --skip-execution --database-name main
         env:
           HASURA_GRAPHQL_ENDPOINT: ${{needs.configure-hasura-preview-tenant.outputs.endpoint}}
           HASURA_GRAPHQL_ADMIN_SECRET: ${{needs.configure-hasura-preview-tenant.outputs.admin_secret}}
@@ -436,9 +441,14 @@ jobs:
           ref: ${{ github.head_ref }}
 
       - name: Deploy Hasura
-        run: |
-          cd apps/gql-engine
-          hasura deploy
+        uses: nick-fields/retry@v2
+        with:
+          timeout_seconds: 10
+          max_attempts: 3
+          retry_on: error
+          command: |
+            cd apps/gql-engine
+            hasura deploy
         env:
           HASURA_GRAPHQL_ENDPOINT: ${{needs.configure-hasura-preview-tenant.outputs.endpoint}}
           HASURA_GRAPHQL_ADMIN_SECRET: ${{needs.configure-hasura-preview-tenant.outputs.admin_secret}}
