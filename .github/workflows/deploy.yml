@@ -133,7 +133,7 @@ jobs:
           NEON_API_KEY: ${{secrets.NEON_API_KEY}}
         uses: nick-fields/retry@v2
         with:
-          timeout_seconds: 1
+          timeout_seconds: 10
           max_attempts: 3
           retry_on: error
           command: |
