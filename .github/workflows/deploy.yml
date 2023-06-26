@@ -209,6 +209,8 @@ jobs:
             -H 'Authorization: pat ${{ secrets.HASURA_CLOUD_ACCESS_TOKEN }}' \
             -d "$REQUEST_PAYLOAD"
           )
+          echo "Payload: $REQUEST_PAYLOAD"
+          echo "Response: $RESPONSE"
           echo "$RESPONSE" > deleteTenantResponse.json
       - name: Upload deleteTenant response
         if: failure()
@@ -247,6 +249,8 @@ jobs:
             -H 'Authorization: pat ${{ secrets.HASURA_CLOUD_ACCESS_TOKEN }}' \
             -d "$REQUEST_PAYLOAD"
           )
+          echo "Payload: $REQUEST_PAYLOAD"
+          echo "Response: $RESPONSE"
           TENANT_ID=$(echo "${RESPONSE}" | jq -r '.data.createTenant.id')
           echo "$TENANT_ID" > tenant_id.txt
           echo "tenant_id=$TENANT_ID" >> $GITHUB_OUTPUT
@@ -291,7 +295,8 @@ jobs:
             -H 'Authorization: pat ${{ secrets.HASURA_CLOUD_ACCESS_TOKEN }}' \
             -d "$REQUEST_PAYLOAD"
           )
-          echo $RESPONSE
+          echo "Payload: $REQUEST_PAYLOAD"
+          echo "Response: $RESPONSE"
           ENV_HASH=$(echo "${RESPONSE}" | jq -r '.data.getTenantEnv.hash')
           GQL_ADMIN_SECRET=$(echo "${RESPONSE}" | jq -r '.data.getTenantEnv.envVars.HASURA_GRAPHQL_ADMIN_SECRET')
           echo "env_hash=$ENV_HASH" >> $GITHUB_OUTPUT
@@ -345,6 +350,8 @@ jobs:
             -H 'Authorization: pat ${{ secrets.HASURA_CLOUD_ACCESS_TOKEN }}' \
             -d "$REQUEST_PAYLOAD"
           )
+          echo "Payload: $REQUEST_PAYLOAD"
+          echo "Response: $RESPONSE"
           ENDPOINT=$(echo "${RESPONSE}" | jq -r '.data.updateTenantName.tenant.project.endpoint')
           echo "endpoint=$ENDPOINT" >> $GITHUB_OUTPUT
       - name: Upload updateTenantEnvAndName response
