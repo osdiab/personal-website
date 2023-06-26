@@ -424,8 +424,8 @@ jobs:
       - name: Apply Hasura Staging Metadata and initialize metadata
         uses: nick-fields/retry@v2
         with:
-          timeout_seconds: 10
-          max_attempts: 3
+          timeout_minutes: 5
+          max_attempts: 5
           retry_on: error
           command: |
             cd apps/gql-engine
@@ -443,8 +443,8 @@ jobs:
       - name: Deploy Hasura
         uses: nick-fields/retry@v2
         with:
-          timeout_seconds: 10
-          max_attempts: 3
+          timeout_minutes: 5
+          max_attempts: 5
           retry_on: error
           command: |
             cd apps/gql-engine
@@ -505,7 +505,7 @@ jobs:
     permissions:
       pull-requests: write
       contents: write
-    name: Deploy to Vercel
+    name: Deploy Preview to Vercel
     runs-on: ubuntu-latest
     if: github.event_name == 'push' && github.ref == 'refs/heads/prd'
     needs:
@@ -538,7 +538,7 @@ jobs:
     permissions:
       pull-requests: write
       contents: write
-    name: Deploy to Vercel
+    name: Deploy Production to Vercel
     runs-on: ubuntu-latest
     if: github.event_name == 'push' && github.ref == 'refs/heads/prd'
     needs:
