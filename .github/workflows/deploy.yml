@@ -163,7 +163,7 @@ jobs:
           )" >> "$GITHUB_OUTPUT"
 
   delete-hasura-preview-tenant:
-    if: github.event_name == 'pull_request_target' && github.event.action == 'closed'
+    if: github.event_name == 'pull_request_target'
     runs-on: ubuntu-latest
     name: Delete Hasura Preview Tenant
     steps:
