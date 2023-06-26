@@ -507,7 +507,7 @@ jobs:
       contents: write
     name: Deploy Preview to Vercel
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' && github.ref == 'refs/heads/prd'
+    if: github.event_name == 'pull_request_target'
     needs:
       [
         get-tool-versions,
@@ -526,7 +526,6 @@ jobs:
         run: tar -xf vercel-build.tar
       - name: Deploy Vercel Preview
         uses: amondnet/vercel-action@v20
-        if: github.event_name == 'pull_request_target' || github.ref != 'refs/heads/prd'
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
@@ -534,13 +533,13 @@ jobs:
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID_WEB_APP }}
           vercel-args: --prebuilt --env HASURA_GRAPHQL_ENDPOINT=${{needs.configure-hasura-preview-tenant.outputs.endpoint}} HASURA_GRAPHQL_ADMIN_SECRET=${{needs.configure-hasura-preview-tenant.outputs.admin_secret}}
 
-  deploy-to-vercel-prod:
+  deploy-to-vercel-stg-prd:
     permissions:
       pull-requests: write
       contents: write
     name: Deploy Production to Vercel
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' && github.ref == 'refs/heads/prd'
+    if: github.event_name == 'push'
     needs:
       [
         get-tool-versions,
@@ -556,6 +555,9 @@ jobs:
           name: build-web-app-${{ github.sha }}
       - name: Extract tar build artifact for deployment
         run: tar -xf vercel-build.tar
+      - name: Set vercel-args based on ref
+        id: set-vercel-args
+        run: echo "vercel-args=--prebuilt ${{ github.ref == 'refs/heads/prd' && '--prod' || '' }}" >> $GITHUB_OUTPUT
       - name: Deploy Vercel Production
         uses: amondnet/vercel-action@v25
         with:
@@ -563,4 +565,4 @@ jobs:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID_WEB_APP }}
-          vercel-args: --prebuilt --prod
+          vercel-args: ${{steps.set-vercel-args.outputs.vercel-args}}
