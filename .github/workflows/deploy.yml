@@ -419,13 +419,13 @@ jobs:
       - name: Wait for Hasura to be ready
         env:
           GQL_ENDPOINT: ${{needs.configure-hasura-preview-tenant.outputs.endpoint}}
-        run: npx wait-on "${GQL_ENDPOINT/https:/https-get:}/healthz"
+        run: npx wait-on "${GQL_ENDPOINT/https:/https-get:}/healthz" && npx wait-on "${GQL_ENDPOINT/https:/https-get:}/v1/version"
 
       - name: Apply Hasura Staging Metadata and initialize metadata
         run: |
           cd apps/gql-engine
           hasura metadata apply
-          hasura migrate apply --skip-execution
+          hasura migrate apply --skip-execution --database-name main
         env:
           HASURA_GRAPHQL_ENDPOINT: ${{needs.configure-hasura-preview-tenant.outputs.endpoint}}
           HASURA_GRAPHQL_ADMIN_SECRET: ${{needs.configure-hasura-preview-tenant.outputs.admin_secret}}
