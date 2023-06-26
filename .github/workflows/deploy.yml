@@ -218,7 +218,7 @@ jobs:
         id: deleteTenant
         if: steps.get-existing-tenant.outputs.tenant_exists == 'true'
         run: |
-          TENANT_ID="$(${{ steps.get-existing-tenant.outputs.tenant_id}})"
+          TENANT_ID="${{ steps.get-existing-tenant.outputs.tenant_id}}"
 
           GQL_QUERY=$(cat <<-GQL
             mutation DeleteTenant(\$tenantId: uuid!) {
