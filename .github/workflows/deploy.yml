@@ -179,11 +179,14 @@ jobs:
         run: |
           if [ ! -f "tenantId.txt" ]; then
             echo "No tenant ID file found, no tenant to delete."
-            exit 0
+            echo "file_exists=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "file_exists=true" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Delete Tenant
         id: deleteTenant
+        if: steps.checkArtifact.outputs.file_exists == 'true'
         run: |
           TENANT_ID=$(cat tenant_id.txt)
           QUERY=$(cat <<-GQL
