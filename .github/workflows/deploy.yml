@@ -172,7 +172,7 @@ jobs:
         run: |
           GQL_QUERY=$(cat <<-GQL
             query GetTenantByName(\$tenantName: String!) {
-              tenant(where: {name: {_eq: \$tenantName}}) {
+              tenant(where: {project: {name: {_eq: \$tenantName}}}) {
                 id
               }
             }
