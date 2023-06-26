@@ -189,7 +189,7 @@ jobs:
         if: steps.checkArtifact.outputs.file_exists == 'true'
         run: |
           TENANT_ID=$(cat tenant_id.txt)
-          QUERY=$(cat <<-GQL
+          GQL_QUERY=$(cat <<-GQL
             mutation DeleteTenant(\$tenantId: uuid!) {
               deleteTenant(tenantId: \$tenantId) {
                 status
@@ -198,13 +198,10 @@ jobs:
           GQL
           )
 
-          # Escape the QUERY variable using jq
-          ESCAPED_QUERY=$(echo "$QUERY" | jq -sRr @sh)
-
           REQUEST_PAYLOAD=$(jq -n \
-            --arg escapedQuery "$ESCAPED_QUERY" \
+            --arg gqlQuery "$GQL_QUERY" \
             --arg tenantId "$TENANT_ID" \
-            '{ "query": $escapedQuery, "variables": { "tenantId": $tenantId } }'
+            '{ "query": $gqlQuery, "variables": { "tenantId": $tenantId } }'
           )
 
           RESPONSE=$(curl --silent --show-error --fail-with-body -X POST 'https://data.pro.hasura.io/v1/graphql' \
@@ -233,7 +230,7 @@ jobs:
       - name: Create Tenant
         id: createTenant
         run: |
-          QUERY=$(cat <<-GQL
+          GQL_QUERY=$(cat <<-GQL
             mutation CreateTenant {
               createTenant(cloud: "aws", region: "eu-central-1", plan: "cloud_free_v2") {
                 id
@@ -242,9 +239,7 @@ jobs:
           GQL
           )
 
-          # Escape the QUERY variable using jq
-          ESCAPED_QUERY=$(echo "$QUERY" | jq -sRr @sh)
-          REQUEST_PAYLOAD=$(jq -n --arg escapedQuery "$ESCAPED_QUERY" '{ "query": $escapedQuery }')
+          REQUEST_PAYLOAD=$(jq -n --arg gqlQuery "$GQL_QUERY" '{ "query": $gqlQuery }')
 
           # Send the request using curl
           RESPONSE=$(curl \
@@ -255,11 +250,11 @@ jobs:
             --request POST \
             --header 'Content-Type: application/json' \
             --header 'Authorization: pat ${{ secrets.HASURA_CLOUD_ACCESS_TOKEN }}' \
-            --data "{\"query\":$ESCAPED_QUERY}" \
+            --data "$REQUEST_PAYLOAD" \
             'https://data.pro.hasura.io/v1/graphql'
           )
 
-          echo "Payload: $ESCAPED_QUERY"
+          echo "Payload: $REQUEST_PAYLOAD"
           echo "Response: $RESPONSE"
 
           # Check if the response contains errors
@@ -285,7 +280,7 @@ jobs:
       - name: Get Tenant Env
         id: getTenantEnv
         run: |
-          QUERY=$(cat <<-GQL
+          GQL_QUERY=$(cat <<-GQL
             query GetTenantEnv(\$tenantId: uuid!) {
               getTenantEnv(tenantId: \$tenantId) {
                 envVars
@@ -295,13 +290,10 @@ jobs:
           GQL
           )
 
-          # Escape the QUERY variable using jq
-          ESCAPED_QUERY=$(echo "$QUERY" | jq -sRr @sh)
-
           REQUEST_PAYLOAD=$(jq -n \
-            --arg escapedQuery "$ESCAPED_QUERY" \
+            --arg gqlQuery "$GQL_QUERY" \
             --arg tenantId "${{ needs.create-hasura-preview-tenant.outputs.tenant_id }}" \
-            '{ "query": $escapedQuery, "variables": { "tenantId": $tenantId } }'
+            '{ "query": $gqlQuery, "variables": { "tenantId": $tenantId } }'
           )
 
           RESPONSE=$(curl --silent --show-error --fail-with-body -X POST 'https://data.pro.hasura.io/v1/graphql' \
@@ -329,7 +321,7 @@ jobs:
         run: |
           tenantName="personal-website-pr-${{ github.event.number }}"
           dbUrl="postgres://${{ secrets.APP_DB_USER_STG }}:${{ secrets.APP_DB_PASSWORD_STG }}@${{ needs.preview-neon.outputs.preview_branch_id }}/${{ secrets.APP_DB_DATABASE_STG }}"
-          QUERY=$(cat <<-GQL
+          GQL_QUERY=$(cat <<-GQL
             mutation UpdateTenantEnvAndName(\$tenantId: uuid!, \$tenantName: String!, \$dbUrl: String!, \$currentHash: String!) {
               updateTenantEnv(
                 currentHash: \$currentHash
@@ -350,16 +342,13 @@ jobs:
           GQL
           )
 
-          # Escape the QUERY variable using jq
-          ESCAPED_QUERY=$(echo "$QUERY" | jq -sRr @sh)
-
           REQUEST_PAYLOAD=$(jq -n \
-            --arg escapedQuery "$ESCAPED_QUERY" \
+            --arg gqlQuery "$GQL_QUERY" \
             --arg tenantId "${{ needs.create-hasura-preview-tenant.outputs.tenant_id }}" \
             --arg tenantName "$tenantName" \
             --arg dbUrl "$dbUrl" \
             --arg currentHash "${{ steps.getTenantEnv.outputs.env_hash }}" \
-            '{ "query": $escapedQuery, "variables": { "tenantId": $tenantId, "tenantName": $tenantName, "dbUrl": $dbUrl, "currentHash": $currentHash } }'
+            '{ "query": $gqlQuery, "variables": { "tenantId": $tenantId, "tenantName": $tenantName, "dbUrl": $dbUrl, "currentHash": $currentHash } }'
           )
 
           echo "Payload: $REQUEST_PAYLOAD"
