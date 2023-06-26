@@ -171,7 +171,6 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: pr-${{ github.event.number }}-hasura-tenant-id
-          path: hasura_preview_tenant_id.txt
         continue-on-error: true
 
       - name: Check if Artifact exists
@@ -424,7 +423,7 @@ jobs:
           echo "endpoint=$ENDPOINT" >> "$GITHUB_OUTPUT"
 
   deploy-hasura-preview:
-    needs: [configure-hasura-preview-tenant]
+    needs: [get-tool-versions, configure-hasura-preview-tenant]
     runs-on: ubuntu-latest
     name: Deploy Hasura
     steps:
@@ -436,10 +435,15 @@ jobs:
       - name: Install Hasura CLI
         run: curl -L https://github.com/hasura/graphql-engine/raw/stable/cli/get.sh | bash
 
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ needs.get-tool-versions.outputs.nodejs }}
+
       - name: Wait for Hasura to be ready
         env:
           GQL_ENDPOINT: ${{needs.configure-hasura-preview-tenant.outputs.endpoint}}
-        run: pnpx wait-on "${GQL_ENDPOINT/https:/https-get:}/healthz"
+        run: npx wait-on "${GQL_ENDPOINT/https:/https-get:}/healthz"
 
       - name: Apply Hasura Staging Metadata and initialize metadata
         run: |
