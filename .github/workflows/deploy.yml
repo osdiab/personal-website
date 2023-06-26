@@ -98,6 +98,7 @@ jobs:
   preview-neon:
     if: github.event_name == 'pull_request_target'
     name: "Make Neon preview postgres branch"
+    needs: [delete-existing-neon-branch]
     runs-on: ubuntu-latest
     outputs:
       preview_branch_id: ${{ steps.parse-preview-branch-id.outputs.branch_id}}
