@@ -263,6 +263,10 @@ jobs:
             exit 1
           fi
 
+          tenant_id=$(echo "$RESPONSE" | jq -r '.data.createTenant.id')
+          echo "Tenant ID: $tenant_id"
+          echo "$tenant_id" > tenant_id.txt
+
       - name: Upload Tenant ID
         uses: actions/upload-artifact@v3
         with:
