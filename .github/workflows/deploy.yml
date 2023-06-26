@@ -249,14 +249,14 @@ jobs:
           REQUEST_PAYLOAD=$(jq -n --arg escapedQuery "$ESCAPED_QUERY" '{ "query": $escapedQuery }')
 
           # Send the request using curl
-          RESPONSE=$(curl
-            --fail
-            --silent
-            --show-error
-            --location
-            --request POST
-            --header 'Content-Type: application/json'
-            --header 'Authorization: pat ${{ secrets.HASURA_CLOUD_ACCESS_TOKEN }}'
+          RESPONSE=$(curl \
+            --fail-with-body \
+            --silent \
+            --show-error \
+            --location \
+            --request POST \
+            --header 'Content-Type: application/json' \
+            --header 'Authorization: pat ${{ secrets.HASURA_CLOUD_ACCESS_TOKEN }}' \
             --data "{\"query\":$ESCAPED_QUERY}"
           )
 
