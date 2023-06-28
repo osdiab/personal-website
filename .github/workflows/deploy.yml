@@ -342,7 +342,6 @@ jobs:
 
           ENV_HASH=$(echo "${RESPONSE}" | jq -r '.data.getTenantEnv.hash')
           GQL_ADMIN_SECRET=$(echo "${RESPONSE}" | jq -r '.data.getTenantEnv.envVars.HASURA_GRAPHQL_ADMIN_SECRET')
-          echo "::add-mask::$GQL_ADMIN_SECRET"
           echo "env_hash=$ENV_HASH" >> "$GITHUB_OUTPUT"
           echo "gql_admin_secret=$GQL_ADMIN_SECRET" >> "$GITHUB_OUTPUT"
 
