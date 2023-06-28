@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev:noDoppler": "next dev",
+    "prepare": "panda codegen",
+    "dev:noDoppler": "rm -rf .next && next dev",
     "dev": "doppler run -- pnpm dev:noDoppler",
     "build:noDoppler": "next build",
     "build": "doppler run -- pnpm build:noDoppler",
@@ -26,6 +27,7 @@
   },
   "devDependencies": {
     "@osdiab-website/tsconfig": "workspace:*",
+    "@pandacss/dev": "^0.5.0",
     "@svgr/webpack": "^8.0.1",
     "@types/node": "^17.0.12",
     "@types/react": "^18.0.22",
