@@ -304,10 +304,12 @@ jobs:
     needs: [create-hasura-preview-tenant, preview-neon]
     outputs:
       endpoint: ${{ steps.updateTenantEnvAndName.outputs.endpoint }}
-      admin_secret: ${{ steps.getTenantEnv.outputs.gql_admin_secret }}
+      admin_secret_encrypted: ${{ steps.getTenantEnv.outputs.admin_secret_encrypted }}
     steps:
       - name: Get Tenant Env
         id: getTenantEnv
+        env:
+          GPG_SECRET: ${{secrets.GPG_CRYPTO_SECRET}}
         run: |
           GQL_QUERY=$(cat <<-GQL
             query GetTenantEnv(\$tenantId: uuid!) {
@@ -342,8 +344,11 @@ jobs:
 
           ENV_HASH=$(echo "${RESPONSE}" | jq -r '.data.getTenantEnv.hash')
           GQL_ADMIN_SECRET=$(echo "${RESPONSE}" | jq -r '.data.getTenantEnv.envVars.HASURA_GRAPHQL_ADMIN_SECRET')
+          # https://nitratine.net/blog/post/how-to-pass-secrets-between-runners-in-github-actions/
+          echo "::add-mask::$GQL_ADMIN_SECRET"
+          ADMIN_SECRET_ENCRYPTED=$(gpg --symmetric --batch --passphrase "$GPG_SECRET" --output - <(echo "$GQL_ADMIN_SECRET") | base64 -w0)
           echo "env_hash=$ENV_HASH" >> "$GITHUB_OUTPUT"
-          echo "gql_admin_secret=$GQL_ADMIN_SECRET" >> "$GITHUB_OUTPUT"
+          echo "admin_secret_encrypted=$ADMIN_SECRET_ENCRYPTED" >> "$GITHUB_OUTPUT"
 
       - name: Update Tenant Env And Name
         id: updateTenantEnvAndName
@@ -419,7 +424,18 @@ jobs:
       - name: Wait for Hasura to be ready
         env:
           GQL_ENDPOINT: ${{needs.configure-hasura-preview-tenant.outputs.endpoint}}
-        run: npx wait-on "${GQL_ENDPOINT/https:/https-get:}/healthz" && npx wait-on "${GQL_ENDPOINT/https:/https-get:}/v1/version"
+        run: |
+          npx wait-on "${GQL_ENDPOINT/https:/https-get:}/healthz"
+          npx wait-on "${GQL_ENDPOINT/https:/https-get:}/v1/version"
+
+      - id: decrypt-admin-secret
+        name: Decrypt Hasura GraphQL Admin Secret
+        env:
+          GPG_SECRET: ${{ secrets.GPG_CRYPTO_SECRET }}
+        run: |
+          ADMIN_SECRET=$(gpg --decrypt --quiet --batch --passphrase "$GPG_SECRET" --output - <(echo "${{needs.configure-hasura-preview-tenant.outputs.admin_secret_encrypted}}" | base64 --decode))
+          echo "::add-mask::$ADMIN_SECRET"
+          echo "admin_secret=$ADMIN_SECRET" >> "$GITHUB_OUTPUT"
 
       - name: Apply Hasura Staging Metadata and initialize metadata
         uses: nick-fields/retry@v2
@@ -433,7 +449,7 @@ jobs:
             hasura migrate apply --skip-execution --database-name main
         env:
           HASURA_GRAPHQL_ENDPOINT: ${{needs.configure-hasura-preview-tenant.outputs.endpoint}}
-          HASURA_GRAPHQL_ADMIN_SECRET: ${{needs.configure-hasura-preview-tenant.outputs.admin_secret}}
+          HASURA_GRAPHQL_ADMIN_SECRET: ${{ steps.decrypt-admin-secret.outputs.admin_secret }}
 
       - name: Checkout PR branch
         uses: actions/checkout@v2
@@ -451,7 +467,7 @@ jobs:
             hasura deploy
         env:
           HASURA_GRAPHQL_ENDPOINT: ${{needs.configure-hasura-preview-tenant.outputs.endpoint}}
-          HASURA_GRAPHQL_ADMIN_SECRET: ${{needs.configure-hasura-preview-tenant.outputs.admin_secret}}
+          HASURA_GRAPHQL_ADMIN_SECRET: ${{ steps.decrypt-admin-secret.outputs.admin_secret }}
 
   build-web-app:
     name: Build Web App
@@ -524,14 +540,24 @@ jobs:
           name: build-web-app-${{ github.sha }}
       - name: Extract tar build artifact for deployment
         run: tar -xf vercel-build.tar
+
+      - id: decrypt-admin-secret
+        name: Decrypt Hasura GraphQL Admin Secret
+        env:
+          GPG_SECRET: ${{ secrets.GPG_CRYPTO_SECRET }}
+        run: |
+          ADMIN_SECRET=$(gpg --decrypt --quiet --batch --passphrase "$GPG_SECRET" --output - <(echo "${{needs.configure-hasura-preview-tenant.outputs.admin_secret_encrypted}}" | base64 --decode))
+          echo "::add-mask::$ADMIN_SECRET"
+          echo "admin_secret=$ADMIN_SECRET" >> "$GITHUB_OUTPUT"
+
       - name: Deploy Vercel Preview
-        uses: amondnet/vercel-action@v25
+        uses: amondnet/vercel-action@v20
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID_WEB_APP }}
-          vercel-args: --prebuilt --env HASURA_GRAPHQL_ENDPOINT=${{needs.configure-hasura-preview-tenant.outputs.endpoint}} --env HASURA_GRAPHQL_ADMIN_SECRET=${{needs.configure-hasura-preview-tenant.outputs.admin_secret}}
+          vercel-args: --prebuilt --env HASURA_GRAPHQL_ENDPOINT=${{needs.configure-hasura-preview-tenant.outputs.endpoint}} --env HASURA_GRAPHQL_ADMIN_SECRET=${{steps.decrypt-admin-secret.outputs.admin_secret}}
 
   deploy-to-vercel-stg-prd:
     permissions:
