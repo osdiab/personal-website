@@ -1,21 +1,4 @@
-import {
-  companyLogoSvgCss,
-  companyTitleCss,
-  heroTitleCss,
-  jobDescriptionCss,
-  jobEntryCss,
-  jobEntrySectionCss,
-  jobHeaderCss,
-  jobLinkIconCss,
-  jobMetadataCss,
-  jobTitleCss,
-  pageContentCss,
-  pageCss,
-  sectionCss,
-  timeCss,
-} from "@/app/page.css";
 import { ComponentProps, ReactNode } from "react";
-import { hyperlinkCss } from "@osdiab-website/ui/hyperlink.css";
 import CleverLogo from "@/assets/logos/clever.svg";
 import SpinachLogo from "@/assets/logos/spinach.svg";
 import EveryOrgLogo from "@/assets/logos/every-org.svg";
@@ -25,16 +8,16 @@ type SvgComponent = (props: ComponentProps<"svg">) => JSX.Element;
 
 export default function Page() {
   return (
-    <div className={pageCss}>
-      <div className={pageContentCss}>
-        <section className={sectionCss}>
-          <h1 className={heroTitleCss}>
+    <div>
+      <div>
+        <section>
+          <h1>
             I convert business needs into designs and technical strategy, and
             align engineers to produce world-class products.
           </h1>
         </section>
-        <section className={sectionCss}>
-          <div className={jobEntrySectionCss}>
+        <section>
+          <div>
             <Entry
               CompanyLogoType={SpinachLogo as SvgComponent}
               companyName="Spinach HR"
@@ -100,45 +83,33 @@ function Entry({
   description,
 }: EntryProps) {
   const companyLogo = (
-    <span className={companyTitleCss}>
-      <CompanyLogoType
-        className={companyLogoSvgCss}
-        role="img"
-        aria-label={companyName}
-      />
+    <span>
+      <CompanyLogoType role="img" aria-label={companyName} />
       {companyUrl && (
-        <ExternalLink
-          className={jobLinkIconCss}
-          aria-label={`Visit ${companyName} website`}
-        />
+        <ExternalLink aria-label={`Visit ${companyName} website`} />
       )}
     </span>
   );
   return (
-    <article className={jobEntryCss}>
-      <header className={jobHeaderCss}>
+    <article>
+      <header>
         <h3>
           {companyUrl ? (
-            <a
-              className={hyperlinkCss}
-              href={companyUrl}
-              target="_blank"
-              rel="noreferrer"
-            >
+            <a href={companyUrl} target="_blank" rel="noreferrer">
               {companyLogo}
             </a>
           ) : (
             companyLogo
           )}
         </h3>
-        <div className={jobMetadataCss}>
-          <span className={jobTitleCss}>{jobTitle}</span>
-          <span className={timeCss}>
+        <div>
+          <span>{jobTitle}</span>
+          <span>
             {periodStart}–{periodEnd}
           </span>
         </div>
       </header>
-      <div className={jobDescriptionCss}>
+      <div>
         <p>{description}</p>
       </div>
     </article>

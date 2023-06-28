@@ -1,22 +1,12 @@
 "use client"; // for scrolled interactivity
 
-import {
-  headerContentCss,
-  headerLeftCss,
-  headerRightCss,
-  logoCss,
-  siteHeaderCss,
-  siteHeaderScrolledCss,
-  siteTitleCss,
-} from "@/app/header.css";
 import Logo from "@/app/logo.svg";
 
-import clsx from "clsx";
 import { useEffect, useRef, useState } from "react";
 import { Github, Linkedin, Mail } from "lucide-react";
 
-export function RootHeader({ className }: { className?: string }) {
-  const [isScrolled, setIsScrolled] = useState(false);
+export function RootHeader({}: { className?: string }) {
+  const [_isScrolled, setIsScrolled] = useState(false);
 
   const dummyRef = useRef<HTMLSpanElement | null>(null);
   useEffect(function setScrollStateByDummyVisibility() {
@@ -44,39 +34,33 @@ export function RootHeader({ className }: { className?: string }) {
       {/* dummy element to watch if still on screen to determine if we've
       scrolled down */}
       <span ref={dummyRef} />
-      <header
-        className={clsx(
-          siteHeaderCss,
-          isScrolled && siteHeaderScrolledCss,
-          className
-        )}
-      >
-        <div className={headerContentCss}>
-          <div className={headerLeftCss}>
-            <Logo className={logoCss} />
-            <span className={siteTitleCss}>Omar Diab</span>
+      <header>
+        <div>
+          <div>
+            <Logo />
+            <span>Omar Diab</span>
           </div>
-          <div className={headerRightCss}>
+          <div>
             <a
               href="https://www.linkedin.com/in/osdiab/"
               target="_blank"
               rel="noreferrer"
             >
-              <Linkedin className={logoCss} aria-label="LinkedIn" />
+              <Linkedin aria-label="LinkedIn" />
             </a>
             <a
               href="mailto:hello@omardiab.com"
               target="_blank"
               rel="noreferrer"
             >
-              <Mail className={logoCss} aria-label="Email" />
+              <Mail aria-label="Email" />
             </a>
             <a
               href="https://github.com/osdiab/personal-website"
               target="_blank"
               rel="noreferrer"
             >
-              <Github className={logoCss} aria-label="Github" />
+              <Github aria-label="Github" />
             </a>
           </div>
         </div>
