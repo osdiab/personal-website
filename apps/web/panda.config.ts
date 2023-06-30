@@ -8,7 +8,7 @@ export default defineConfig({
   include: ["./src/**/*.{ts,tsx,js,jsx}"],
 
   // Files to exclude
-  exclude: ["./src/panda-css"],
+  exclude: [],
 
   // Useful for theme customization
   theme: {
@@ -16,5 +16,5 @@ export default defineConfig({
   },
 
   // The output directory for your css system
-  outdir: "./src/panda-css",
+  outdir: "./generated/panda-css",
 });
