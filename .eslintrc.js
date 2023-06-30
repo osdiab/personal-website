@@ -49,6 +49,19 @@ module.exports = {
       files: ["./apps/web/**/*"],
       extends: ["plugin:@next/next/core-web-vitals"],
       settings: { next: { rootDir: "apps/web" } },
+      rules: {
+        "no-restricted-imports": [
+          "error",
+          {
+            paths: [
+              {
+                name: "styled-jsx/css",
+                message: "You probably meant to use the panda-css import",
+              },
+            ],
+          },
+        ],
+      },
     },
   ],
 };
