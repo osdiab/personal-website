@@ -1,6 +1,0 @@
-{
-  "extends": "@osdiab-website/tsconfig/base.json",
-  "include": ["."],
-  "exclude": ["node_modules"],
-  "compilerOptions": { "lib": ["ES2022", "DOM"] }
-}
