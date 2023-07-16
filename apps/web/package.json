@@ -10,7 +10,8 @@
     "start:noDoppler": "next start",
     "start": "doppler run -- pnpm start:noDoppler",
     "setup:doppler": "doppler setup --no-interactive",
-    "typecheck": "tsc"
+    "typecheck": "tsc",
+    "prepare": "panda codegen"
   },
   "dependencies": {
     "@osdiab-website/ui": "workspace:*",
@@ -26,6 +27,7 @@
   },
   "devDependencies": {
     "@osdiab-website/tsconfig": "workspace:*",
+    "@pandacss/dev": "^0.6.0",
     "@svgr/webpack": "^8.0.1",
     "@types/node": "^17.0.12",
     "@types/react": "^18.0.22",
