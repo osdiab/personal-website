@@ -8,8 +8,8 @@ import {
   siteHeaderCss,
   siteHeaderScrolledCss,
   siteTitleCss,
-} from "@/app/header.css";
-import Logo from "@/app/logo.svg";
+} from "~/app/header.css";
+import Logo from "~/app/logo.svg";
 
 import clsx from "clsx";
 import { useEffect, useRef, useState } from "react";

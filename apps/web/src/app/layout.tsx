@@ -1,13 +1,13 @@
-import { RootHeader } from "@/app/header";
+import { RootHeader } from "~/app/header";
 import {
   bodyCss,
   footerContentCss,
   footerCss,
   footerWrapperCss,
   mainContentCss,
-} from "@/app/layout.css";
+} from "~/app/layout.css";
 
-import "@/app/reset.css";
+import "~/app/reset.css";
 
 export default function RootLayout({
   children,
