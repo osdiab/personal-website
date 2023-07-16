@@ -6,7 +6,12 @@ package/app is 100% [TypeScript](https://www.typescriptlang.org/).
 
 ## Installation
 
-1. [Install Docker](https://docs.docker.com/engine/install/)
+1. Setup Docker. Options:
+   1. **Recommended for >M1 Mac users**: Use [OrbStack, a Docker runtime
+      optimized for ARM Macs](https://orbstack.dev/)
+      1. [Install it](https://docs.orbstack.dev/quick-start)
+   1. Use Docker Desktop. [Install Docker](https://docs.docker.com/engine/install/)
+   1. Use `docker` manually; you can figure it out yourself
 1. [Install `asdf`](https://asdf-vm.com/guide/getting-started.html)
 1. Install `asdf` plugins
    1. [nodejs](https://github.com/asdf-vm/asdf-nodejs#install)
