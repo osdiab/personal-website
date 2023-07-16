@@ -31,6 +31,15 @@ pnpm dev
 
 The web app will be accessible on http://localhost:3000
 
+### Accessing Hasura
+
+To use the Hasura CLI, run:
+
+```sh
+pnpm --workspace-root hasura  # or `pnpm -w hasura` for short
+pnpm -w hasura console  # access the hasura console
+```
+
 ## What's inside?
 
 ### Apps and Packages
@@ -91,3 +100,18 @@ pnpm build
   - A branch of the staging database
   - A Hasura Cloud preview app (currently not stable; may switch to Render)
   - A Vercel preview deploy configured to query the Hasura preview app
+
+#### TODO
+
+- [ ] Create a preview environment and test hasura deploys for
+      staging/production as well, so that migrations that will fail don't get deployed
+      at all
+- [ ] Hook up Playwright testing on deploys
+- [ ] Add an auth solution
+- [ ] Try replacing Vanilla Extract with Panda CSS (once my issues are resolved)
+- [ ] Add some `shadcn` components but with the styles replaced (by an LLM) to
+      be compatible with Vanilla Extract or Panda CSS
+- [ ] set up ULIDs instead of UUIDv7 since it's supported by Neon and has
+      similar characteristics
+- [ ] replace Hasura migrations with something better since they aren't actually
+      atomically applied
