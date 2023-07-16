@@ -5,6 +5,7 @@
   "compilerOptions": {
     "target": "ES2022",
     "lib": ["ES2022"],
+    "module": "NodeNext",
     "composite": false,
     "declaration": true,
     "declarationMap": true,
