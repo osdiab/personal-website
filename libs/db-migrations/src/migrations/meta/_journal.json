@@ -1,0 +1,27 @@
+{
+  "version": "5",
+  "dialect": "pg",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1689503526489,
+      "tag": "0000_worthless_tyrannus",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1689750282042,
+      "tag": "0001_fearless_living_lightning",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1689752303573,
+      "tag": "0002_married_wild_child",
+      "breakpoints": true
+    }
+  ]
+}
