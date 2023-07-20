@@ -1,0 +1,7 @@
+{
+  "migration-file-language": "ts",
+  "migrations-dir": "migrations",
+  "single-transaction": true,
+  "migration-filename-format": "utc",
+  "template-file-name": "./migration.template.ts"
+}

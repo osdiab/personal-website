@@ -1,0 +1,3 @@
+setup:
+  project: db-migrations
+  config: dev

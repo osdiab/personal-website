@@ -1,7 +1,11 @@
 version: '3.6'
 services:
   postgres:
-    image: postgres:15
+    build:
+      context: ../db
+      dockerfile: Dockerfile
+      args:
+        - PG_MAJOR=15
     # https://github.com/hasura/graphql-engine/issues/3672
     command: postgres -c jit=off
     ports:
