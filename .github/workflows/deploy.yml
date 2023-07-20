@@ -524,11 +524,11 @@ jobs:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           DOPPLER_TOKEN: ${{ secrets.DOPPLER_TOKEN_WEB_APP_PRD }}
       - name: Tar build artifact for deployment
-        run: tar -cf vercel-build.tar ./.vercel
+        run: tar -czf vercel-build.tar.gz ./.vercel
       - uses: actions/upload-artifact@v3
         with:
           name: build-web-app-${{ github.sha }}
-          path: vercel-build.tar
+          path: vercel-build.tar.gz
 
   deploy-to-vercel-preview:
     permissions:
@@ -552,7 +552,7 @@ jobs:
         with:
           name: build-web-app-${{ github.sha }}
       - name: Extract tar build artifact for deployment
-        run: tar -xf vercel-build.tar
+        run: tar -xzf vercel-build.tar.gz
 
       - id: decrypt-admin-secret
         name: Decrypt Hasura GraphQL Admin Secret
@@ -593,7 +593,7 @@ jobs:
         with:
           name: build-web-app-${{ github.sha }}
       - name: Extract tar build artifact for deployment
-        run: tar -xf vercel-build.tar
+        run: tar -xzf vercel-build.tar.gz
       - name: Set vercel-args based on ref
         id: set-vercel-args
         run: echo "vercel-args=--prebuilt ${{ github.ref == 'refs/heads/prd' && '--prod' || '' }}" >> $GITHUB_OUTPUT
