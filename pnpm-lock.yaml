@@ -138,9 +138,6 @@ importers:
       '@types/pg':
         specifier: ^8.10.2
         version: 8.10.2
-      kysely:
-        specifier: ^0.26.1
-        version: 0.26.1
       node-pg-migrate:
         specifier: ^6.2.2
         version: 6.2.2(pg@8.11.1)
@@ -6770,11 +6767,6 @@ packages:
   /kleur@3.0.3:
     resolution: {integrity: sha512-eTIzlVOSUR+JxdDFepEYcBMtZ9Qqdef+rnzWdRZuMbOywu5tO2w2N7rqjoANZ5k9vywhL6Br1VRjUIgTQx4E8w==}
     engines: {node: '>=6'}
-    dev: true
-
-  /kysely@0.26.1:
-    resolution: {integrity: sha512-FVRomkdZofBu3O8SiwAOXrwbhPZZr8mBN5ZeUWyprH29jzvy6Inzqbd0IMmGxpd4rcOCL9HyyBNWBa8FBqDAdg==}
-    engines: {node: '>=14.0.0'}
     dev: true
 
   /language-subtag-registry@0.3.22:
