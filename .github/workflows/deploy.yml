@@ -464,9 +464,11 @@ jobs:
           timeout_minutes: 5
           max_attempts: 3
           retry_on: error
-          command: pnpm run --filter db-migrations migrate up
+          command: pnpm run --filter db-migrations migrate:noDoppler up
+        # consider using doppler if there ends up needing to be more than this
         env:
           DATABASE_URL: postgres://${{ secrets.APP_DB_USER_STG }}:${{ secrets.APP_DB_PASSWORD_STG }}@${{ needs.preview-neon.outputs.preview_branch_id }}/${{ secrets.APP_DB_DATABASE_STG }}
+          PGSSLMODE: require
 
       - name: Apply Hasura Metadata
         uses: nick-fields/retry@v2
