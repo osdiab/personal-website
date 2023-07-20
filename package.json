@@ -15,7 +15,8 @@
     "format:check": "pnpm format:base --check",
     "test": "turbo run test",
     "typecheck": "turbo run typecheck",
-    "setup:doppler": "turbo run setup:doppler --concurrency=1"
+    "setup:doppler": "turbo run setup:doppler --concurrency=1",
+    "vercel": "pnpm --filter vercel start"
   },
   "devDependencies": {
     "@next/eslint-plugin-next": "^13.4.2",

@@ -1,0 +1,11 @@
+{
+  "name": "@osdiab-website/vercel",
+  "version": "1.0.0",
+  "description": "Just a way to install the Vercel CLI selectively and have it cached for Github Actions deploys",
+  "scripts": {
+    "start": "cd ../../ && vercel"
+  },
+  "devDependencies": {
+    "vercel": "^31.0.4"
+  }
+}
