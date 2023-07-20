@@ -404,7 +404,7 @@ jobs:
           echo "endpoint=$ENDPOINT" >> "$GITHUB_OUTPUT"
 
   deploy-hasura-preview:
-    needs: [get-tool-versions, configure-hasura-preview-tenant]
+    needs: [get-tool-versions, configure-hasura-preview-tenant, preview-neon]
     runs-on: ubuntu-latest
     name: Deploy Hasura
     steps:
@@ -415,6 +415,11 @@ jobs:
 
       - name: Install Hasura CLI
         run: curl -L https://github.com/hasura/graphql-engine/raw/stable/cli/get.sh | bash
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: ${{ needs.get-tool-versions.outputs.pnpm }}
 
       - name: Install Node.js
         uses: actions/setup-node@v3
@@ -437,16 +442,13 @@ jobs:
           echo "::add-mask::$ADMIN_SECRET"
           echo "admin_secret=$ADMIN_SECRET" >> "$GITHUB_OUTPUT"
 
-      - name: Apply Hasura Staging Metadata and initialize metadata
+      - name: Apply Hasura Staging Metadata
         uses: nick-fields/retry@v2
         with:
           timeout_minutes: 5
           max_attempts: 5
           retry_on: error
-          command: |
-            cd apps/gql-engine
-            hasura metadata apply
-            hasura migrate apply --skip-execution --database-name main
+          command: pnpm run --filter gql-engine hasura:noDoppler metadata apply
         env:
           HASURA_GRAPHQL_ENDPOINT: ${{needs.configure-hasura-preview-tenant.outputs.endpoint}}
           HASURA_GRAPHQL_ADMIN_SECRET: ${{ steps.decrypt-admin-secret.outputs.admin_secret }}
@@ -456,15 +458,23 @@ jobs:
         with:
           ref: ${{ github.head_ref }}
 
-      - name: Deploy Hasura
+      - name: Apply Migrations
+        uses: nick-fields/retry@v2
+        with:
+          timeout_minutes: 5
+          max_attempts: 3
+          retry_on: error
+          command: pnpm run --filter db-migrations migrate up
+        env:
+          DATABASE_URL: postgres://${{ secrets.APP_DB_USER_STG }}:${{ secrets.APP_DB_PASSWORD_STG }}@${{ needs.preview-neon.outputs.preview_branch_id }}/${{ secrets.APP_DB_DATABASE_STG }}
+
+      - name: Apply Hasura Metadata
         uses: nick-fields/retry@v2
         with:
           timeout_minutes: 5
           max_attempts: 5
           retry_on: error
-          command: |
-            cd apps/gql-engine
-            hasura deploy
+          command: pnpm run --filter gql-engine hasura:noDoppler metadata apply
         env:
           HASURA_GRAPHQL_ENDPOINT: ${{needs.configure-hasura-preview-tenant.outputs.endpoint}}
           HASURA_GRAPHQL_ADMIN_SECRET: ${{ steps.decrypt-admin-secret.outputs.admin_secret }}
