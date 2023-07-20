@@ -4,7 +4,8 @@
     "typecheck": "tsc"
   },
   "dependencies": {
-    "email-regex": "^5.0.0"
+    "email-regex": "^5.0.0",
+    "ulidx": "^2.0.0"
   },
   "devDependencies": {
     "zod": "^3.21.4"
