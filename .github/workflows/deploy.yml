@@ -448,7 +448,7 @@ jobs:
           timeout_minutes: 5
           max_attempts: 5
           retry_on: error
-          command: pnpm run --filter gql-engine hasura:noDoppler metadata apply
+          command: pnpm run --filter gql-engine hasura:noDoppler metadata apply --disallow-inconsistent-metadata
         env:
           HASURA_GRAPHQL_ENDPOINT: ${{needs.configure-hasura-preview-tenant.outputs.endpoint}}
           HASURA_GRAPHQL_ADMIN_SECRET: ${{ steps.decrypt-admin-secret.outputs.admin_secret }}
@@ -474,7 +474,7 @@ jobs:
           timeout_minutes: 5
           max_attempts: 5
           retry_on: error
-          command: pnpm run --filter gql-engine hasura:noDoppler metadata apply
+          command: pnpm run --filter gql-engine hasura:noDoppler metadata apply --disallow-inconsistent-metadata
         env:
           HASURA_GRAPHQL_ENDPOINT: ${{needs.configure-hasura-preview-tenant.outputs.endpoint}}
           HASURA_GRAPHQL_ADMIN_SECRET: ${{ steps.decrypt-admin-secret.outputs.admin_secret }}
