@@ -215,6 +215,9 @@ importers:
       email-regex:
         specifier: ^5.0.0
         version: 5.0.0
+      ulidx:
+        specifier: ^2.0.0
+        version: 2.0.0
     devDependencies:
       zod:
         specifier: ^3.21.4
@@ -8408,6 +8411,10 @@ packages:
       language-subtag-registry: 0.3.22
     dev: true
 
+  /layerr@2.0.1:
+    resolution: {integrity: sha512-z0730CwG/JO24evdORnyDkwG1Q7b7mF2Tp1qRQ0YvrMMARbt1DFG694SOv439Gm7hYKolyZyaB49YIrYIfZBdg==}
+    dev: false
+
   /leven@3.1.0:
     resolution: {integrity: sha512-qsda+H8jTaUaN/x5vzW2rzc+8Rw4TAQ/4KjB46IwK5VH+IlVeeeje/EoZRpiXvIqjFgK84QffqPztGI3VBLG1A==}
     engines: {node: '>=6'}
@@ -11486,6 +11493,13 @@ packages:
   /ufo@1.1.2:
     resolution: {integrity: sha512-TrY6DsjTQQgyS3E3dBaOXf0TpPD8u9FVrVYmKVegJuFw51n/YB9XPt+U6ydzFG5ZIN7+DIjPbNmXoBj9esYhgQ==}
     dev: true
+
+  /ulidx@2.0.0:
+    resolution: {integrity: sha512-cz6HnYL8aQeR1l7qgo4qK88kLhnVQn1qLjALMoa4rtmj6/jw3yS2KUxu3r+d8GSKkeK9ctw+n8VmCygqfDtckA==}
+    engines: {node: '>=16'}
+    dependencies:
+      layerr: 2.0.1
+    dev: false
 
   /unbox-primitive@1.0.2:
     resolution: {integrity: sha512-61pPlCD9h51VoreyJ0BReideM3MDKMKnh6+V9L08331ipq6Q8OFXZYiqP6n/tbHx4s5I9uRhcye6BrbkizkBDw==}
