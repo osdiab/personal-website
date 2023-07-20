@@ -32,6 +32,14 @@ module.exports = {
       },
       rules: {
         "@typescript-eslint/no-unused-vars": "off",
+        "@typescript-eslint/naming-convention": [
+          "error",
+          {
+            selector: "variableLike",
+            format: ["camelCase", "PascalCase"],
+            leadingUnderscore: "allow",
+          },
+        ],
       },
     },
     {
