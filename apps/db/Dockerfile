@@ -1,4 +1,3 @@
-# lifted from https://github.com/pksunkara/pgx_ulid/blob/master/Dockerfile
 ARG PG_MAJOR
 
 FROM postgres:${PG_MAJOR}
