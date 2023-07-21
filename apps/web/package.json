@@ -24,7 +24,7 @@
   },
   "devDependencies": {
     "@osdiab-website/tsconfig": "workspace:*",
-    "@pandacss/dev": "^0.6.0",
+    "@pandacss/dev": "0.0.0-dev-20230720173817",
     "@svgr/webpack": "^8.0.1",
     "@types/node": "^17.0.12",
     "@types/react": "^18.0.22",
