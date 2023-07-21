@@ -16,11 +16,10 @@ import {
 } from "~/app/page.css";
 import { ReactNode } from "react";
 import CleverLogo from "~/assets/logos/clever.svg";
-import SpinachLogo from "~/assets/logos/spinach.svg";
-import EveryOrgLogo from "~/assets/logos/every-org.svg";
 import { ExternalLink } from "lucide-react";
 import { hyperlinkCss } from "~/app/hyperlink.css";
 import { SvgComponent } from "~/types";
+import { EveryOrgLogo, SpinachLogo } from "~/app/themed-logos";
 
 export default function Page() {
   return (
@@ -35,7 +34,7 @@ export default function Page() {
         <section className={sectionCss}>
           <div className={jobEntrySectionCss}>
             <Entry
-              CompanyLogoType={SpinachLogo as SvgComponent}
+              CompanyLogoType={SpinachLogo}
               companyName="Spinach HR"
               companyUrl="https://www.gotofu.com"
               jobTitle="Co-Founder, Head of Engineering"
@@ -44,7 +43,7 @@ export default function Page() {
               description="A whitelabel platform that powers the operations of major Employer of Record global payroll companies, from sales pipeline to payroll to invoicing. I designed the initial product concept, and built a team that implemented and successfully deployed it at scale at multiple companies. Acquired 2023."
             />
             <Entry
-              CompanyLogoType={EveryOrgLogo as SvgComponent}
+              CompanyLogoType={EveryOrgLogo}
               companyName="Every.org"
               companyUrl="https://www.every.org"
               jobTitle="Co-Founder, Head of Engineering"

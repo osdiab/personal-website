@@ -15,6 +15,7 @@ export const siteHeaderCss = css({
   fontSize: "lg",
   paddingX: headerPaddingX,
   paddingY: "2",
+  transition: "background 0.3s ease-out",
   background: "pageBackground",
   borderBottom: `1px solid transparent`,
 });
