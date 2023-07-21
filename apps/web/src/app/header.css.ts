@@ -1,11 +1,3 @@
-import {
-  fontSize,
-  grayColors,
-  sprinkles,
-} from "@osdiab-website/ui/sprinkles.css";
-import { stackCss } from "@osdiab-website/ui/stack.css";
-import { style } from "@vanilla-extract/css";
-
 export const maxContentWidth = "800px";
 export const headerPaddingX: Parameters<typeof sprinkles>[0]["paddingX"] = {
   mobile: "xl2",

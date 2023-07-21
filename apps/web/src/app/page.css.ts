@@ -1,9 +1,4 @@
 import { headerPaddingX, maxContentWidth } from "~/app/header.css";
-import { sprinkles } from "@osdiab-website/ui/sprinkles.css";
-import { stackCss } from "@osdiab-website/ui/stack.css";
-import { style } from "@vanilla-extract/css";
-import { fontSize } from "@osdiab-website/ui/sprinkles.css";
-import { proseCss } from "@osdiab-website/ui/prose.css";
 
 export const pageCss = style([
   sprinkles({ paddingX: headerPaddingX, paddingY: "xl3" }),

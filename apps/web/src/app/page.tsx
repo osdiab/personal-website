@@ -15,7 +15,6 @@ import {
   timeCss,
 } from "~/app/page.css";
 import { ComponentProps, ReactNode } from "react";
-import { hyperlinkCss } from "@osdiab-website/ui/hyperlink.css";
 import CleverLogo from "~/assets/logos/clever.svg";
 import SpinachLogo from "~/assets/logos/spinach.svg";
 import EveryOrgLogo from "~/assets/logos/every-org.svg";
