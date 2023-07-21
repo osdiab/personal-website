@@ -8,10 +8,10 @@
     "typecheck": "tsc"
   },
   "devDependencies": {
+    "@osdiab-website/tsconfig": "workspace:*",
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.0",
-    "react": "^17.0.2",
-    "@osdiab-website/tsconfig": "workspace:*",
+    "react": "^18.2.0",
     "typescript": "^4.5.2"
   },
   "dependencies": {
