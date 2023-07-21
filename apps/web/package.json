@@ -21,7 +21,6 @@
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "@csstools/postcss-cascade-layers": "^4.0.0",
     "@osdiab-website/tsconfig": "workspace:*",
     "@pandacss/dev": "0.0.0-dev-20230720173817",
     "@svgr/webpack": "^8.0.1",
@@ -33,5 +32,5 @@
     "typescript": "^5.0.4",
     "webpack-merge": "^5.8.0"
   },
-  "browserslist": "defaults, last 3 iOS major versions, last 3 Safari major versions"
+  "browserslist": "defaults and supports css-cascade-layers, last 3 years and supports css-cascade-layers and not dead"
 }
