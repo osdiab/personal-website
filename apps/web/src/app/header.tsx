@@ -16,6 +16,7 @@ import { Github, Linkedin, Mail } from "lucide-react";
 import { cx } from "~pandacss/css";
 import { hyperlinkCss } from "~/app/hyperlink.css";
 import { SvgComponent } from "~/types";
+import { ThemeSwitcher } from "~/app/theme-switcher";
 
 export function RootHeader() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -55,6 +56,7 @@ export function RootHeader() {
             <span className={siteTitleCss}>Omar Diab</span>
           </div>
           <div className={headerRightCss}>
+            <ThemeSwitcher />
             <NavLink
               url="https://www.linkedin.com/in/osdiab/"
               Icon={Linkedin}
@@ -89,7 +91,7 @@ function NavLink({
     <a
       className={hyperlinkCss({
         initColor: "bodyText",
-        activeColor: "largePrimary",
+        activeColor: "primaryDisplay",
       })}
       href={url}
       target="_blank"

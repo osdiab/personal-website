@@ -2,7 +2,10 @@ import { headerPaddingX, maxContentWidth } from "~/app/header.css";
 import { css, cx } from "~pandacss/css";
 import { hstack, vstack } from "~pandacss/patterns";
 
-export const bodyCss = css({ minHeight: "var(--full-dvh)" });
+export const bodyCss = css({
+  minHeight: "var(--full-dvh)",
+  background: "pageBackground",
+});
 export const bodyContentCss = vstack({ gap: "6", alignItems: "stretch" });
 export const mainContentCss = css({ paddingBlockEnd: "20" });
 

@@ -1,4 +1,8 @@
-import { defineConfig, defineSemanticTokens } from "@pandacss/dev";
+import {
+  defineConfig,
+  defineGlobalStyles,
+  defineSemanticTokens,
+} from "@pandacss/dev";
 
 export default defineConfig({
   // Whether to use css reset
@@ -11,29 +15,51 @@ export default defineConfig({
   exclude: [],
 
   conditions: {
-    light: "[data-color-mode=light] &",
-    dark: "[data-color-mode=dark] &",
+    light: "[data-theme=light] &",
+    dark: "[data-theme=dark] &",
   },
 
+  globalCss: defineGlobalStyles({ html: { color: "bodyText" } }),
+  staticCss: {
+    css: [
+      {
+        properties: {
+          // needed so the tokens used in the theming below are definitely
+          // present in the generated CSS
+          color: ["zinc.900", "zinc.50"],
+        },
+      },
+    ],
+  },
   // Useful for theme customization
   theme: {
     extend: {
       semanticTokens: defineSemanticTokens({
         colors: {
           bodyText: {
-            value: { _light: "{zinc.800}", _dark: "{zinc.50}" },
+            value: { _light: "#18181b", _dark: "#fafafa" },
           },
-          primary: { value: "hsl(var(--primary-hue), 100%, 65%)" },
-          primaryText: {
-            value: {
-              _light: "hsl(var(--primary-hue), 100%, 55%)",
-              _dark: "hsl(var(--primary-hue), 100%, 75%)",
+          pageBackground: {
+            value: { _light: "#fafafa", _dark: "#18181b" },
+          },
+          border: {
+            soft: {
+              value: { _light: "hsl(0, 0%, 80%)", _dark: "hsl(0, 0%, 20%)" },
             },
           },
-          primaryHighlight: {
-            value: {
-              _light: "hsl(var(--primary-hue), 100%, 75%)",
-              _dark: "hsl(var(--primary-hue), 100%, 45%)",
+          primary: {
+            display: { value: "hsl(var(--color-primary-hue), 100%, 65%)" },
+            text: {
+              value: {
+                _light: "hsl(var(--color-primary-hue), 100%, 55%)",
+                _dark: "hsl(var(--color-primary-hue), 100%, 65%)",
+              },
+            },
+            highlight: {
+              value: {
+                _light: "hsl(var(--color-primary-hue), 60%, 55%)",
+                _dark: "hsl(var(--color-primary-hue), 60%, 65%)",
+              },
             },
           },
         },

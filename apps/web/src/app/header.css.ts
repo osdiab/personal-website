@@ -15,7 +15,7 @@ export const siteHeaderCss = css({
   fontSize: "lg",
   paddingX: headerPaddingX,
   paddingY: "2",
-  background: "white",
+  background: "pageBackground",
   borderBottom: `1px solid transparent`,
 });
 export const headerContentCss = cx(
@@ -30,7 +30,7 @@ const headerSectionCss = hstack({ gap: "6", alignItems: "center" });
 export const headerLeftCss = headerSectionCss;
 export const headerRightCss = headerSectionCss;
 export const siteHeaderScrolledCss = css({
-  borderBottomColor: "gray.200",
+  borderBottomColor: "border.soft",
 });
 export const logoCss = css({ height: "1em" });
 export const siteTitleCss = css({ fontWeight: "bold" });
