@@ -2,6 +2,7 @@
 
 :root {
   --full-dvh: 100vh;
+  --primary-hue: 14.67;
 }
 
 @supports (height: 100dvh){

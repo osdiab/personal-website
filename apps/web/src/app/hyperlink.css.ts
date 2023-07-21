@@ -1,8 +1,15 @@
-import { css } from "~pandacss/css";
-import { SystemStyleObject } from "~pandacss/types";
+import { hyperlinkStyles } from "~/app/prose.css";
+import { cva } from "~pandacss/css";
 
-export const hyperlinkStyles: SystemStyleObject = {
-  color: "orange.400",
-  textDecoration: "underline",
-};
-export const hyperlinkCss = css(hyperlinkStyles);
+export const hyperlinkCss = cva({
+  base: hyperlinkStyles,
+  variants: {
+    initColor: {
+      bodyText: { color: "bodyText" },
+      largePrimary: { color: "primary" },
+    },
+    activeColor: {
+      largePrimary: { _hover: { color: "primary" } },
+    },
+  },
+});

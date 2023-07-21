@@ -14,6 +14,8 @@ import Logo from "~/app/logo.svg";
 import { useEffect, useRef, useState } from "react";
 import { Github, Linkedin, Mail } from "lucide-react";
 import { cx } from "~pandacss/css";
+import { hyperlinkCss } from "~/app/hyperlink.css";
+import { SvgComponent } from "~/types";
 
 export function RootHeader() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -53,30 +55,47 @@ export function RootHeader() {
             <span className={siteTitleCss}>Omar Diab</span>
           </div>
           <div className={headerRightCss}>
-            <a
-              href="https://www.linkedin.com/in/osdiab/"
-              target="_blank"
-              rel="noreferrer"
-            >
-              <Linkedin className={logoCss} aria-label="LinkedIn" />
-            </a>
-            <a
-              href="mailto:hello@omardiab.com"
-              target="_blank"
-              rel="noreferrer"
-            >
-              <Mail className={logoCss} aria-label="Email" />
-            </a>
-            <a
-              href="https://github.com/osdiab/personal-website"
-              target="_blank"
-              rel="noreferrer"
-            >
-              <Github className={logoCss} aria-label="Github" />
-            </a>
+            <NavLink
+              url="https://www.linkedin.com/in/osdiab/"
+              Icon={Linkedin}
+              title="LinkedIn"
+            />
+            <NavLink
+              url="mailto:hello@omardiab.com"
+              Icon={Mail}
+              title="Email"
+            />
+            <NavLink
+              url="https://github.com/osdiab/personal-website"
+              Icon={Github}
+              title="Github"
+            />
           </div>
         </div>
       </header>
     </>
+  );
+}
+function NavLink({
+  url,
+  Icon,
+  title,
+}: {
+  url: string;
+  Icon: SvgComponent;
+  title: string;
+}) {
+  return (
+    <a
+      className={hyperlinkCss({
+        initColor: "bodyText",
+        activeColor: "largePrimary",
+      })}
+      href={url}
+      target="_blank"
+      rel="noreferrer"
+    >
+      <Icon className={logoCss} aria-label={title} />
+    </a>
   );
 }

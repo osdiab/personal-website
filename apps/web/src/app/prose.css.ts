@@ -1,12 +1,30 @@
-import { hyperlinkStyles } from "~/app/hyperlink.css";
 import { css } from "~pandacss/css";
+import { SystemStyleObject } from "~pandacss/types";
 
-// & h1:not(:first-child), & h2:not(first-child), ...
-const childTextElementSelector = ["h1", "h2", "h3", "h4", "h5", "h6", "p"]
-  .map((s) => `& ${s}:not(:first-child)`)
-  .join(", ");
+const paragraphSpacingStyle: SystemStyleObject = {
+  "&:not(:first-child)": { marginBlockStart: "1em" },
+};
+
+// this needs to be in this file so that panda can pick it up at compile time
+export const hyperlinkStyles: SystemStyleObject = {
+  color: "primaryText",
+  textDecoration: "underline",
+  display: "inline-block",
+  cursor: "pointer",
+  fontWeight: "semibold",
+  border: "none",
+  background: "none",
+  transition: "color 0.1s linear",
+  _hover: { color: "primaryHighlight" },
+};
 
 export const proseCss = css({
   "& a": hyperlinkStyles,
-  [childTextElementSelector]: { marginBlockStart: "1em" },
+  "& p": paragraphSpacingStyle,
+  "& h1": paragraphSpacingStyle,
+  "& h2": paragraphSpacingStyle,
+  "& h3": paragraphSpacingStyle,
+  "& h4": paragraphSpacingStyle,
+  "& h5": paragraphSpacingStyle,
+  "& h6": paragraphSpacingStyle,
 });

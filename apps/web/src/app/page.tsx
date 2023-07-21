@@ -14,14 +14,13 @@ import {
   sectionCss,
   timeCss,
 } from "~/app/page.css";
-import { ComponentProps, ReactNode } from "react";
+import { ReactNode } from "react";
 import CleverLogo from "~/assets/logos/clever.svg";
 import SpinachLogo from "~/assets/logos/spinach.svg";
 import EveryOrgLogo from "~/assets/logos/every-org.svg";
 import { ExternalLink } from "lucide-react";
 import { hyperlinkCss } from "~/app/hyperlink.css";
-
-type SvgComponent = (props: ComponentProps<"svg">) => JSX.Element;
+import { SvgComponent } from "~/types";
 
 export default function Page() {
   return (
@@ -120,7 +119,7 @@ function Entry({
         <h3>
           {companyUrl ? (
             <a
-              className={hyperlinkCss}
+              className={hyperlinkCss()}
               href={companyUrl}
               target="_blank"
               rel="noreferrer"
