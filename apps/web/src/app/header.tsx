@@ -11,9 +11,9 @@ import {
 } from "~/app/header.css";
 import Logo from "~/app/logo.svg";
 
-import clsx from "clsx";
 import { useEffect, useRef, useState } from "react";
 import { Github, Linkedin, Mail } from "lucide-react";
+import { cx } from "~pandacss/css";
 
 export function RootHeader({ className }: { className?: string }) {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -45,7 +45,7 @@ export function RootHeader({ className }: { className?: string }) {
       scrolled down */}
       <span ref={dummyRef} />
       <header
-        className={clsx(
+        className={cx(
           siteHeaderCss,
           isScrolled && siteHeaderScrolledCss,
           className
