@@ -1,2 +1,12 @@
 @layer reset, base, tokens, recipes, utilities;
 
+:root {
+  --full-dvh: 100vh;
+}
+
+@supports (height: 100dvh){
+ :root {
+    --full-dvh: 100dvh;
+ }
+}
+

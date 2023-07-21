@@ -15,7 +15,7 @@ import { useEffect, useRef, useState } from "react";
 import { Github, Linkedin, Mail } from "lucide-react";
 import { cx } from "~pandacss/css";
 
-export function RootHeader({ className }: { className?: string }) {
+export function RootHeader() {
   const [isScrolled, setIsScrolled] = useState(false);
 
   const dummyRef = useRef<HTMLSpanElement | null>(null);
@@ -45,11 +45,7 @@ export function RootHeader({ className }: { className?: string }) {
       scrolled down */}
       <span ref={dummyRef} />
       <header
-        className={cx(
-          siteHeaderCss,
-          isScrolled && siteHeaderScrolledCss,
-          className
-        )}
+        className={cx(siteHeaderCss, isScrolled && siteHeaderScrolledCss)}
       >
         <div className={headerContentCss}>
           <div className={headerLeftCss}>

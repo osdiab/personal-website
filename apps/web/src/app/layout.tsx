@@ -1,5 +1,6 @@
 import { RootHeader } from "~/app/header";
 import {
+  bodyContentCss,
   bodyCss,
   footerContentCss,
   footerCss,
@@ -18,14 +19,16 @@ export default function RootLayout({
     <html lang="en">
       <body className={bodyCss}>
         <RootHeader />
-        <main className={mainContentCss}>{children}</main>
-        <footer className={footerCss}>
-          <div className={footerWrapperCss}>
-            <div className={footerContentCss}>
-              <span>© Omar Diab, {new Date().getFullYear()}</span>
+        <div className={bodyContentCss}>
+          <main className={mainContentCss}>{children}</main>
+          <footer className={footerCss}>
+            <div className={footerWrapperCss}>
+              <div className={footerContentCss}>
+                <span>© Omar Diab, {new Date().getFullYear()}</span>
+              </div>
             </div>
-          </div>
-        </footer>
+          </footer>
+        </div>
       </body>
     </html>
   );
