@@ -46,7 +46,7 @@ export default defineConfig({
           },
           border: {
             soft: {
-              value: { _light: "hsl(0, 0%, 80%)", _dark: "hsl(0, 0%, 20%)" },
+              value: { _light: "hsl(0, 0%, 80%)", _dark: "hsl(0, 0%, 30%)" },
             },
           },
           primary: {
