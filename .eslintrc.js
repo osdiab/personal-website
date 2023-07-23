@@ -51,6 +51,15 @@ module.exports = {
           "warn",
           { prefer: "type-imports" },
         ],
+        // consistency
+        "@typescript-eslint/naming-convention": [
+          "error",
+          {
+            selector: "variableLike",
+            format: ["camelCase", "PascalCase"],
+            leadingUnderscore: "allow",
+          },
+        ],
       },
     },
     {

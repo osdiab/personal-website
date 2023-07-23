@@ -6,7 +6,12 @@ package/app is 100% [TypeScript](https://www.typescriptlang.org/).
 
 ## Installation
 
-1. [Install Docker](https://docs.docker.com/engine/install/)
+1. Setup Docker. Options:
+   1. **Recommended for >M1 Mac users**: Use [OrbStack, a Docker runtime
+      optimized for ARM Macs](https://orbstack.dev/)
+      1. [Install it](https://docs.orbstack.dev/quick-start)
+   1. Use Docker Desktop. [Install Docker](https://docs.docker.com/engine/install/)
+   1. Use `docker` manually; you can figure it out yourself
 1. [Install `asdf`](https://asdf-vm.com/guide/getting-started.html)
 1. Install `asdf` plugins
    1. [nodejs](https://github.com/asdf-vm/asdf-nodejs#install)
@@ -26,6 +31,15 @@ pnpm dev
 
 The web app will be accessible on http://localhost:3000
 
+### Accessing Hasura
+
+To use the Hasura CLI, run:
+
+```sh
+pnpm --workspace-root hasura  # or `pnpm -w hasura` for short
+pnpm -w hasura console  # access the hasura console
+```
+
 ## What's inside?
 
 ### Apps and Packages
@@ -37,6 +51,9 @@ The web app will be accessible on http://localhost:3000
 - Shared libraries are in the `libs/` directory
   - `libs/gql-web`: Auto-generated bindings to call the GraphQL engine generated
     by Hasura with TypeScript
+  - `libs/db-migrations`: Database migrations powered by `node-pg-migrate`,
+    since [Hasura's migrations are not implemented in a safe
+    way](https://github.com/hasura/graphql-engine/issues/7166)
 
 ### Style/Linting
 

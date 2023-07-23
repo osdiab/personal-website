@@ -6,7 +6,7 @@
     "dev:down": "docker compose down",
     "dev:logs": "docker compose logs --follow",
     "dev:noDoppler": "docker compose up --detach",
-    "dev": "doppler run -- pnpm dev:noDoppler",
+    "dev": "DOPPLER_TOKEN=$(doppler configs tokens create ephemeral-token --max-age 1m --plain) pnpm dev:noDoppler",
     "hasura:noDoppler": "hasura --skip-update-check",
     "hasura": "pnpm doppler:dev run -- pnpm hasura:noDoppler",
     "doppler:dev": "doppler --project gql-engine-cli --config dev",
