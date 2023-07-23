@@ -16,6 +16,14 @@ module.exports = {
         argsIgnorePattern: "^_",
       },
     ],
+    "no-restricted-imports": [
+      "error",
+      {
+        paths: [
+          { name: "next-themes", message: "Please use ~/utils/theme instead" },
+        ],
+      },
+    ],
   },
   root: true,
   overrides: [
@@ -33,6 +41,16 @@ module.exports = {
       },
       rules: {
         "@typescript-eslint/no-unused-vars": "off", // typescript handles this
+        // asserting types is unsafe, only use if truly necessary
+        "@typescript-eslint/consistent-type-assertions": [
+          "warn",
+          { assertionStyle: "never" },
+        ],
+        // makes extra sure that types are imported correctly
+        "@typescript-eslint/consistent-type-imports": [
+          "warn",
+          { prefer: "type-imports" },
+        ],
       },
     },
     {
