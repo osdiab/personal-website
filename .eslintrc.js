@@ -28,7 +28,7 @@ module.exports = {
   root: true,
   overrides: [
     {
-      files: ["./**/*.{ts,tsx}"],
+      files: ["./**/*.ts{,x}"],
       plugins: ["@typescript-eslint"],
       extends: [
         "plugin:@typescript-eslint/recommended",
@@ -54,7 +54,7 @@ module.exports = {
       },
     },
     {
-      files: ["./**/*.{j,t}sx"],
+      files: ["./**/*.[jt]s{,x}"],
       extends: [
         "plugin:react/recommended",
         "plugin:react-hooks/recommended",
