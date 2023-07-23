@@ -11,11 +11,10 @@ export const headerPaddingX: SystemProperties["paddingX"] = {
 export const siteHeaderCss = css({
   position: "sticky",
   top: 0,
-  transition: "border-bottom 0.3s",
+  transition: "border-bottom 0.3s, background 0.2s ease-out",
   fontSize: "lg",
   paddingX: headerPaddingX,
   paddingY: "2",
-  transition: "background 0.3s ease-out",
   background: "pageBackground",
   borderBottom: `1px solid transparent`,
 });

@@ -17,7 +17,7 @@ import {
 import { ReactNode } from "react";
 import CleverLogo from "~/assets/logos/clever.svg";
 import { ExternalLink } from "lucide-react";
-import { hyperlinkCss } from "~/app/hyperlink.css";
+import { hyperlinkCss } from "~/components/ui/hyperlink";
 import { SvgComponent } from "~/types";
 import { EveryOrgLogo, SpinachLogo } from "~/app/themed-logos";
 

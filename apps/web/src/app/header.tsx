@@ -14,7 +14,7 @@ import Logo from "~/app/logo.svg";
 import { useEffect, useRef, useState } from "react";
 import { Github, Linkedin, Mail } from "lucide-react";
 import { cx } from "~pandacss/css";
-import { hyperlinkCss } from "~/app/hyperlink.css";
+import { hyperlinkCss } from "~/components/ui/hyperlink";
 import { SvgComponent } from "~/types";
 import { ThemeSwitcher } from "~/app/theme-switcher";
 

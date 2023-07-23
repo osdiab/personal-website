@@ -5,7 +5,7 @@ import { PropsWithChildren } from "react";
 
 export function Providers({ children }: PropsWithChildren) {
   return (
-    <ThemeProvider themes={["light", "dark", "system"]}>
+    <ThemeProvider themes={["light", "dark"]} enableSystem>
       {children}
     </ThemeProvider>
   );
