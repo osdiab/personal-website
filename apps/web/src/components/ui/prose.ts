@@ -1,5 +1,5 @@
 import { css } from "~pandacss/css";
-import { SystemStyleObject } from "~pandacss/types";
+import type { SystemStyleObject } from "~pandacss/types";
 
 const paragraphSpacingStyle: SystemStyleObject = {
   "&:not(:first-child)": { marginBlockStart: "1em" },

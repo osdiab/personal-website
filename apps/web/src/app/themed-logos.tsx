@@ -1,30 +1,53 @@
 "use client";
 
-import { useTheme } from "next-themes";
 import EveryOrgLogoDark from "~/assets/logos/every-org-dark.svg";
 import EveryOrgLogoLight from "~/assets/logos/every-org-light.svg";
 import SpinachLogoNormal from "~/assets/logos/spinach.svg";
 import SpinachLogoInverted from "~/assets/logos/spinach-inverted.svg";
-import { SvgComponent } from "~/types";
+import { WaitOnTheme } from "~/components/wait-on-theme";
+import { useTheme } from "~/utils/theme";
+import type { ComponentProps, FC } from "react";
+
+type SvgComponent = FC<ComponentProps<"svg">>;
 
 const EmptySvg: SvgComponent = (props) => <svg {...props} />;
 
-export const EveryOrgLogo: SvgComponent = (props) => {
-  const { resolvedTheme } = useTheme();
-  const Logo = resolvedTheme
-    ? ((resolvedTheme === "dark"
-        ? EveryOrgLogoLight
-        : EveryOrgLogoDark) as SvgComponent)
-    : EmptySvg;
-  return <Logo {...props} />;
-};
+interface ThemeDependentLogoProps extends ComponentProps<SvgComponent> {
+  DarkLogo: SvgComponent;
+  LightLogo: SvgComponent;
+}
 
-export const SpinachLogo: SvgComponent = (props) => {
+function ThemeDependentLogo({
+  DarkLogo,
+  LightLogo,
+  ...props
+}: ThemeDependentLogoProps) {
   const { resolvedTheme } = useTheme();
-  const Logo = resolvedTheme
-    ? ((resolvedTheme === "dark"
-        ? SpinachLogoInverted
-        : SpinachLogoNormal) as SvgComponent)
-    : EmptySvg;
-  return <Logo {...props} />;
-};
+  switch (resolvedTheme) {
+    case "dark":
+      return <DarkLogo {...props} />;
+    case "light":
+      return <LightLogo {...props} />;
+    default:
+      return <EmptySvg {...props} />;
+  }
+}
+export const EveryOrgLogo: SvgComponent = (props) => (
+  <WaitOnTheme>
+    <ThemeDependentLogo
+      DarkLogo={EveryOrgLogoLight}
+      LightLogo={EveryOrgLogoDark}
+      {...props}
+    />
+  </WaitOnTheme>
+);
+
+export const SpinachLogo: SvgComponent = (props) => (
+  <WaitOnTheme>
+    <ThemeDependentLogo
+      DarkLogo={SpinachLogoInverted}
+      LightLogo={SpinachLogoNormal}
+      {...props}
+    />
+  </WaitOnTheme>
+);

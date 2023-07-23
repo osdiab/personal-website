@@ -19,7 +19,7 @@ export default defineConfig({
     dark: "[data-theme=dark] &",
   },
 
-  globalCss: defineGlobalStyles({ html: { color: "bodyText" } }),
+  globalCss: defineGlobalStyles({ html: { color: "text.body" } }),
   staticCss: {
     css: [
       {
@@ -34,17 +34,45 @@ export default defineConfig({
   // Useful for theme customization
   theme: {
     extend: {
+      keyframes: {
+        zoomIn: {
+          "0%": { transform: "scale(0)" },
+          "100%": { transform: "scale(1)" },
+        },
+        zoomOut: {
+          "0%": { transform: "scale(1)" },
+          "100%": { transform: "scale(0)" },
+        },
+        zoomInSlight: {
+          "0%": { transform: "scale(0.95)" },
+          "100%": { transform: "scale(1)" },
+        },
+        zoomOutSlight: {
+          "0%": { transform: "scale(1)" },
+          "100%": { transform: "scale(0.95)" },
+        },
+        fadeIn: {
+          "0%": { opacity: 0 },
+          "100%": { opacity: 1 },
+        },
+        fadeOut: {
+          "0%": { opacity: 0 },
+          "100%": { opacity: 1 },
+        },
+      },
       semanticTokens: defineSemanticTokens({
         colors: {
-          bodyText: {
-            value: { _light: "#18181b", _dark: "#fafafa" },
+          text: {
+            body: { value: { _light: "#18181b", _dark: "#fafafa" } },
+            popover: { value: { _light: "#18181b", _dark: "#fafafa" } },
           },
-          pageBackground: {
-            value: { _light: "#fafafa", _dark: "#18181b" },
+          bg: {
+            page: { value: { _light: "#fafafa", _dark: "#18181b" } },
+            popover: { value: { _light: "#fafafa", _dark: "#18181b" } },
           },
           border: {
             soft: {
-              value: { _light: "hsl(0, 0%, 80%)", _dark: "hsl(0, 0%, 20%)" },
+              value: { _light: "hsl(0, 0%, 80%)", _dark: "hsl(0, 0%, 30%)" },
             },
           },
           primary: {

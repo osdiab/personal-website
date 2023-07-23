@@ -1,6 +1,7 @@
+import { buttonCss } from "~/components/ui/button";
 import { css, cx } from "~pandacss/css";
 import { hstack } from "~pandacss/patterns";
-import { SystemProperties } from "~pandacss/types/style-props";
+import type { SystemProperties } from "~pandacss/types/style-props";
 
 export const maxContentWidth = "800px";
 export const headerPaddingX: SystemProperties["paddingX"] = {
@@ -11,12 +12,11 @@ export const headerPaddingX: SystemProperties["paddingX"] = {
 export const siteHeaderCss = css({
   position: "sticky",
   top: 0,
-  transition: "border-bottom 0.3s",
+  transition: "border-bottom 0.3s, background 0.2s ease-out",
   fontSize: "lg",
   paddingX: headerPaddingX,
   paddingY: "2",
-  transition: "background 0.3s ease-out",
-  background: "pageBackground",
+  background: "bg.page",
   borderBottom: `1px solid transparent`,
 });
 export const headerContentCss = cx(
@@ -35,3 +35,8 @@ export const siteHeaderScrolledCss = css({
 });
 export const logoCss = css({ height: "1em" });
 export const siteTitleCss = css({ fontWeight: "bold" });
+
+export const navLinkCss = cx(
+  buttonCss({ type: "plainText", padding: "none" }),
+  css({ "& svg": { height: "1em" } })
+);

@@ -1,5 +1,5 @@
 import { headerPaddingX, maxContentWidth } from "~/app/header.css";
-import { proseCss } from "~/app/prose.css";
+import { proseCss } from "~/components/ui/prose";
 import { css, cx } from "~pandacss/css";
 import { hstack, stack, vstack } from "~pandacss/patterns";
 

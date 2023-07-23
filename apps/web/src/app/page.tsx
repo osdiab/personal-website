@@ -14,11 +14,10 @@ import {
   sectionCss,
   timeCss,
 } from "~/app/page.css";
-import { ReactNode } from "react";
+import type { ComponentProps, FC, ReactNode } from "react";
 import CleverLogo from "~/assets/logos/clever.svg";
 import { ExternalLink } from "lucide-react";
-import { hyperlinkCss } from "~/app/hyperlink.css";
-import { SvgComponent } from "~/types";
+import { hyperlinkCss } from "~/components/ui/hyperlink";
 import { EveryOrgLogo, SpinachLogo } from "~/app/themed-logos";
 
 export default function Page() {
@@ -52,7 +51,7 @@ export default function Page() {
               description="The easiest and most efficient way to donate to any U.S. nonprofit. I helped research issues in philanthropy, and built the core of the app. By the time I departed, it was facilitating tens of millions of dollars in donations yearly. Still running!"
             />
             <Entry
-              CompanyLogoType={CleverLogo as SvgComponent}
+              CompanyLogoType={CleverLogo}
               companyName="Clever"
               companyUrl="https://www.clever.com"
               jobTitle="Full-Stack Engineer"
@@ -79,7 +78,7 @@ export default function Page() {
 }
 
 interface EntryProps {
-  CompanyLogoType: SvgComponent;
+  CompanyLogoType: FC<ComponentProps<"svg">>;
   companyName: string;
   companyUrl?: string;
   jobTitle: string;

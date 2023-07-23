@@ -5,17 +5,17 @@ import {
   headerLeftCss,
   headerRightCss,
   logoCss,
+  navLinkCss,
   siteHeaderCss,
   siteHeaderScrolledCss,
   siteTitleCss,
 } from "~/app/header.css";
 import Logo from "~/app/logo.svg";
 
+import type { ComponentProps, FC } from "react";
 import { useEffect, useRef, useState } from "react";
 import { Github, Linkedin, Mail } from "lucide-react";
 import { cx } from "~pandacss/css";
-import { hyperlinkCss } from "~/app/hyperlink.css";
-import { SvgComponent } from "~/types";
 import { ThemeSwitcher } from "~/app/theme-switcher";
 
 export function RootHeader() {
@@ -56,19 +56,19 @@ export function RootHeader() {
             <span className={siteTitleCss}>Omar Diab</span>
           </div>
           <div className={headerRightCss}>
-            <ThemeSwitcher />
+            <ThemeSwitcher className={navLinkCss} />
             <NavLink
-              url="https://www.linkedin.com/in/osdiab/"
+              href="https://www.linkedin.com/in/osdiab/"
               Icon={Linkedin}
               title="LinkedIn"
             />
             <NavLink
-              url="mailto:hello@omardiab.com"
+              href="mailto:hello@omardiab.com"
               Icon={Mail}
               title="Email"
             />
             <NavLink
-              url="https://github.com/osdiab/personal-website"
+              href="https://github.com/osdiab/personal-website"
               Icon={Github}
               title="Github"
             />
@@ -78,26 +78,22 @@ export function RootHeader() {
     </>
   );
 }
-function NavLink({
-  url,
-  Icon,
-  title,
-}: {
-  url: string;
-  Icon: SvgComponent;
+interface NavLinkProps extends ComponentProps<"a"> {
+  href: string;
+  Icon: FC<ComponentProps<"svg">>;
   title: string;
-}) {
+}
+
+function NavLink({ href, Icon, title, ...props }: NavLinkProps) {
   return (
     <a
-      className={hyperlinkCss({
-        initColor: "bodyText",
-        activeColor: "primaryDisplay",
-      })}
-      href={url}
+      className={navLinkCss}
+      href={href}
       target="_blank"
       rel="noreferrer"
+      {...props}
     >
-      <Icon className={logoCss} aria-label={title} />
+      <Icon aria-label={title} />
     </a>
   );
 }

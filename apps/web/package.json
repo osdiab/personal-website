@@ -14,12 +14,14 @@
     "prepare": "panda codegen"
   },
   "dependencies": {
+    "@radix-ui/react-dropdown-menu": "^2.0.5",
     "lucide-react": "^0.248.0",
     "next": "13.4.7-canary.4",
     "next-themes": "^0.2.1",
     "radash": "^10.8.1",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "zod": "^3.21.4"
   },
   "devDependencies": {
     "@osdiab-website/tsconfig": "workspace:*",
