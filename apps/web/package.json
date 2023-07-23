@@ -10,29 +10,30 @@
     "start:noDoppler": "next start",
     "start": "doppler run -- pnpm start:noDoppler",
     "setup:doppler": "doppler setup --no-interactive",
-    "typecheck": "tsc"
+    "typecheck": "tsc",
+    "prepare": "panda codegen"
   },
   "dependencies": {
-    "@osdiab-website/ui": "workspace:*",
-    "@vanilla-extract/css": "^1.11.0",
-    "@vanilla-extract/recipes": "^0.4.0",
-    "@vanilla-extract/sprinkles": "^1.6.0",
-    "clsx": "^1.2.1",
+    "@radix-ui/react-dropdown-menu": "^2.0.5",
     "lucide-react": "^0.248.0",
     "next": "13.4.7-canary.4",
+    "next-themes": "^0.2.1",
     "radash": "^10.8.1",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "zod": "^3.21.4"
   },
   "devDependencies": {
     "@osdiab-website/tsconfig": "workspace:*",
+    "@pandacss/dev": "0.0.0-dev-20230720173817",
     "@svgr/webpack": "^8.0.1",
     "@types/node": "^17.0.12",
     "@types/react": "^18.0.22",
     "@types/react-dom": "^18.0.7",
-    "@vanilla-extract/next-plugin": "^2.1.2",
+    "autoprefixer": "^10.4.14",
     "ts-essentials": "^9.3.2",
     "typescript": "^5.0.4",
     "webpack-merge": "^5.8.0"
-  }
+  },
+  "browserslist": "defaults and supports css-cascade-layers, last 3 years and supports css-cascade-layers and not dead"
 }

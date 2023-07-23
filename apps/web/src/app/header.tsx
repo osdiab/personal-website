@@ -5,17 +5,20 @@ import {
   headerLeftCss,
   headerRightCss,
   logoCss,
+  navLinkCss,
   siteHeaderCss,
   siteHeaderScrolledCss,
   siteTitleCss,
 } from "~/app/header.css";
 import Logo from "~/app/logo.svg";
 
-import clsx from "clsx";
+import type { ComponentProps, FC } from "react";
 import { useEffect, useRef, useState } from "react";
 import { Github, Linkedin, Mail } from "lucide-react";
+import { cx } from "~pandacss/css";
+import { ThemeSwitcher } from "~/app/theme-switcher";
 
-export function RootHeader({ className }: { className?: string }) {
+export function RootHeader() {
   const [isScrolled, setIsScrolled] = useState(false);
 
   const dummyRef = useRef<HTMLSpanElement | null>(null);
@@ -45,11 +48,7 @@ export function RootHeader({ className }: { className?: string }) {
       scrolled down */}
       <span ref={dummyRef} />
       <header
-        className={clsx(
-          siteHeaderCss,
-          isScrolled && siteHeaderScrolledCss,
-          className
-        )}
+        className={cx(siteHeaderCss, isScrolled && siteHeaderScrolledCss)}
       >
         <div className={headerContentCss}>
           <div className={headerLeftCss}>
@@ -57,30 +56,44 @@ export function RootHeader({ className }: { className?: string }) {
             <span className={siteTitleCss}>Omar Diab</span>
           </div>
           <div className={headerRightCss}>
-            <a
+            <ThemeSwitcher className={navLinkCss} />
+            <NavLink
               href="https://www.linkedin.com/in/osdiab/"
-              target="_blank"
-              rel="noreferrer"
-            >
-              <Linkedin className={logoCss} aria-label="LinkedIn" />
-            </a>
-            <a
+              Icon={Linkedin}
+              title="LinkedIn"
+            />
+            <NavLink
               href="mailto:hello@omardiab.com"
-              target="_blank"
-              rel="noreferrer"
-            >
-              <Mail className={logoCss} aria-label="Email" />
-            </a>
-            <a
+              Icon={Mail}
+              title="Email"
+            />
+            <NavLink
               href="https://github.com/osdiab/personal-website"
-              target="_blank"
-              rel="noreferrer"
-            >
-              <Github className={logoCss} aria-label="Github" />
-            </a>
+              Icon={Github}
+              title="Github"
+            />
           </div>
         </div>
       </header>
     </>
+  );
+}
+interface NavLinkProps extends ComponentProps<"a"> {
+  href: string;
+  Icon: FC<ComponentProps<"svg">>;
+  title: string;
+}
+
+function NavLink({ href, Icon, title, ...props }: NavLinkProps) {
+  return (
+    <a
+      className={navLinkCss}
+      href={href}
+      target="_blank"
+      rel="noreferrer"
+      {...props}
+    >
+      <Icon aria-label={title} />
+    </a>
   );
 }

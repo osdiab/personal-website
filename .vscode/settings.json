@@ -44,5 +44,6 @@
   "rewrap.doubleSentenceSpacing": true,
   "rewrap.reformat": true,
   "files.insertFinalNewline": true,
-  "editor.tabSize": 2
+  "editor.tabSize": 2,
+  "typescript.preferences.autoImportFileExcludePatterns": ["styled-jsx"]
 }

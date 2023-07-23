@@ -14,14 +14,11 @@ import {
   sectionCss,
   timeCss,
 } from "~/app/page.css";
-import { ComponentProps, ReactNode } from "react";
-import { hyperlinkCss } from "@osdiab-website/ui/hyperlink.css";
+import type { ComponentProps, FC, ReactNode } from "react";
 import CleverLogo from "~/assets/logos/clever.svg";
-import SpinachLogo from "~/assets/logos/spinach.svg";
-import EveryOrgLogo from "~/assets/logos/every-org.svg";
 import { ExternalLink } from "lucide-react";
-
-type SvgComponent = (props: ComponentProps<"svg">) => JSX.Element;
+import { hyperlinkCss } from "~/components/ui/hyperlink";
+import { EveryOrgLogo, SpinachLogo } from "~/app/themed-logos";
 
 export default function Page() {
   return (
@@ -36,7 +33,7 @@ export default function Page() {
         <section className={sectionCss}>
           <div className={jobEntrySectionCss}>
             <Entry
-              CompanyLogoType={SpinachLogo as SvgComponent}
+              CompanyLogoType={SpinachLogo}
               companyName="Spinach HR"
               companyUrl="https://www.gotofu.com"
               jobTitle="Co-Founder, Head of Engineering"
@@ -45,7 +42,7 @@ export default function Page() {
               description="A whitelabel platform that powers the operations of major Employer of Record global payroll companies, from sales pipeline to payroll to invoicing. I designed the initial product concept, and built a team that implemented and successfully deployed it at scale at multiple companies. Acquired 2023."
             />
             <Entry
-              CompanyLogoType={EveryOrgLogo as SvgComponent}
+              CompanyLogoType={EveryOrgLogo}
               companyName="Every.org"
               companyUrl="https://www.every.org"
               jobTitle="Co-Founder, Head of Engineering"
@@ -54,7 +51,7 @@ export default function Page() {
               description="The easiest and most efficient way to donate to any U.S. nonprofit. I helped research issues in philanthropy, and built the core of the app. By the time I departed, it was facilitating tens of millions of dollars in donations yearly. Still running!"
             />
             <Entry
-              CompanyLogoType={CleverLogo as SvgComponent}
+              CompanyLogoType={CleverLogo}
               companyName="Clever"
               companyUrl="https://www.clever.com"
               jobTitle="Full-Stack Engineer"
@@ -81,7 +78,7 @@ export default function Page() {
 }
 
 interface EntryProps {
-  CompanyLogoType: SvgComponent;
+  CompanyLogoType: FC<ComponentProps<"svg">>;
   companyName: string;
   companyUrl?: string;
   jobTitle: string;
@@ -120,7 +117,7 @@ function Entry({
         <h3>
           {companyUrl ? (
             <a
-              className={hyperlinkCss}
+              className={hyperlinkCss()}
               href={companyUrl}
               target="_blank"
               rel="noreferrer"

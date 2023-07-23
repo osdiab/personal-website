@@ -1,21 +1,22 @@
 import { headerPaddingX, maxContentWidth } from "~/app/header.css";
-import { sprinkles } from "@osdiab-website/ui/sprinkles.css";
-import { stackCss } from "@osdiab-website/ui/stack.css";
-import { style } from "@vanilla-extract/css";
+import { css, cx } from "~pandacss/css";
+import { hstack, vstack } from "~pandacss/patterns";
 
-export const bodyCss = style([
-  { minHeight: ["100dvh", "100vh"] },
-  stackCss({ direction: "y", gap: "lg", alignItems: "stretch" }),
-]);
-export const mainContentCss = style([sprinkles({ paddingBottom: "xl7" })]);
+export const bodyCss = css({
+  minHeight: "var(--full-dvh)",
+  transition: "background 0.2s ease-out",
+  background: "bg.page",
+});
+export const bodyContentCss = vstack({ gap: "6", alignItems: "stretch" });
+export const mainContentCss = css({ paddingBlockEnd: "20" });
 
-export const footerCss = style([
-  sprinkles({
+export const footerCss = cx(
+  css({
     marginTop: "auto",
     position: "relative",
   }),
-  {
-    ":before": {
+  css({
+    _before: {
       display: "block",
       position: "absolute",
       top: "0",
@@ -30,21 +31,19 @@ export const footerCss = style([
       maskImage:
         "linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%)",
     },
-  },
-]);
+  })
+);
 
-export const footerWrapperCss = style([
-  sprinkles({
-    paddingX: headerPaddingX,
-    paddingTop: "xl7",
-    paddingBottom: "xl4",
-  }),
-]);
+export const footerWrapperCss = css({
+  paddingX: headerPaddingX,
+  paddingBlockStart: "28",
+  paddingBlockEnd: "10",
+});
 
-export const footerContentCss = style([
-  sprinkles({
+export const footerContentCss = cx(
+  css({
     marginX: "auto",
+    maxWidth: maxContentWidth,
   }),
-  stackCss({ direction: "x", gap: "lg", justifyContent: "space-between" }),
-  { maxWidth: maxContentWidth },
-]);
+  hstack({ gap: "6", justifyContent: "space-between" })
+);

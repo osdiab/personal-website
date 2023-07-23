@@ -1,5 +1,6 @@
 import { RootHeader } from "~/app/header";
 import {
+  bodyContentCss,
   bodyCss,
   footerContentCss,
   footerCss,
@@ -7,7 +8,8 @@ import {
   mainContentCss,
 } from "~/app/layout.css";
 
-import "~/app/reset.css";
+import "~/app/global.css";
+import { Providers } from "~/app/providers";
 
 export default function RootLayout({
   children,
@@ -15,17 +17,24 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html
+      lang="en"
+      suppressHydrationWarning // needed for next-themes, only suppresses for this element
+    >
       <body className={bodyCss}>
-        <RootHeader />
-        <main className={mainContentCss}>{children}</main>
-        <footer className={footerCss}>
-          <div className={footerWrapperCss}>
-            <div className={footerContentCss}>
-              <span>© Omar Diab, {new Date().getFullYear()}</span>
-            </div>
+        <Providers>
+          <RootHeader />
+          <div className={bodyContentCss}>
+            <main className={mainContentCss}>{children}</main>
+            <footer className={footerCss}>
+              <div className={footerWrapperCss}>
+                <div className={footerContentCss}>
+                  <span>© Omar Diab, {new Date().getFullYear()}</span>
+                </div>
+              </div>
+            </footer>
           </div>
-        </footer>
+        </Providers>
       </body>
     </html>
   );

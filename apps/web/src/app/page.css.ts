@@ -1,58 +1,48 @@
 import { headerPaddingX, maxContentWidth } from "~/app/header.css";
-import { sprinkles } from "@osdiab-website/ui/sprinkles.css";
-import { stackCss } from "@osdiab-website/ui/stack.css";
-import { style } from "@vanilla-extract/css";
-import { fontSize } from "@osdiab-website/ui/sprinkles.css";
-import { proseCss } from "@osdiab-website/ui/prose.css";
+import { proseCss } from "~/components/ui/prose";
+import { css, cx } from "~pandacss/css";
+import { hstack, stack, vstack } from "~pandacss/patterns";
 
-export const pageCss = style([
-  sprinkles({ paddingX: headerPaddingX, paddingY: "xl3" }),
-]);
-export const pageContentCss = style([
-  stackCss({ direction: "y", gap: "xl5" }),
-  sprinkles({ marginX: "auto" }),
-  { width: "100%", maxWidth: maxContentWidth },
-]);
-export const sectionCss = style([
-  stackCss({ direction: "y", gap: "xl4" }),
-  sprinkles({ paddingY: "lg" }),
-]);
-export const heroTitleCss = style([
-  sprinkles({ textSize: "xl4", textWrap: "balance" }),
-  { maxWidth: maxContentWidth },
-]);
-export const sectionHeadingCss = style([sprinkles({ textSize: "xl3" })]);
-export const jobEntrySectionCss = style([
-  stackCss({ direction: "y", gap: "xl5" }),
-]);
-export const timeCss = style([
-  sprinkles({ color: "gray-500", fontStyle: "italic" }),
-]);
-export const jobEntryCss = style([
-  stackCss({ direction: "y", gap: "xl4" }),
-  { maxWidth: "60ch" },
-]);
-export const jobHeaderCss = style([
-  stackCss({
-    direction: "y",
-    alignItems: "flex-start",
-    directionTablet: "x",
-    alignItemsTablet: "center",
-    justifyContentTablet: "space-between",
-    gap: "lg",
-  }),
-]);
-export const companyTitleCss = style([
-  stackCss({ direction: "x", alignItems: "center", gap: "lg" }),
-]);
-export const jobLinkIconCss = style([{ height: fontSize.lg }]);
-export const jobTitleCss = style([
-  sprinkles({ fontWeight: "bold", color: "gray-600" }),
-]);
-export const jobMetadataCss = style([
-  stackCss({ direction: "y", gap: "md" }),
-  sprinkles({ textAlign: { tablet: "end" } }),
-]);
-export const jobDescriptionCss = style([proseCss, { textAlign: "justify" }]);
+export const pageCss = css({ paddingX: headerPaddingX, paddingY: "6" });
+export const pageContentCss = cx(
+  vstack({ gap: "20", alignItems: "start" }),
+  css({ marginX: "auto", width: "full", maxWidth: maxContentWidth })
+);
+export const sectionCss = cx(
+  vstack({ gap: "16", alignItems: "start" }),
+  css({ paddingY: "8" })
+);
+export const heroTitleCss = css({
+  textStyle: "4xl",
+  textWrap: "balance",
+  maxWidth: maxContentWidth,
+});
 
-export const companyLogoSvgCss = style({ height: fontSize.xl5 });
+export const sectionHeadingCss = css({ textStyle: "3xl" });
+export const jobEntrySectionCss = vstack({
+  gap: "14",
+  alignItems: "start",
+});
+export const timeCss = css({ color: "gray-500", fontStyle: "italic" });
+export const jobEntryCss = cx(vstack({ gap: "10" }), css({ maxWidth: "60ch" }));
+export const jobHeaderCss = stack({
+  alignItems: { base: "stretch", md: "center" },
+  justifyContent: { md: "space-between" },
+  direction: { base: "column", md: "row" },
+  gap: "6",
+  width: "100%",
+});
+export const companyTitleCss = hstack({
+  alignItems: "center",
+  gap: "6",
+  justifyContent: "space-between",
+});
+export const jobLinkIconCss = css({ height: "2em" });
+export const jobTitleCss = css({ fontWeight: "bold", color: "gray.600" });
+export const jobMetadataCss = vstack({
+  gap: "md",
+  alignItems: { base: "start", md: "end" },
+});
+export const jobDescriptionCss = cx(proseCss, css({ textAlign: "justify" }));
+
+export const companyLogoSvgCss = css({ height: "3rem" });
