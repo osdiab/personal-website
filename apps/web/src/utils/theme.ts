@@ -28,6 +28,6 @@ export function useTheme() {
       // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
       setTheme: themeReturn.setTheme as (theme: Theme) => void,
     }),
-    []
+    [themeReturn]
   );
 }
