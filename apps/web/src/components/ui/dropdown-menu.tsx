@@ -8,7 +8,6 @@ import { css, cx } from "~pandacss/css";
 import { buttonCss } from "~/components/ui/button";
 import {
   baseMenuCss,
-  baseMenuIndicatorCss,
   baseMenuIndicatorWrapperCss,
   baseMenuItemCss,
 } from "~/components/ui/dropdown-menu.css";
@@ -69,7 +68,7 @@ export const DropdownMenuCheckboxItem = React.forwardRef<
   >
     <span className={baseMenuIndicatorWrapperCss}>
       <DropdownMenuPrimitive.ItemIndicator>
-        <Check className={baseMenuIndicatorCss} />
+        <Check className={css({ height: "1em", width: "1em" })} />
       </DropdownMenuPrimitive.ItemIndicator>
     </span>
     {children}
@@ -89,7 +88,7 @@ export const DropdownMenuRadioItem = React.forwardRef<
   >
     <span className={baseMenuIndicatorWrapperCss}>
       <DropdownMenuPrimitive.ItemIndicator>
-        <Circle className={baseMenuIndicatorCss} />
+        <Circle className={css({ fill: "current", width: "6px" })} />
       </DropdownMenuPrimitive.ItemIndicator>
     </span>
     {children}

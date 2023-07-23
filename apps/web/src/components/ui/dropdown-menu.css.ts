@@ -41,12 +41,6 @@ export const baseMenuItemCss = cx(
   })
 );
 
-export const baseMenuIndicatorCss = css({
-  fill: "current",
-  stroke: "current",
-  width: "4px",
-  height: "4px",
-});
 export const baseMenuIndicatorWrapperCss = css({
   width: "1rem",
   display: "flex",

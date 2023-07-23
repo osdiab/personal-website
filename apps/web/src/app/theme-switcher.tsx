@@ -14,7 +14,7 @@ import { hstack } from "~pandacss/patterns";
 import { buttonCss } from "~/components/ui/button";
 import { cx } from "~pandacss/css";
 import { WaitOnTheme } from "~/components/wait-on-theme";
-import type { Theme} from "~/utils/theme";
+import type { Theme } from "~/utils/theme";
 import { themeSchema, useTheme } from "~/utils/theme";
 
 // TODO: add i18n
