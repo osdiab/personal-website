@@ -4,6 +4,9 @@ import { SystemStyleObject } from "~pandacss/types";
 const textButtonVariant: SystemStyleObject = {
   background: "transparent",
   border: "none",
+  borderColor: "none",
+  borderWidth: "0",
+  borderStyle: "none",
   color: "primary.text",
   _hover: { color: "primary.highlight", background: "transparent" },
 };
@@ -34,6 +37,7 @@ export const buttonCss = cva({
       text: textButtonVariant,
       plainText: { ...textButtonVariant, color: "text.body" },
     },
-    padding: { none: { padding: 0 } },
+    padding: { none: { paddingX: "0", paddingY: "0" } },
+    border: { none: { border: "none" } },
   },
 });

@@ -5,16 +5,16 @@ import {
   headerLeftCss,
   headerRightCss,
   logoCss,
+  navLinkCss,
   siteHeaderCss,
   siteHeaderScrolledCss,
   siteTitleCss,
 } from "~/app/header.css";
 import Logo from "~/app/logo.svg";
 
-import { useEffect, useRef, useState } from "react";
+import { ComponentProps, useEffect, useRef, useState } from "react";
 import { Github, Linkedin, Mail } from "lucide-react";
 import { cx } from "~pandacss/css";
-import { hyperlinkCss } from "~/components/ui/hyperlink";
 import { SvgComponent } from "~/types";
 import { ThemeSwitcher } from "~/app/theme-switcher";
 
@@ -56,19 +56,19 @@ export function RootHeader() {
             <span className={siteTitleCss}>Omar Diab</span>
           </div>
           <div className={headerRightCss}>
-            <ThemeSwitcher />
+            <ThemeSwitcher className={navLinkCss} />
             <NavLink
-              url="https://www.linkedin.com/in/osdiab/"
+              href="https://www.linkedin.com/in/osdiab/"
               Icon={Linkedin}
               title="LinkedIn"
             />
             <NavLink
-              url="mailto:hello@omardiab.com"
+              href="mailto:hello@omardiab.com"
               Icon={Mail}
               title="Email"
             />
             <NavLink
-              url="https://github.com/osdiab/personal-website"
+              href="https://github.com/osdiab/personal-website"
               Icon={Github}
               title="Github"
             />
@@ -78,26 +78,22 @@ export function RootHeader() {
     </>
   );
 }
-function NavLink({
-  url,
-  Icon,
-  title,
-}: {
-  url: string;
+interface NavLinkProps extends ComponentProps<"a"> {
+  href: string;
   Icon: SvgComponent;
   title: string;
-}) {
+}
+
+function NavLink({ href, Icon, title, ...props }: NavLinkProps) {
   return (
     <a
-      className={hyperlinkCss({
-        initColor: "body",
-        activeColor: "primaryDisplay",
-      })}
-      href={url}
+      className={navLinkCss}
+      href={href}
       target="_blank"
       rel="noreferrer"
+      {...props}
     >
-      <Icon className={logoCss} aria-label={title} />
+      <Icon aria-label={title} />
     </a>
   );
 }

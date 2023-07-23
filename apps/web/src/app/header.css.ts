@@ -1,3 +1,4 @@
+import { buttonCss } from "~/components/ui/button";
 import { css, cx } from "~pandacss/css";
 import { hstack } from "~pandacss/patterns";
 import { SystemProperties } from "~pandacss/types/style-props";
@@ -34,3 +35,8 @@ export const siteHeaderScrolledCss = css({
 });
 export const logoCss = css({ height: "1em" });
 export const siteTitleCss = css({ fontWeight: "bold" });
+
+export const navLinkCss = cx(
+  buttonCss({ type: "plainText", padding: "none" }),
+  css({ "& svg": { height: "1em" } })
+);

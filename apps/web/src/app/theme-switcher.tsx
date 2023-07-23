@@ -15,6 +15,7 @@ import {
 } from "~/components/ui/dropdown-menu";
 import { hstack } from "~pandacss/patterns";
 import { buttonCss } from "~/components/ui/button";
+import { cx } from "~pandacss/css";
 
 const themeSchema = z.enum(["system", "dark", "light"]);
 type Theme = z.infer<typeof themeSchema>;
@@ -34,7 +35,8 @@ function ThemeIcon({ theme }: { theme: Theme }) {
       return <Sun />;
   }
 }
-export const ThemeSwitcher = () => {
+
+export const ThemeSwitcher = ({ className }: { className?: string }) => {
   const [mounted, setMounted] = useState(false);
   const themeReturn = useTheme();
   const { theme, setTheme } = useMemo(
@@ -56,7 +58,14 @@ export const ThemeSwitcher = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
-        className={buttonCss({ type: "plainText", padding: "none" })}
+        className={cx(
+          buttonCss({
+            type: "plainText",
+            padding: "none",
+            border: "none",
+          }),
+          className
+        )}
       >
         <ThemeIcon theme={theme} />
       </DropdownMenuTrigger>
