@@ -5,7 +5,7 @@ export const hyperlinkCss = cva({
   base: hyperlinkStyles,
   variants: {
     initColor: {
-      bodyText: { color: "bodyText" },
+      body: { color: "text.body" },
       primaryDisplay: { color: "primary.display" },
     },
     activeColor: {

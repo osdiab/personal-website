@@ -19,7 +19,7 @@ export default defineConfig({
     dark: "[data-theme=dark] &",
   },
 
-  globalCss: defineGlobalStyles({ html: { color: "bodyText" } }),
+  globalCss: defineGlobalStyles({ html: { color: "text.body" } }),
   staticCss: {
     css: [
       {
@@ -36,11 +36,13 @@ export default defineConfig({
     extend: {
       semanticTokens: defineSemanticTokens({
         colors: {
-          bodyText: {
-            value: { _light: "#18181b", _dark: "#fafafa" },
+          text: {
+            body: { value: { _light: "#18181b", _dark: "#fafafa" } },
+            popover: { value: { _light: "#18181b", _dark: "#fafafa" } },
           },
-          pageBackground: {
-            value: { _light: "#fafafa", _dark: "#18181b" },
+          bg: {
+            page: { value: { _light: "#fafafa", _dark: "#18181b" } },
+            popover: { value: { _light: "#fafafa", _dark: "#18181b" } },
           },
           border: {
             soft: {

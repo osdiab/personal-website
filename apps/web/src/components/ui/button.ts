@@ -18,7 +18,7 @@ export const buttonCss = cva({
     borderColor: "primary.text",
     borderRadius: "md",
     background: "primary.text",
-    color: "pageBackground",
+    color: "bg.page",
     _hover: {
       background: "primary.highlight",
       borderColor: "primary.highlight",
@@ -32,7 +32,7 @@ export const buttonCss = cva({
         _hover: { background: "transparent" },
       },
       text: textButtonVariant,
-      plainText: { ...textButtonVariant, color: "bodyText" },
+      plainText: { ...textButtonVariant, color: "text.body" },
     },
     padding: { none: { padding: 0 } },
   },

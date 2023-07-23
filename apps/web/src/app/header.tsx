@@ -90,7 +90,7 @@ function NavLink({
   return (
     <a
       className={hyperlinkCss({
-        initColor: "bodyText",
+        initColor: "body",
         activeColor: "primaryDisplay",
       })}
       href={url}

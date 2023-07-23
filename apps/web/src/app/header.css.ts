@@ -15,7 +15,7 @@ export const siteHeaderCss = css({
   fontSize: "lg",
   paddingX: headerPaddingX,
   paddingY: "2",
-  background: "pageBackground",
+  background: "bg.page",
   borderBottom: `1px solid transparent`,
 });
 export const headerContentCss = cx(

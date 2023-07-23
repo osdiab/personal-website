@@ -5,7 +5,7 @@ import { hstack, vstack } from "~pandacss/patterns";
 export const bodyCss = css({
   minHeight: "var(--full-dvh)",
   transition: "background 0.2s ease-out",
-  background: "pageBackground",
+  background: "bg.page",
 });
 export const bodyContentCss = vstack({ gap: "6", alignItems: "stretch" });
 export const mainContentCss = css({ paddingBlockEnd: "20" });
