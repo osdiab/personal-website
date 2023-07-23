@@ -1,3 +1,4 @@
+// documentation: https://ui.shadcn.com/docs/components/dropdown-menu
 "use client";
 
 import * as React from "react";
@@ -5,69 +6,25 @@ import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
 import { Check, ChevronRight, Circle } from "lucide-react";
 import { css, cx } from "~pandacss/css";
 import { buttonCss } from "~/components/ui/button";
+import {
+  baseMenuCss,
+  baseMenuIndicatorCss,
+  baseMenuIndicatorWrapperCss,
+  baseMenuItemCss,
+} from "~/components/ui/dropdown-menu.css";
 import { hstack } from "~pandacss/patterns";
 
-const DropdownMenu = DropdownMenuPrimitive.Root;
+export const DropdownMenu = DropdownMenuPrimitive.Root;
 
-const DropdownMenuTrigger = DropdownMenuPrimitive.Trigger;
+export const DropdownMenuTrigger = DropdownMenuPrimitive.Trigger;
 
-const DropdownMenuGroup = DropdownMenuPrimitive.Group;
+export const DropdownMenuGroup = DropdownMenuPrimitive.Group;
 
-const DropdownMenuPortal = DropdownMenuPrimitive.Portal;
+export const DropdownMenuPortal = DropdownMenuPrimitive.Portal;
 
-const DropdownMenuSub = DropdownMenuPrimitive.Sub;
+export const DropdownMenuRadioGroup = DropdownMenuPrimitive.RadioGroup;
 
-const DropdownMenuRadioGroup = DropdownMenuPrimitive.RadioGroup;
-
-const DropdownMenuSubTrigger = React.forwardRef<
-  React.ElementRef<typeof DropdownMenuPrimitive.SubTrigger>,
-  React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.SubTrigger> & {
-    inset?: boolean;
-  }
->(({ className, inset, children, ...props }, ref) => (
-  <DropdownMenuPrimitive.SubTrigger
-    ref={ref}
-    className={cx(buttonCss(), inset && css({ paddingLeft: "8" }), className)}
-    {...props}
-  >
-    {children}
-    <ChevronRight
-      className={css({ marginLeft: "auto", height: "4", width: "4" })}
-    />
-  </DropdownMenuPrimitive.SubTrigger>
-));
-DropdownMenuSubTrigger.displayName =
-  DropdownMenuPrimitive.SubTrigger.displayName;
-
-const DropdownMenuSubContent = React.forwardRef<
-  React.ElementRef<typeof DropdownMenuPrimitive.SubContent>,
-  React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.SubContent>
->(({ className, ...props }, ref) => (
-  <DropdownMenuPrimitive.SubContent
-    ref={ref}
-    className={cx(
-      css({
-        zIndex: 50,
-        minWidth: "8rem",
-        overflow: "hidden",
-        borderRadius: "md",
-        borderWidth: "1px",
-        borderStyle: "solid",
-        borderColor: "border.soft",
-        bg: "bg.popover",
-        paddingY: 1,
-        color: "text.popover",
-        shadow: "lg",
-      }),
-      className
-    )}
-    {...props}
-  />
-));
-DropdownMenuSubContent.displayName =
-  DropdownMenuPrimitive.SubContent.displayName;
-
-const DropdownMenuContent = React.forwardRef<
+export const DropdownMenuContent = React.forwardRef<
   React.ElementRef<typeof DropdownMenuPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Content>
 >(({ sideOffset = 4, className, ...props }, ref) => (
@@ -75,29 +32,14 @@ const DropdownMenuContent = React.forwardRef<
     <DropdownMenuPrimitive.Content
       ref={ref}
       sideOffset={sideOffset}
-      className={cx(
-        css({
-          zIndex: 50,
-          minWidth: "8rem",
-          overflow: "hidden",
-          borderRadius: "md",
-          borderWidth: "1px",
-          borderStyle: "solid",
-          borderColor: "border.soft",
-          bg: "bg.popover",
-          paddingY: 1,
-          color: "text.popover",
-          shadow: "md",
-        }),
-        className
-      )}
+      className={cx(baseMenuCss, className)}
       {...props}
     />
   </DropdownMenuPrimitive.Portal>
 ));
 DropdownMenuContent.displayName = DropdownMenuPrimitive.Content.displayName;
 
-const DropdownMenuItem = React.forwardRef<
+export const DropdownMenuItem = React.forwardRef<
   React.ElementRef<typeof DropdownMenuPrimitive.Item>,
   React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Item> & {
     inset?: boolean;
@@ -106,26 +48,8 @@ const DropdownMenuItem = React.forwardRef<
   <DropdownMenuPrimitive.Item
     ref={ref}
     className={cx(
-      hstack(),
-      css({
-        position: "relative",
-        cursor: "pointer",
-        userSelect: "none",
-        borderRadius: "sm",
-        paddingX: 2,
-        paddingY: 2,
-        fontSize: "sm",
-        outline: "none",
-        _focus: {
-          bg: "primary.text",
-          color: "bg.page",
-        },
-        "&[data-disabled]": {
-          pointerEvents: "none",
-          opacity: 0.5,
-        },
-        ...(inset && { paddingInlineStart: 8 }),
-      }),
+      baseMenuItemCss,
+      inset && css({ paddingInlineStart: 8 }),
       className
     )}
     {...props}
@@ -133,51 +57,19 @@ const DropdownMenuItem = React.forwardRef<
 ));
 DropdownMenuItem.displayName = DropdownMenuPrimitive.Item.displayName;
 
-const DropdownMenuCheckboxItem = React.forwardRef<
+export const DropdownMenuCheckboxItem = React.forwardRef<
   React.ElementRef<typeof DropdownMenuPrimitive.CheckboxItem>,
   React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.CheckboxItem>
 >(({ children, className, checked, ...props }, ref) => (
   <DropdownMenuPrimitive.CheckboxItem
     ref={ref}
-    className={cx(
-      hstack(),
-      css({
-        position: "relative",
-        cursor: "pointer",
-        userSelect: "none",
-        borderRadius: "sm",
-        paddingY: 2,
-        paddingInlineStart: 8,
-        paddingInlineEnd: 2,
-        fontSize: "sm",
-        outline: "none",
-        _focus: {
-          bg: "primary.text",
-          color: "bg.page",
-        },
-        "&[data-disabled]": {
-          pointerEvents: "none",
-          opacity: 0.5,
-        },
-      }),
-      className
-    )}
+    className={cx(baseMenuItemCss, className)}
     checked={checked ?? false}
     {...props}
   >
-    <span
-      className={css({
-        position: "absolute",
-        left: 2,
-        display: "flex",
-        height: "3.5rem",
-        width: "3.5rem",
-        alignItems: "center",
-        justifyContent: "center",
-      })}
-    >
+    <span className={baseMenuIndicatorWrapperCss}>
       <DropdownMenuPrimitive.ItemIndicator>
-        <Check className={css({ height: "4", width: "4" })} />
+        <Check className={baseMenuIndicatorCss} />
       </DropdownMenuPrimitive.ItemIndicator>
     </span>
     {children}
@@ -186,51 +78,18 @@ const DropdownMenuCheckboxItem = React.forwardRef<
 DropdownMenuCheckboxItem.displayName =
   DropdownMenuPrimitive.CheckboxItem.displayName;
 
-const DropdownMenuRadioItem = React.forwardRef<
+export const DropdownMenuRadioItem = React.forwardRef<
   React.ElementRef<typeof DropdownMenuPrimitive.RadioItem>,
   React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.RadioItem>
 >(({ className, children, ...props }, ref) => (
   <DropdownMenuPrimitive.RadioItem
     ref={ref}
-    className={cx(
-      hstack(),
-      css({
-        cursor: "pointer",
-        userSelect: "none",
-        borderRadius: "sm",
-        padding: 2,
-        fontSize: "sm",
-        outline: "none",
-        _focus: {
-          bg: "primary.text",
-          color: "bg.page",
-        },
-        "&[data-disabled]": {
-          pointerEvents: "none",
-          opacity: 0.5,
-        },
-      }),
-      className
-    )}
+    className={cx(baseMenuItemCss, className)}
     {...props}
   >
-    <span
-      className={css({
-        width: "1rem",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-      })}
-    >
+    <span className={baseMenuIndicatorWrapperCss}>
       <DropdownMenuPrimitive.ItemIndicator>
-        <Circle
-          className={css({
-            fill: "current",
-            stroke: "current",
-            width: "4px",
-            height: "4px",
-          })}
-        />
+        <Circle className={baseMenuIndicatorCss} />
       </DropdownMenuPrimitive.ItemIndicator>
     </span>
     {children}
@@ -238,7 +97,7 @@ const DropdownMenuRadioItem = React.forwardRef<
 ));
 DropdownMenuRadioItem.displayName = DropdownMenuPrimitive.RadioItem.displayName;
 
-const DropdownMenuLabel = React.forwardRef<
+export const DropdownMenuLabel = React.forwardRef<
   React.ElementRef<typeof DropdownMenuPrimitive.Label>,
   React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Label> & {
     inset?: boolean;
@@ -248,12 +107,11 @@ const DropdownMenuLabel = React.forwardRef<
     ref={ref}
     className={cx(
       css({
-        paddingX: 2,
-        paddingY: 2,
+        padding: 2,
         fontSize: "sm",
         fontWeight: "semibold",
-        ...(inset ? { paddingInlineStart: 8 } : {}),
       }),
+      inset && css({ paddingInlineStart: 8 }),
       className
     )}
     {...props}
@@ -261,7 +119,7 @@ const DropdownMenuLabel = React.forwardRef<
 ));
 DropdownMenuLabel.displayName = DropdownMenuPrimitive.Label.displayName;
 
-const DropdownMenuSeparator = React.forwardRef<
+export const DropdownMenuSeparator = React.forwardRef<
   React.ElementRef<typeof DropdownMenuPrimitive.Separator>,
   React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Separator>
 >(({ className, ...props }, ref) => (
@@ -281,7 +139,7 @@ const DropdownMenuSeparator = React.forwardRef<
 ));
 DropdownMenuSeparator.displayName = DropdownMenuPrimitive.Separator.displayName;
 
-const DropdownMenuShortcut = ({
+export const DropdownMenuShortcut = ({
   className,
   ...props
 }: React.HTMLAttributes<HTMLSpanElement>) => {
@@ -303,20 +161,42 @@ const DropdownMenuShortcut = ({
 
 DropdownMenuShortcut.displayName = "DropdownMenuShortcut";
 
-export {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuCheckboxItem,
-  DropdownMenuRadioItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuShortcut,
-  DropdownMenuGroup,
-  DropdownMenuPortal,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
-  DropdownMenuRadioGroup,
-};
+// Submenu components
+export const DropdownMenuSub = DropdownMenuPrimitive.Sub;
+export const DropdownMenuSubTrigger = React.forwardRef<
+  React.ElementRef<typeof DropdownMenuPrimitive.SubTrigger>,
+  React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.SubTrigger> & {
+    inset?: boolean;
+  }
+>(({ className, inset, children, ...props }, ref) => (
+  <DropdownMenuPrimitive.SubTrigger
+    ref={ref}
+    className={cx(
+      buttonCss(),
+      hstack(),
+      inset && css({ paddingLeft: "8" }),
+      className
+    )}
+    {...props}
+  >
+    {children}
+    <ChevronRight
+      className={css({ marginLeft: "auto", height: "1em", width: "1em" })}
+    />
+  </DropdownMenuPrimitive.SubTrigger>
+));
+DropdownMenuSubTrigger.displayName =
+  DropdownMenuPrimitive.SubTrigger.displayName;
+
+export const DropdownMenuSubContent = React.forwardRef<
+  React.ElementRef<typeof DropdownMenuPrimitive.SubContent>,
+  React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.SubContent>
+>(({ className, ...props }, ref) => (
+  <DropdownMenuPrimitive.SubContent
+    ref={ref}
+    className={cx(baseMenuCss, className)}
+    {...props}
+  />
+));
+DropdownMenuSubContent.displayName =
+  DropdownMenuPrimitive.SubContent.displayName;

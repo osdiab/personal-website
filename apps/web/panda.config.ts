@@ -34,6 +34,32 @@ export default defineConfig({
   // Useful for theme customization
   theme: {
     extend: {
+      keyframes: {
+        zoomIn: {
+          "0%": { transform: "scale(0)" },
+          "100%": { transform: "scale(1)" },
+        },
+        zoomOut: {
+          "0%": { transform: "scale(1)" },
+          "100%": { transform: "scale(0)" },
+        },
+        zoomInSlight: {
+          "0%": { transform: "scale(0.95)" },
+          "100%": { transform: "scale(1)" },
+        },
+        zoomOutSlight: {
+          "0%": { transform: "scale(1)" },
+          "100%": { transform: "scale(0.95)" },
+        },
+        fadeIn: {
+          "0%": { opacity: 0 },
+          "100%": { opacity: 1 },
+        },
+        fadeOut: {
+          "0%": { opacity: 0 },
+          "100%": { opacity: 1 },
+        },
+      },
       semanticTokens: defineSemanticTokens({
         colors: {
           text: {
