@@ -1,8 +1,23 @@
 // documentation: https://ui.shadcn.com/docs/components/dropdown-menu
 "use client";
 
-import * as React from "react";
-import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
+import {
+  Root,
+  Trigger,
+  Group,
+  Portal,
+  RadioGroup,
+  Content,
+  Item,
+  CheckboxItem,
+  RadioItem,
+  ItemIndicator,
+  Label,
+  Separator,
+  Sub,
+  SubTrigger,
+  SubContent,
+} from "@radix-ui/react-dropdown-menu";
 import { Check, ChevronRight, Circle } from "lucide-react";
 import { css, cx } from "~pandacss/css";
 import { buttonCss } from "~/components/ui/button";
@@ -12,39 +27,45 @@ import {
   baseMenuItemCss,
 } from "~/components/ui/dropdown-menu.css";
 import { hstack } from "~pandacss/patterns";
+import type {
+  ComponentPropsWithoutRef,
+  ElementRef,
+  HTMLAttributes,
+} from "react";
+import { forwardRef } from "react";
 
-export const DropdownMenu = DropdownMenuPrimitive.Root;
+export const DropdownMenu = Root;
 
-export const DropdownMenuTrigger = DropdownMenuPrimitive.Trigger;
+export const DropdownMenuTrigger = Trigger;
 
-export const DropdownMenuGroup = DropdownMenuPrimitive.Group;
+export const DropdownMenuGroup = Group;
 
-export const DropdownMenuPortal = DropdownMenuPrimitive.Portal;
+export const DropdownMenuPortal = Portal;
 
-export const DropdownMenuRadioGroup = DropdownMenuPrimitive.RadioGroup;
+export const DropdownMenuRadioGroup = RadioGroup;
 
-export const DropdownMenuContent = React.forwardRef<
-  React.ElementRef<typeof DropdownMenuPrimitive.Content>,
-  React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Content>
+export const DropdownMenuContent = forwardRef<
+  ElementRef<typeof Content>,
+  ComponentPropsWithoutRef<typeof Content>
 >(({ sideOffset = 4, className, ...props }, ref) => (
-  <DropdownMenuPrimitive.Portal>
-    <DropdownMenuPrimitive.Content
+  <Portal>
+    <Content
       ref={ref}
       sideOffset={sideOffset}
       className={cx(baseMenuCss, className)}
       {...props}
     />
-  </DropdownMenuPrimitive.Portal>
+  </Portal>
 ));
-DropdownMenuContent.displayName = DropdownMenuPrimitive.Content.displayName;
+DropdownMenuContent.displayName = Content.displayName;
 
-export const DropdownMenuItem = React.forwardRef<
-  React.ElementRef<typeof DropdownMenuPrimitive.Item>,
-  React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Item> & {
+export const DropdownMenuItem = forwardRef<
+  ElementRef<typeof Item>,
+  ComponentPropsWithoutRef<typeof Item> & {
     inset?: boolean;
   }
 >(({ className, inset, ...props }, ref) => (
-  <DropdownMenuPrimitive.Item
+  <Item
     ref={ref}
     className={cx(
       baseMenuItemCss,
@@ -54,55 +75,50 @@ export const DropdownMenuItem = React.forwardRef<
     {...props}
   />
 ));
-DropdownMenuItem.displayName = DropdownMenuPrimitive.Item.displayName;
+DropdownMenuItem.displayName = Item.displayName;
 
-export const DropdownMenuCheckboxItem = React.forwardRef<
-  React.ElementRef<typeof DropdownMenuPrimitive.CheckboxItem>,
-  React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.CheckboxItem>
+export const DropdownMenuCheckboxItem = forwardRef<
+  ElementRef<typeof CheckboxItem>,
+  ComponentPropsWithoutRef<typeof CheckboxItem>
 >(({ children, className, checked, ...props }, ref) => (
-  <DropdownMenuPrimitive.CheckboxItem
+  <CheckboxItem
     ref={ref}
     className={cx(baseMenuItemCss, className)}
     checked={checked ?? false}
     {...props}
   >
     <span className={baseMenuIndicatorWrapperCss}>
-      <DropdownMenuPrimitive.ItemIndicator>
+      <ItemIndicator>
         <Check className={css({ height: "1em", width: "1em" })} />
-      </DropdownMenuPrimitive.ItemIndicator>
+      </ItemIndicator>
     </span>
     {children}
-  </DropdownMenuPrimitive.CheckboxItem>
+  </CheckboxItem>
 ));
-DropdownMenuCheckboxItem.displayName =
-  DropdownMenuPrimitive.CheckboxItem.displayName;
+DropdownMenuCheckboxItem.displayName = CheckboxItem.displayName;
 
-export const DropdownMenuRadioItem = React.forwardRef<
-  React.ElementRef<typeof DropdownMenuPrimitive.RadioItem>,
-  React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.RadioItem>
+export const DropdownMenuRadioItem = forwardRef<
+  ElementRef<typeof RadioItem>,
+  ComponentPropsWithoutRef<typeof RadioItem>
 >(({ className, children, ...props }, ref) => (
-  <DropdownMenuPrimitive.RadioItem
-    ref={ref}
-    className={cx(baseMenuItemCss, className)}
-    {...props}
-  >
+  <RadioItem ref={ref} className={cx(baseMenuItemCss, className)} {...props}>
     <span className={baseMenuIndicatorWrapperCss}>
-      <DropdownMenuPrimitive.ItemIndicator>
+      <ItemIndicator>
         <Circle className={css({ fill: "current", width: "6px" })} />
-      </DropdownMenuPrimitive.ItemIndicator>
+      </ItemIndicator>
     </span>
     {children}
-  </DropdownMenuPrimitive.RadioItem>
+  </RadioItem>
 ));
-DropdownMenuRadioItem.displayName = DropdownMenuPrimitive.RadioItem.displayName;
+DropdownMenuRadioItem.displayName = RadioItem.displayName;
 
-export const DropdownMenuLabel = React.forwardRef<
-  React.ElementRef<typeof DropdownMenuPrimitive.Label>,
-  React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Label> & {
+export const DropdownMenuLabel = forwardRef<
+  ElementRef<typeof Label>,
+  ComponentPropsWithoutRef<typeof Label> & {
     inset?: boolean;
   }
 >(({ className, inset, ...props }, ref) => (
-  <DropdownMenuPrimitive.Label
+  <Label
     ref={ref}
     className={cx(
       css({
@@ -116,13 +132,13 @@ export const DropdownMenuLabel = React.forwardRef<
     {...props}
   />
 ));
-DropdownMenuLabel.displayName = DropdownMenuPrimitive.Label.displayName;
+DropdownMenuLabel.displayName = Label.displayName;
 
-export const DropdownMenuSeparator = React.forwardRef<
-  React.ElementRef<typeof DropdownMenuPrimitive.Separator>,
-  React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Separator>
+export const DropdownMenuSeparator = forwardRef<
+  ElementRef<typeof Separator>,
+  ComponentPropsWithoutRef<typeof Separator>
 >(({ className, ...props }, ref) => (
-  <DropdownMenuPrimitive.Separator
+  <Separator
     ref={ref}
     className={cx(
       css({
@@ -136,12 +152,12 @@ export const DropdownMenuSeparator = React.forwardRef<
     {...props}
   />
 ));
-DropdownMenuSeparator.displayName = DropdownMenuPrimitive.Separator.displayName;
+DropdownMenuSeparator.displayName = Separator.displayName;
 
 export const DropdownMenuShortcut = ({
   className,
   ...props
-}: React.HTMLAttributes<HTMLSpanElement>) => {
+}: HTMLAttributes<HTMLSpanElement>) => {
   return (
     <span
       className={cx(
@@ -161,14 +177,14 @@ export const DropdownMenuShortcut = ({
 DropdownMenuShortcut.displayName = "DropdownMenuShortcut";
 
 // Submenu components
-export const DropdownMenuSub = DropdownMenuPrimitive.Sub;
-export const DropdownMenuSubTrigger = React.forwardRef<
-  React.ElementRef<typeof DropdownMenuPrimitive.SubTrigger>,
-  React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.SubTrigger> & {
+export const DropdownMenuSub = Sub;
+export const DropdownMenuSubTrigger = forwardRef<
+  ElementRef<typeof SubTrigger>,
+  ComponentPropsWithoutRef<typeof SubTrigger> & {
     inset?: boolean;
   }
 >(({ className, inset, children, ...props }, ref) => (
-  <DropdownMenuPrimitive.SubTrigger
+  <SubTrigger
     ref={ref}
     className={cx(
       buttonCss(),
@@ -182,20 +198,14 @@ export const DropdownMenuSubTrigger = React.forwardRef<
     <ChevronRight
       className={css({ marginLeft: "auto", height: "1em", width: "1em" })}
     />
-  </DropdownMenuPrimitive.SubTrigger>
+  </SubTrigger>
 ));
-DropdownMenuSubTrigger.displayName =
-  DropdownMenuPrimitive.SubTrigger.displayName;
+DropdownMenuSubTrigger.displayName = SubTrigger.displayName;
 
-export const DropdownMenuSubContent = React.forwardRef<
-  React.ElementRef<typeof DropdownMenuPrimitive.SubContent>,
-  React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.SubContent>
+export const DropdownMenuSubContent = forwardRef<
+  ElementRef<typeof SubContent>,
+  ComponentPropsWithoutRef<typeof SubContent>
 >(({ className, ...props }, ref) => (
-  <DropdownMenuPrimitive.SubContent
-    ref={ref}
-    className={cx(baseMenuCss, className)}
-    {...props}
-  />
+  <SubContent ref={ref} className={cx(baseMenuCss, className)} {...props} />
 ));
-DropdownMenuSubContent.displayName =
-  DropdownMenuPrimitive.SubContent.displayName;
+DropdownMenuSubContent.displayName = SubContent.displayName;
