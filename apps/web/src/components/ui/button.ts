@@ -1,5 +1,5 @@
 import { cva } from "~pandacss/css";
-import { SystemStyleObject } from "~pandacss/types";
+import type { SystemStyleObject } from "~pandacss/types";
 
 const textButtonVariant: SystemStyleObject = {
   background: "transparent",

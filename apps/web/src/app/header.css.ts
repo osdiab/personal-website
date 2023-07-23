@@ -1,7 +1,7 @@
 import { buttonCss } from "~/components/ui/button";
 import { css, cx } from "~pandacss/css";
 import { hstack } from "~pandacss/patterns";
-import { SystemProperties } from "~pandacss/types/style-props";
+import type { SystemProperties } from "~pandacss/types/style-props";
 
 export const maxContentWidth = "800px";
 export const headerPaddingX: SystemProperties["paddingX"] = {

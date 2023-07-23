@@ -1,8 +1,5 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
-import { useTheme } from "next-themes";
-import { z } from "zod";
 import { Moon, Stars, Sun } from "lucide-react";
 import {
   DropdownMenu,
@@ -16,9 +13,10 @@ import {
 import { hstack } from "~pandacss/patterns";
 import { buttonCss } from "~/components/ui/button";
 import { cx } from "~pandacss/css";
+import { WaitOnTheme } from "~/components/wait-on-theme";
+import type { Theme} from "~/utils/theme";
+import { themeSchema, useTheme } from "~/utils/theme";
 
-const themeSchema = z.enum(["system", "dark", "light"]);
-type Theme = z.infer<typeof themeSchema>;
 // TODO: add i18n
 const nameForTheme: Record<Theme, string> = {
   dark: "Dark",
@@ -36,58 +34,47 @@ function ThemeIcon({ theme }: { theme: Theme }) {
   }
 }
 
-export const ThemeSwitcher = ({ className }: { className?: string }) => {
-  const [mounted, setMounted] = useState(false);
-  const themeReturn = useTheme();
-  const { theme, setTheme } = useMemo(
-    () => ({
-      theme: themeSchema.optional().parse(themeReturn.theme),
-      setTheme: (target: Theme) => themeReturn.setTheme(target),
-    }),
-    [themeReturn]
-  );
+export const ThemeSwitcher = ({ className }: { className: string }) => {
+  const { theme, setTheme } = useTheme();
 
-  // useEffect only runs on the client, so now we can safely show the UI
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (!mounted || !theme) {
+  if (!theme) {
     return null;
   }
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger
-        className={cx(
-          buttonCss({
-            type: "plainText",
-            padding: "none",
-            border: "none",
-          }),
-          className
-        )}
-      >
-        <ThemeIcon theme={theme} />
-      </DropdownMenuTrigger>
-      <DropdownMenuContent>
-        <DropdownMenuLabel>Choose Theme</DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        <DropdownMenuRadioGroup
-          onValueChange={(option) => setTheme(themeSchema.parse(option))}
-          value={theme}
+    <WaitOnTheme>
+      <DropdownMenu>
+        <DropdownMenuTrigger
+          className={cx(
+            buttonCss({
+              type: "plainText",
+              padding: "none",
+              border: "none",
+            }),
+            className
+          )}
         >
-          {themeSchema.options.map((option) => (
-            <DropdownMenuRadioItem
-              key={option}
-              className={hstack({ justifyContent: "start" })}
-              value={option}
-            >
-              <ThemeIcon theme={option} />
-              <span>{nameForTheme[option]}</span>
-            </DropdownMenuRadioItem>
-          ))}
-        </DropdownMenuRadioGroup>
-      </DropdownMenuContent>
-    </DropdownMenu>
+          <ThemeIcon theme={theme} />
+        </DropdownMenuTrigger>
+        <DropdownMenuContent>
+          <DropdownMenuLabel>Choose Theme</DropdownMenuLabel>
+          <DropdownMenuSeparator />
+          <DropdownMenuRadioGroup
+            onValueChange={(option) => setTheme(themeSchema.parse(option))}
+            value={theme}
+          >
+            {themeSchema.options.map((option) => (
+              <DropdownMenuRadioItem
+                key={option}
+                className={hstack({ justifyContent: "start" })}
+                value={option}
+              >
+                <ThemeIcon theme={option} />
+                <span>{nameForTheme[option]}</span>
+              </DropdownMenuRadioItem>
+            ))}
+          </DropdownMenuRadioGroup>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </WaitOnTheme>
   );
 };

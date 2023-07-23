@@ -12,10 +12,10 @@ import {
 } from "~/app/header.css";
 import Logo from "~/app/logo.svg";
 
-import { ComponentProps, useEffect, useRef, useState } from "react";
+import type { ComponentProps, FC } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Github, Linkedin, Mail } from "lucide-react";
 import { cx } from "~pandacss/css";
-import { SvgComponent } from "~/types";
 import { ThemeSwitcher } from "~/app/theme-switcher";
 
 export function RootHeader() {
@@ -80,7 +80,7 @@ export function RootHeader() {
 }
 interface NavLinkProps extends ComponentProps<"a"> {
   href: string;
-  Icon: SvgComponent;
+  Icon: FC<ComponentProps<"svg">>;
   title: string;
 }
 
