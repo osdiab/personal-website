@@ -4,8 +4,9 @@ module.exports = {
   ignorePatterns: [".eslintrc.js", "next.config.js", "generated/", "build/"],
   extends: ["turbo", "prettier"],
   rules: {
-    "no-unused-vars": "off",
-    "unused-imports/no-unused-imports": "error",
+    "no-unused-vars": "off", // typescript handles this
+    "unused-imports/no-unused-imports": "error", // cleans up imports
+    // cleans up unused variables
     "unused-imports/no-unused-vars": [
       "warn",
       {
@@ -31,7 +32,7 @@ module.exports = {
         project: true,
       },
       rules: {
-        "@typescript-eslint/no-unused-vars": "off",
+        "@typescript-eslint/no-unused-vars": "off", // typescript handles this
       },
     },
     {
@@ -42,7 +43,8 @@ module.exports = {
         "plugin:jsx-a11y/strict",
       ],
       rules: {
-        "react/react-in-jsx-scope": "off",
+        "react/react-in-jsx-scope": "off", // not needed for modern React
+        "react/prop-types": "off", // we use TypeScript
       },
     },
     {
