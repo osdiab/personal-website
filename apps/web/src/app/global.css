@@ -1,13 +1,1 @@
 @layer reset, base, tokens, recipes, utilities;
-
-:root {
-  --full-dvh: 100vh;
-  --color-primary-hue: 14.67;
-}
-
-@supports (height: 100dvh){
- :root {
-    --full-dvh: 100dvh;
- }
-}
-
