@@ -11,6 +11,7 @@ module.exports = {
   extends: ["plugin:unicorn/recommended", "turbo", "prettier"],
   root: true,
   rules: {
+    "no-template-curly-in-string": "warn",
     "no-unused-vars": "off", // typescript handles this
     "unused-imports/no-unused-imports": "error", // cleans up imports
     // cleans up unused variables
