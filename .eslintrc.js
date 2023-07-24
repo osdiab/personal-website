@@ -7,6 +7,8 @@ module.exports = {
     "build/",
     "gen/",
     "next-env.d.ts",
+    "jest.config.js",
+    "next.config.js",
   ],
   extends: [
     "eslint:recommended",
