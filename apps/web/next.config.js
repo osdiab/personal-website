@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/prefer-module */
 const packageJson = require("./package.json");
 
 const referencedPackageNames = Object.keys(packageJson.dependencies).filter(

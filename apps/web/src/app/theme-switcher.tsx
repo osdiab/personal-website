@@ -25,12 +25,15 @@ const nameForTheme: Record<Theme, string> = {
 };
 function ThemeIcon({ theme }: { theme: Theme }) {
   switch (theme) {
-    case "system":
+    case "system": {
       return <Stars />;
-    case "dark":
+    }
+    case "dark": {
       return <Moon />;
-    case "light":
+    }
+    case "light": {
       return <Sun />;
+    }
   }
 }
 

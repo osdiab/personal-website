@@ -24,12 +24,15 @@ function ThemeDependentLogo({
 }: ThemeDependentLogoProps) {
   const { resolvedTheme } = useTheme();
   switch (resolvedTheme) {
-    case "dark":
+    case "dark": {
       return <DarkLogo {...props} />;
-    case "light":
+    }
+    case "light": {
       return <LightLogo {...props} />;
-    default:
+    }
+    default: {
       return <EmptySvg {...props} />;
+    }
   }
 }
 export const EveryOrgLogo: SvgComponent = (props) => (
