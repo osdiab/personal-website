@@ -36,6 +36,17 @@ export default defineConfig({
         "--full-dvh": "100dvh",
       },
     },
+    "*:focus:focus-visible": {
+      outline: `2px solid hsl(${[
+        primaryColorVariables.hue,
+        primaryColorVariables.saturation,
+        primaryColorVariables.lightness,
+      ]
+        .map((v) => `var(${v})`)
+        .join(", ")})`,
+    },
+    /* Focusing the button with a mouse, touch, or stylus will not show outlines */
+    "*:focus:not(:focus-visible)": { outline: "none" },
     html: { color: "text.body" },
   }),
   // Useful for theme customization
