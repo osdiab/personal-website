@@ -9,9 +9,8 @@ export const baseMenuCss = css({
   borderWidth: "1px",
   borderStyle: "solid",
   borderColor: "border.soft",
-  bg: "bg.popover",
-  paddingY: 1,
-  color: "text.popover",
+  bg: "bg.page",
+  color: "text.body",
   shadow: "md",
   "&[data-state=open]": {
     animation: "zoomInSlight 0.2s ease-out, fadeIn 0.2s ease-out",
@@ -26,14 +25,10 @@ export const baseMenuItemCss = cx(
   css({
     cursor: "pointer",
     userSelect: "none",
-    borderRadius: "sm",
     padding: 2,
     fontSize: "sm",
     outline: "none",
-    _focus: {
-      bg: "primary.text",
-      color: "bg.page",
-    },
+    _focus: { bg: "bg.highlight", color: "text.body" },
     "&[data-disabled]": {
       pointerEvents: "none",
       opacity: 0.5,

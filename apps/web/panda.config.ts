@@ -3,6 +3,11 @@ import {
   defineGlobalStyles,
   defineSemanticTokens,
 } from "@pandacss/dev";
+import { preset } from "@pandacss/preset-panda";
+import { mapValues } from "radash";
+import { primaryColorVariables } from "~/utils/css-variables";
+
+const zinc = mapValues(preset.theme.tokens.colors.zinc, (v) => v.value);
 
 export default defineConfig({
   // Whether to use css reset
@@ -19,18 +24,20 @@ export default defineConfig({
     dark: "[data-theme=dark] &",
   },
 
-  globalCss: defineGlobalStyles({ html: { color: "text.body" } }),
-  staticCss: {
-    css: [
-      {
-        properties: {
-          // needed so the tokens used in the theming below are definitely
-          // present in the generated CSS
-          color: ["zinc.900", "zinc.50"],
-        },
+  globalCss: defineGlobalStyles({
+    ":root": {
+      "--full-dvh": "100vh",
+      [primaryColorVariables.hue]: "14.67",
+      [primaryColorVariables.saturation]: "100%",
+      [primaryColorVariables.lightness]: "65%",
+    },
+    "@supports (height: 100dvh)": {
+      ":root": {
+        "--full-dvh": "100dvh",
       },
-    ],
-  },
+    },
+    html: { color: "text.body" },
+  }),
   // Useful for theme customization
   theme: {
     extend: {
@@ -63,31 +70,39 @@ export default defineConfig({
       semanticTokens: defineSemanticTokens({
         colors: {
           text: {
-            body: { value: { _light: "#18181b", _dark: "#fafafa" } },
-            popover: { value: { _light: "#18181b", _dark: "#fafafa" } },
+            body: { value: { _light: zinc[900], _dark: zinc[50] } },
+            soft: { value: { _light: zinc[600], _dark: zinc[200] } },
+            primary: {
+              normal: {
+                value: {
+                  _light: `hsl(var(${primaryColorVariables.hue}), 100%, 55%)`,
+                  _dark: `hsl(var(${primaryColorVariables.hue}), 100%, 65%)`,
+                },
+              },
+              highlight: {
+                value: {
+                  _light: `hsl(var(${primaryColorVariables.hue}), var(${primaryColorVariables.saturation}), 35%)`,
+                  _dark: `hsl(var(${primaryColorVariables.hue}), var(${primaryColorVariables.saturation}), 85%)`,
+                },
+              },
+            },
           },
           bg: {
-            page: { value: { _light: "#fafafa", _dark: "#18181b" } },
-            popover: { value: { _light: "#fafafa", _dark: "#18181b" } },
-          },
-          border: {
-            soft: {
-              value: { _light: "hsl(0, 0%, 80%)", _dark: "hsl(0, 0%, 30%)" },
-            },
-          },
-          primary: {
-            display: { value: "hsl(var(--color-primary-hue), 100%, 65%)" },
-            text: {
-              value: {
-                _light: "hsl(var(--color-primary-hue), 100%, 55%)",
-                _dark: "hsl(var(--color-primary-hue), 100%, 65%)",
-              },
-            },
+            page: { value: { _light: zinc[50], _dark: zinc[700] } },
             highlight: {
               value: {
-                _light: "hsl(var(--color-primary-hue), 60%, 55%)",
-                _dark: "hsl(var(--color-primary-hue), 60%, 65%)",
+                _light: `hsl(var(${primaryColorVariables.hue}), 100%, 90%)`,
+                _dark: `hsl(var(${primaryColorVariables.hue}), 100%, 35%)`,
               },
+            },
+          },
+          border: {
+            soft: { value: { _light: zinc[300], _dark: zinc[500] } },
+            softer: { value: { _light: zinc[200], _dark: zinc[600] } },
+          },
+          brand: {
+            primary: {
+              value: `hsl(var(${primaryColorVariables.hue}), var(${primaryColorVariables.saturation}), var(${primaryColorVariables.lightness}))`,
             },
           },
         },

@@ -7,8 +7,8 @@ const textButtonVariant: SystemStyleObject = {
   borderColor: "none",
   borderWidth: "0",
   borderStyle: "none",
-  color: "primary.text",
-  _hover: { color: "primary.highlight", background: "transparent" },
+  color: "text.primary.normal",
+  _hover: { color: "text.primary.highlight", background: "transparent" },
 };
 export const buttonCss = cva({
   base: {
@@ -18,20 +18,20 @@ export const buttonCss = cva({
     paddingY: "2",
     borderWidth: "1px",
     borderStyle: "solid",
-    borderColor: "primary.text",
+    borderColor: "text.primary.normal",
     borderRadius: "md",
-    background: "primary.text",
+    background: "text.primary.normal",
     color: "bg.page",
     _hover: {
-      background: "primary.highlight",
-      borderColor: "primary.highlight",
+      background: "text.primary.highlight",
+      borderColor: "text.primary.highlight",
     },
   },
   variants: {
     type: {
       secondary: {
         background: "transparent",
-        color: "primary.text",
+        color: "text.primary.normal",
         _hover: { background: "transparent" },
       },
       text: textButtonVariant,

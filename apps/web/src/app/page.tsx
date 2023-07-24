@@ -15,10 +15,9 @@ import {
   timeCss,
 } from "~/app/page.css";
 import type { ComponentProps, FC, ReactNode } from "react";
-import CleverLogo from "~/assets/logos/clever.svg";
 import { ExternalLink } from "lucide-react";
 import { hyperlinkCss } from "~/components/ui/hyperlink";
-import { EveryOrgLogo, SpinachLogo } from "~/app/themed-logos";
+import { CleverLogo, EveryOrgLogo, SpinachLogo } from "~/app/themed-logos";
 
 export default function Page() {
   return (

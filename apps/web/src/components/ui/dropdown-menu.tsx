@@ -5,11 +5,7 @@
 // instrumented version
 // eslint-disable-next-line no-restricted-imports
 import {
-  Root,
-  Trigger,
-  Group,
   Portal,
-  RadioGroup,
   Content,
   Item,
   CheckboxItem,
@@ -17,7 +13,6 @@ import {
   ItemIndicator,
   Label,
   Separator,
-  Sub,
   SubTrigger,
   SubContent,
 } from "@radix-ui/react-dropdown-menu";
@@ -36,16 +31,6 @@ import type {
   HTMLAttributes,
 } from "react";
 import { forwardRef } from "react";
-
-export const DropdownMenu = Root;
-
-export const DropdownMenuTrigger = Trigger;
-
-export const DropdownMenuGroup = Group;
-
-export const DropdownMenuPortal = Portal;
-
-export const DropdownMenuRadioGroup = RadioGroup;
 
 export const DropdownMenuContent = forwardRef<
   ElementRef<typeof Content>,
@@ -143,15 +128,7 @@ export const DropdownMenuSeparator = forwardRef<
 >(({ className, ...props }, ref) => (
   <Separator
     ref={ref}
-    className={cx(
-      css({
-        marginX: -1,
-        marginY: 1,
-        height: "1px",
-        bg: "muted",
-      }),
-      className
-    )}
+    className={cx(css({ height: "1px", bg: "border.softer" }), className)}
     {...props}
   />
 ));
@@ -180,7 +157,7 @@ export const DropdownMenuShortcut = ({
 DropdownMenuShortcut.displayName = "DropdownMenuShortcut";
 
 // Submenu components
-export const DropdownMenuSub = Sub;
+
 export const DropdownMenuSubTrigger = forwardRef<
   ElementRef<typeof SubTrigger>,
   ComponentPropsWithoutRef<typeof SubTrigger> & {
@@ -212,3 +189,13 @@ export const DropdownMenuSubContent = forwardRef<
   <SubContent ref={ref} className={cx(baseMenuCss, className)} {...props} />
 ));
 DropdownMenuSubContent.displayName = SubContent.displayName;
+
+// eslint-disable-next-line no-restricted-imports
+export {
+  Root as DropdownMenu,
+  Trigger as DropdownMenuTrigger,
+  Group as DropdownMenuGroup,
+  RadioGroup as DropdownMenuRadioGroup,
+  Sub as DropdownMenuSub,
+  Portal as DropdownMenuPortal,
+} from "@radix-ui/react-dropdown-menu";

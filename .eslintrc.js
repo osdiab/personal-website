@@ -3,13 +3,22 @@ module.exports = {
   plugins: ["unused-imports"],
   ignorePatterns: [
     ".eslintrc.js",
-    "next.config.js",
     "generated/",
     "build/",
     "gen/",
+    "next-env.d.ts",
+    "jest.config.js",
+    "next.config.js",
   ],
-  extends: ["turbo", "prettier"],
+  extends: [
+    "eslint:recommended",
+    "plugin:unicorn/recommended",
+    "turbo",
+    "prettier",
+  ],
+  root: true,
   rules: {
+    "no-template-curly-in-string": "warn",
     "no-unused-vars": "off", // typescript handles this
     "unused-imports/no-unused-imports": "error", // cleans up imports
     // cleans up unused variables
@@ -35,9 +44,26 @@ module.exports = {
         ],
       },
     ],
+    // distinguishing undefined and null is useful in my opinion -Omar
+    "unicorn/no-null": "off",
+    "unicorn/prevent-abbreviations": [
+      "warn",
+      {
+        replacements: {
+          // the following are known keywords in React, allow them
+          ref: false,
+          props: false,
+        },
+      },
+    ],
   },
-  root: true,
   overrides: [
+    {
+      files: ["libs/db-migrations/migrations/**/*.ts"],
+      rules: {
+        "unicorn/filename-case": "off", // tool doesn't output kebab case by default
+      },
+    },
     {
       files: ["./**/*.ts{,x}"],
       plugins: ["@typescript-eslint"],

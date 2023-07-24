@@ -8,6 +8,8 @@ export type Theme = z.infer<typeof themeSchema>;
 const resolvedThemeSchema = z.enum(["dark", "light"]);
 export type ResolvedTheme = z.infer<typeof resolvedThemeSchema>;
 
+// bug: https://github.com/sindresorhus/eslint-plugin-unicorn/issues/2149
+// eslint-disable-next-line unicorn/prefer-top-level-await
 const laxThemeSchema = themeSchema.optional().catch("system").default("system");
 
 export function useTheme() {

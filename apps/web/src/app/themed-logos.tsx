@@ -4,6 +4,8 @@ import EveryOrgLogoDark from "~/assets/logos/every-org-dark.svg";
 import EveryOrgLogoLight from "~/assets/logos/every-org-light.svg";
 import SpinachLogoNormal from "~/assets/logos/spinach.svg";
 import SpinachLogoInverted from "~/assets/logos/spinach-inverted.svg";
+import CleverLogoBlue from "~/assets/logos/clever.svg";
+import CleverLogoWhite from "~/assets/logos/clever-white.svg";
 import { WaitOnTheme } from "~/components/wait-on-theme";
 import { useTheme } from "~/utils/theme";
 import type { ComponentProps, FC } from "react";
@@ -24,12 +26,15 @@ function ThemeDependentLogo({
 }: ThemeDependentLogoProps) {
   const { resolvedTheme } = useTheme();
   switch (resolvedTheme) {
-    case "dark":
+    case "dark": {
       return <DarkLogo {...props} />;
-    case "light":
+    }
+    case "light": {
       return <LightLogo {...props} />;
-    default:
+    }
+    default: {
       return <EmptySvg {...props} />;
+    }
   }
 }
 export const EveryOrgLogo: SvgComponent = (props) => (
@@ -47,6 +52,16 @@ export const SpinachLogo: SvgComponent = (props) => (
     <ThemeDependentLogo
       DarkLogo={SpinachLogoInverted}
       LightLogo={SpinachLogoNormal}
+      {...props}
+    />
+  </WaitOnTheme>
+);
+
+export const CleverLogo: SvgComponent = (props) => (
+  <WaitOnTheme>
+    <ThemeDependentLogo
+      DarkLogo={CleverLogoWhite}
+      LightLogo={CleverLogoBlue}
       {...props}
     />
   </WaitOnTheme>

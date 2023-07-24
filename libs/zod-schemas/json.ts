@@ -1,10 +1,10 @@
 import { z } from "zod";
 
-export const jsonString = z.string().transform((input, ctx): unknown => {
+export const jsonString = z.string().transform((input, context): unknown => {
   try {
     return JSON.parse(input);
-  } catch (error) {
-    ctx.addIssue({
+  } catch {
+    context.addIssue({
       code: z.ZodIssueCode.custom,
       message: "Invalid JSON",
       path: [],
