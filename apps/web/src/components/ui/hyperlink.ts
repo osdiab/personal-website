@@ -6,10 +6,10 @@ export const hyperlinkCss = cva({
   variants: {
     initColor: {
       body: { color: "text.body" },
-      "primary.display": { color: "primary.display" },
+      "brand.primary": { color: "brand.primary" },
     },
     activeColor: {
-      "primary.display": { _hover: { color: "primary.display" } },
+      "brand.primary": { _hover: { color: "brand.primary" } },
     },
   },
 });

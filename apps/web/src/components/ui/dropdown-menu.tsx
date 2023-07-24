@@ -128,15 +128,7 @@ export const DropdownMenuSeparator = forwardRef<
 >(({ className, ...props }, ref) => (
   <Separator
     ref={ref}
-    className={cx(
-      css({
-        marginX: -1,
-        marginY: 1,
-        height: "1px",
-        bg: "muted",
-      }),
-      className
-    )}
+    className={cx(css({ height: "1px", bg: "border.softer" }), className)}
     {...props}
   />
 ));

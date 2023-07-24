@@ -38,7 +38,7 @@ export const companyTitleCss = hstack({
   justifyContent: "space-between",
 });
 export const jobLinkIconCss = css({ height: "2em" });
-export const jobTitleCss = css({ fontWeight: "bold", color: "gray.600" });
+export const jobTitleCss = css({ fontWeight: "bold", color: "text.soft" });
 export const jobMetadataCss = vstack({
   gap: "md",
   alignItems: { base: "start", md: "end" },

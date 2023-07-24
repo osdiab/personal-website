@@ -7,7 +7,7 @@ const paragraphSpacingStyle: SystemStyleObject = {
 
 // this needs to be in this file so that panda can pick it up at compile time
 export const hyperlinkStyles: SystemStyleObject = {
-  color: "primary.text",
+  color: "text.primary.normal",
   textDecoration: "underline",
   display: "inline-block",
   cursor: "pointer",
@@ -15,7 +15,7 @@ export const hyperlinkStyles: SystemStyleObject = {
   border: "none",
   background: "none",
   transition: "color 0.1s linear",
-  _hover: { color: "primary.highlight" },
+  _hover: { color: "text.primary.highlight" },
 };
 
 export const proseCss = css({
