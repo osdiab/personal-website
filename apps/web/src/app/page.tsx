@@ -60,7 +60,11 @@ export default function Page() {
                 <>
                   Single sign-on and simple APIs to query fragmented student
                   databases. I{" "}
-                  <a href="https://clever.com/products/badges">
+                  <a
+                    href="https://clever.com/products/badges"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
                     implemented Clever Badges
                   </a>
                   , allowing young children to access education tech at school.
