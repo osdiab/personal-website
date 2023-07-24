@@ -84,6 +84,7 @@ module.exports = {
         "react/react-in-jsx-scope": "off", // not needed for modern React
         "react/prop-types": "off", // we use TypeScript
       },
+      settings: { react: { version: "detect" } },
     },
     {
       files: ["./apps/web/**/*"],
