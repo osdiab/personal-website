@@ -1,7 +1,13 @@
 /* eslint-env node */
 module.exports = {
   plugins: ["unused-imports"],
-  ignorePatterns: [".eslintrc.js", "next.config.js", "generated/", "build/"],
+  ignorePatterns: [
+    ".eslintrc.js",
+    "next.config.js",
+    "generated/",
+    "build/",
+    "gen/",
+  ],
   extends: ["turbo", "prettier"],
   rules: {
     "no-unused-vars": "off", // typescript handles this
