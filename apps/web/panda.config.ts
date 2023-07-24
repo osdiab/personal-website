@@ -102,8 +102,8 @@ export default defineConfig({
             page: { value: { _light: zinc[50], _dark: zinc[700] } },
             highlight: {
               value: {
-                _light: `hsl(var(${primaryColorVariables.hue}), 100%, 90%)`,
-                _dark: `hsl(var(${primaryColorVariables.hue}), 100%, 35%)`,
+                _light: `hsl(var(${primaryColorVariables.hue}), calc(.5 * var(${primaryColorVariables.saturation})), 90%)`,
+                _dark: `hsl(var(${primaryColorVariables.hue}), calc(.5 * var(${primaryColorVariables.saturation})), 35%)`,
               },
             },
           },
