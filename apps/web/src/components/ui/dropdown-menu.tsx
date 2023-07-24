@@ -1,6 +1,9 @@
 // documentation: https://ui.shadcn.com/docs/components/dropdown-menu
 "use client";
 
+// we're wrapping the default radix dropdown menu components for our own
+// instrumented version
+// eslint-disable-next-line no-restricted-imports
 import {
   Root,
   Trigger,

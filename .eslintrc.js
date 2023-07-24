@@ -21,6 +21,11 @@ module.exports = {
       {
         paths: [
           { name: "next-themes", message: "Please use ~/utils/theme instead" },
+          {
+            name: "@radix-ui/react-dropdown-menu",
+            message:
+              "Are you sure you didn't mean to use ~/components/ui/dropdown-menu ?",
+          },
         ],
       },
     ],
