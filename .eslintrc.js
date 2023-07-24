@@ -8,7 +8,12 @@ module.exports = {
     "gen/",
     "next-env.d.ts",
   ],
-  extends: ["plugin:unicorn/recommended", "turbo", "prettier"],
+  extends: [
+    "eslint:recommended",
+    "plugin:unicorn/recommended",
+    "turbo",
+    "prettier",
+  ],
   root: true,
   rules: {
     "no-template-curly-in-string": "warn",
