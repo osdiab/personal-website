@@ -3,12 +3,13 @@ module.exports = {
   plugins: ["unused-imports"],
   ignorePatterns: [
     ".eslintrc.js",
-    "next.config.js",
     "generated/",
     "build/",
     "gen/",
+    "next-env.d.ts",
   ],
-  extends: ["turbo", "prettier"],
+  extends: ["plugin:unicorn/recommended", "turbo", "prettier"],
+  root: true,
   rules: {
     "no-unused-vars": "off", // typescript handles this
     "unused-imports/no-unused-imports": "error", // cleans up imports
@@ -35,9 +36,16 @@ module.exports = {
         ],
       },
     ],
+    // distinguishing undefined and null is useful in my opinion -Omar
+    "unicorn/no-null": "off",
   },
-  root: true,
   overrides: [
+    {
+      files: ["libs/db-migrations/migrations/**/*.ts"],
+      rules: {
+        "unicorn/filename-case": "off", // tool doesn't output kebab case by default
+      },
+    },
     {
       files: ["./**/*.ts{,x}"],
       plugins: ["@typescript-eslint"],
