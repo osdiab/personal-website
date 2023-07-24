@@ -1,5 +1,6 @@
-import { ColumnDefinitions, PgLiteral } from "node-pg-migrate";
-import { MigrationAction } from "node-pg-migrate/dist/types";
+import type { ColumnDefinitions } from "node-pg-migrate";
+import { PgLiteral } from "node-pg-migrate";
+import type { MigrationAction } from "node-pg-migrate/dist/types";
 
 export const shorthands: ColumnDefinitions = {
   id: {

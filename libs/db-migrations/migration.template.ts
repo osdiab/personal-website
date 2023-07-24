@@ -1,5 +1,6 @@
-import { ColumnDefinitions, PgLiteral } from "node-pg-migrate";
-import { MigrationAction } from "node-pg-migrate/dist/types";
+import type { ColumnDefinitions } from "node-pg-migrate";
+import { PgLiteral } from "node-pg-migrate";
+import type { MigrationAction } from "node-pg-migrate/dist/types";
 
 // see https://salsita.github.io/node-pg-migrate/#/migrations for details on how
 // to use these
