@@ -38,6 +38,16 @@ module.exports = {
     ],
     // distinguishing undefined and null is useful in my opinion -Omar
     "unicorn/no-null": "off",
+    "unicorn/prevent-abbreviations": [
+      "warn",
+      {
+        replacements: {
+          // the following are known keywords in React, allow them
+          ref: false,
+          props: false,
+        },
+      },
+    ],
   },
   overrides: [
     {
