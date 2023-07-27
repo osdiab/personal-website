@@ -1,0 +1,134 @@
+name: Create Hasura Preview Tenant
+on:
+  workflow_call:
+    inputs:
+      pr-number:
+        type: string
+        description: "PR Number"
+        required: true
+    secrets:
+      hasura-cloud-access-token:
+        description: "Hasura Cloud Access Token"
+        required: true
+      db-url:
+        type: string
+        description: "Database URL to connect to"
+        required: true
+      gpg-crypto-secret:
+        type: string
+        description: GPG secret used to encrypt/decrypt admin secret
+        required: true
+    outputs:
+      tenant_id:
+        description: "Created Hasura Tenant ID"
+        value: ${{jobs.create-hasura-preview-tenant.outputs.tenant-id}}
+      hasura-endpoint:
+        description: "Endpoint of the Hasura tenant"
+        value: ${{}}
+      admin-secret-encrypted:
+        description: "Admin secret of the Hasura tenant, encrypted"
+        value: ${{jobs.create-hasura-preview-tenant.outputs.admin-secret-encrypted}}
+
+jobs:
+  create-hasura-preview-tenant:
+    runs-on: ubuntu-latest
+    name: Get or Create Hasura Preview Tenant
+    outputs:
+      tenant-id: ${{ steps.create-tenant.outputs.tenant_id }}
+      admin-secret-encrypted: ${{steps.get-admin-secret.outputs.admin_secret_encrypted}}}
+    steps:
+      - name: Create Tenant
+        id: create-tenant
+        run: |
+          GQL_QUERY=$(cat <<-GQL
+            mutation CreateTenant {
+              createTenant(
+                cloud: "aws",
+                region: "eu-central-1",
+                plan: "cloud_free_v2",
+                name: "personal-website-pr-${{ inputs.pr-number }}"
+                envs: [{key: "MAIN_POSTGRES_DB_URL", value: "${{secrets.db-url}}"}]
+              ) {
+                id
+                tenant {
+                  project {
+                    endpoint
+                  }
+                }
+              }
+            }
+          GQL
+          )
+
+          REQUEST_PAYLOAD=$(jq -n --arg gqlQuery "$GQL_QUERY" '{ "query": $gqlQuery }')
+
+          # Send the request using curl
+          RESPONSE=$(curl \
+            --fail-with-body \
+            --silent \
+            --show-error \
+            --location \
+            --request POST \
+            --header 'Content-Type: application/json' \
+            --header 'Authorization: pat ${{ secrets.hasura-cloud-access-token }}' \
+            --data "$REQUEST_PAYLOAD" \
+            'https://data.pro.hasura.io/v1/graphql'
+          )
+
+          echo "Payload: $REQUEST_PAYLOAD"
+          echo "Response: $RESPONSE"
+
+          # Check if the response contains errors
+          if [[ $(echo "$RESPONSE" | jq -e '.errors') != "null" ]]; then
+            echo "Error occurred: $RESPONSE"
+            exit 1
+          fi
+
+          tenant_id=$(echo "$RESPONSE" | jq -r '.data.createTenant.id')
+          echo "Tenant ID: $tenant_id"
+          echo "tenant_id=$tenant_id" >> "$GITHUB_OUTPUT"
+
+          endpoint=$(echo "$RESPONSE" | jq -r '.data.createTenant.tenant.project.endpoint')
+          echo "Endpoint: $endpoint"
+          echo "endpoint=$endpoint" >> "$GITHUB_OUTPUT"
+
+      - name: Get Tenant Admin Secret
+        id: get-admin-secret
+        env:
+          GPG_SECRET: ${{secrets.gpg-crypto-secret}}
+        run: |
+          GQL_QUERY=$(cat <<-GQL
+            query GetTenantEnv(\$tenantId: uuid!) {
+              getTenantEnv(tenantId: \$tenantId) {
+                envVars
+              }
+            }
+          GQL
+          )
+
+          REQUEST_PAYLOAD=$(jq -n \
+            --arg gqlQuery "$GQL_QUERY" \
+            --arg tenantId "${{ steps.create-tenant.outputs.tenant_id }}" \
+            '{ "query": $gqlQuery, "variables": { "tenantId": $tenantId } }'
+          )
+
+          RESPONSE=$(curl --silent --show-error --fail-with-body -X POST 'https://data.pro.hasura.io/v1/graphql' \
+            -H 'Content-Type: application/json' \
+            -H 'Authorization: pat ${{ secrets.hasura-cloud-access-token }}' \
+            -d "$REQUEST_PAYLOAD"
+          )
+
+          echo "Payload: $REQUEST_PAYLOAD"
+          echo "Response: $RESPONSE"
+
+          # Check if the response contains errors
+          if [[ $(echo "$RESPONSE" | jq -e '.errors') != "null" ]]; then
+            echo "Error occurred: $RESPONSE"
+            exit 1
+          fi
+
+          GQL_ADMIN_SECRET=$(echo "${RESPONSE}" | jq -r '.data.getTenantEnv.envVars.HASURA_GRAPHQL_ADMIN_SECRET')
+          # https://nitratine.net/blog/post/how-to-pass-secrets-between-runners-in-github-actions/
+          echo "::add-mask::$GQL_ADMIN_SECRET"
+          ADMIN_SECRET_ENCRYPTED=$(gpg --symmetric --batch --passphrase "$GPG_SECRET" --output - <(echo "$GQL_ADMIN_SECRET") | base64 -w0)
+          echo "admin_secret_encrypted=$ADMIN_SECRET_ENCRYPTED" >> "$GITHUB_OUTPUT"

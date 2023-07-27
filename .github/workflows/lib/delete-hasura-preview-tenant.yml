@@ -1,0 +1,101 @@
+name: Delete Hasura Preview Tenant
+on:
+  workflow_call:
+    inputs:
+      pr-number:
+        type: string
+        description: "PR Number"
+        required: true
+    secrets:
+      hasura-cloud-access-token:
+        description: "Hasura Cloud Access Token"
+        required: true
+
+jobs:
+  delete-hasura-preview-tenant:
+    name: Delete Hasura Preview Tenant
+    if: github.event_name == 'pull_request_target'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get Existing Tenant
+        id: get-existing-tenant
+        run: |
+          GQL_QUERY=$(cat <<-GQL
+            query GetTenantByName(\$tenantName: String!) {
+              tenant(where: {project: {name: {_eq: \$tenantName}}}) {
+                id
+              }
+            }
+          GQL
+          )
+
+          REQUEST_PAYLOAD=$(jq -n \
+            --arg gqlQuery "$GQL_QUERY" \
+            --arg tenantName "personal-website-pr-${{ inputs.pr-number }}" \
+            '{ "query": $gqlQuery, "variables": { "tenantName": $tenantName } }')
+
+          # Send the request using curl
+          RESPONSE=$(curl \
+            --fail-with-body \
+            --silent \
+            --show-error \
+            --location \
+            --request POST \
+            --header 'Content-Type: application/json' \
+            --header 'Authorization: pat ${{ secrets.hasura-cloud-access-token }}' \
+            --data "$REQUEST_PAYLOAD" \
+            'https://data.pro.hasura.io/v1/graphql'
+          )
+
+          echo "Payload: $REQUEST_PAYLOAD"
+          echo "Response: $RESPONSE"
+
+          # Check if the response contains errors
+          if [[ $(echo "$RESPONSE" | jq -e '.errors') != "null" ]]; then
+            echo "Error occurred: $RESPONSE"
+            exit 1
+          fi
+
+          found_tenant_id=$(echo "$RESPONSE" | jq -r '.data.tenant[0].id')
+          if [ "$found_tenant_id" == "null" ]; then
+            echo "tenant_exists=false" > "$GITHUB_OUTPUT"
+          else
+            echo "tenant_exists=true" > "$GITHUB_OUTPUT"
+            echo "tenant_id=$found_tenant_id" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Delete Tenant
+        id: deleteTenant
+        if: steps.get-existing-tenant.outputs.tenant_exists == 'true'
+        run: |
+          TENANT_ID="${{ steps.get-existing-tenant.outputs.tenant_id}}"
+
+          GQL_QUERY=$(cat <<-GQL
+            mutation DeleteTenant(\$tenantId: uuid!) {
+              deleteTenant(tenantId: \$tenantId) {
+                status
+              }
+            }
+          GQL
+          )
+
+          REQUEST_PAYLOAD=$(jq -n \
+            --arg gqlQuery "$GQL_QUERY" \
+            --arg tenantId "$TENANT_ID" \
+            '{ "query": $gqlQuery, "variables": { "tenantId": $tenantId } }'
+          )
+
+          RESPONSE=$(curl --silent --show-error --fail-with-body -X POST 'https://data.pro.hasura.io/v1/graphql' \
+            -H 'Content-Type: application/json' \
+            -H 'Authorization: pat ${{ secrets.hasura-cloud-access-token }}' \
+            -d "$REQUEST_PAYLOAD"
+          )
+
+          echo "Payload: $REQUEST_PAYLOAD"
+          echo "Response: $RESPONSE"
+
+          # Check if the response contains errors
+          if [[ $(echo "$RESPONSE" | jq -e '.errors') != "null" ]]; then
+            echo "Error occurred: $RESPONSE"
+            exit 1
+          fi

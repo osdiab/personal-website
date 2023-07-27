@@ -1,0 +1,180 @@
+name: Deploy
+on:
+  push:
+    branches:
+      - stg
+      - prd
+  pull_request_target:
+    types: [opened, reopened, synchronize]
+    branches:
+      - stg
+
+concurrency:
+  group: ${{ github.workflow }}-${{github.event_name}}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  get-tool-versions:
+    name: Get Tool Versions
+    runs-on: ubuntu-latest
+    outputs:
+      pnpm: ${{ steps.versions.outputs.pnpm }}
+      nodejs: ${{ steps.versions.outputs.nodejs }}
+    steps:
+      - uses: actions/checkout@v3
+      - name: Read .tool-versions
+        uses: marocchino/tool-versions-action@v1
+        id: versions
+
+  run-checks:
+    name: Run Code Checks
+    uses: "./.github/workflows/lib/checks.yml"
+
+  delete-existing-neon-branch:
+    name: "Delete existing Neon preview postgres branch"
+    uses: "./.github/workflows/lib/delete-neon-pr-branch.yml"
+    if: github.event_name == 'pull_request_target'
+    with:
+      pr-number: ${{github.event.number}}
+    secrets:
+      neon-project-id: ${{secrets.NEON_PROJECT_ID_APP_DB_STG}}
+      neon-api-key: ${{secrets.NEON_API_KEY}}
+
+  create-neon-branch:
+    name: "Create new Neon preview postgres branch"
+    if: github.event_name == 'pull_request_target'
+    needs: [delete-existing-neon-branch]
+    uses: "./.github/workflows/lib/create-neon-pr-branch.yml"
+    with:
+      pr-number: ${{github.event.number}}
+      head-ref: ${{github.head_ref}}
+      commit-hash: ${{github.sha}}
+    secrets:
+      neon-project-id: ${{secrets.NEON_PROJECT_ID_APP_DB_STG}}
+      neon-api-key: ${{secrets.NEON_API_KEY}}
+
+  delete-hasura-preview-tenant:
+    name: Delete existing Hasura preview tenant
+    if: github.event_name == 'pull_request_target'
+    uses: "./.github/workflows/lib/delete-hasura-preview-tenant.yml"
+    with:
+      pr-number: ${{github.event.number}}
+    secrets:
+      hasura-cloud-access-token: ${{secrets.HASURA_CLOUD_ACCESS_TOKEN}}
+
+  create-hasura-preview-tenant:
+    name: Create new Hasura preview tenant
+    needs: [delete-hasura-preview-tenant, create-neon-branch]
+    if: github.event_name == 'pull_request_target' && github.event.action != 'closed'
+    uses: "./.github/workflows/lib/create-hasura-preview-tenant.yml"
+    with:
+      pr-number: ${{github.event.number}}
+    secrets:
+      hasura-cloud-access-token: ${{secrets.HASURA_CLOUD_ACCESS_TOKEN}}
+      db-url: postgres://${{ secrets.APP_DB_USER_STG }}:${{ secrets.APP_DB_PASSWORD_STG }}@${{ needs.create-neon-branch.outputs.db-host }}/${{ secrets.APP_DB_DATABASE_STG }}
+      gpg-crypto-secret: ${{secrets.GPG_CRYPTO_SECRET}}
+
+  deploy-preview-db-and-hasura:
+    needs: [get-tool-versions, create-hasura-preview-tenant, create-neon-branch]
+    uses: "./.github/workflows/lib/deploy-db-and-hasura.yml"
+    with:
+      hasura-endpoint: ${{needs.create-hasura-preview-tenant.outputs.hasura-endpoint}}
+    secrets:
+      hasura-admin-secret-encrypted: ${{needs.create-hasura-preview-tenant.outputs.admin-secret-encrypted}}
+      db-url: postgres://${{ secrets.APP_DB_USER_STG }}:${{ secrets.APP_DB_PASSWORD_STG }}@${{ needs.create-neon-branch.outputs.db-host }}/${{ secrets.APP_DB_DATABASE_STG }}
+      gpg-crypto-secret: ${{secrets.GPG_CRYPTO_SECRET}}
+
+  # we will spin up a preview app before deploying production, so we do this
+  # regardless if it's a producton, staging, or preview build
+  build-web-app-preview:
+    name: Build Web App (Preview)
+    uses: "./.github/workflows/lib/build-web-app.yml"
+    with:
+      commit-hash: ${{github.sha}}
+      production: false
+    secrets:
+      vercel-project-id: ${{secrets.VERCEL_PROJECT_ID_WEB_APP}}
+      vercel-org-id: ${{secrets.VERCEL_ORG_ID}}
+      vercel-token: ${{secrets.VERCEL_TOKEN}}
+      doppler-token: ${{secrets.DOPPLER_TOKEN_WEB_APP_STG}}
+
+  # only prd branch needs production builds
+  build-web-app-prd:
+    name: Build Web App (Production)
+    if: github.event_name == 'push' && github.ref == 'refs/heads/prd'
+    uses: "./.github/workflows/lib/build-web-app.yml"
+    with:
+      commit-hash: ${{github.sha}}
+      production: false
+    secrets:
+      vercel-project-id: ${{secrets.VERCEL_PROJECT_ID_WEB_APP}}
+      vercel-org-id: ${{secrets.VERCEL_ORG_ID}}
+      vercel-token: ${{secrets.VERCEL_TOKEN}}
+      doppler-token: ${{secrets.DOPPLER_TOKEN_WEB_APP_PRD}}
+
+  deploy-to-vercel-preview:
+    permissions:
+      pull-requests: write
+      contents: write
+    name: Deploy Preview to Vercel
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request_target'
+    needs:
+      [
+        get-tool-versions,
+        run-checks,
+        build-web-app-preview,
+        create-hasura-preview-tenant,
+      ]
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/download-artifact@v3
+        with:
+          name: build-web-app-preview-${{ github.sha }}
+      - name: Extract tar build artifact for deployment
+        run: tar -xf vercel-build.tar
+
+      - id: decrypt-admin-secret
+        name: Decrypt Hasura GraphQL Admin Secret
+        env:
+          GPG_SECRET: ${{ secrets.GPG_CRYPTO_SECRET }}
+        run: |
+          ADMIN_SECRET=$(gpg --decrypt --quiet --batch --passphrase "$GPG_SECRET" --output - <(echo "${{needs.create-hasura-preview-tenant.outputs.admin-secret-encrypted}}" | base64 --decode))
+          echo "::add-mask::$ADMIN_SECRET"
+          echo "admin_secret=$ADMIN_SECRET" >> "$GITHUB_OUTPUT"
+
+      - name: Deploy Vercel Preview
+        uses: amondnet/vercel-action@v20
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID_WEB_APP }}
+          vercel-args: --prebuilt --env HASURA_GRAPHQL_ENDPOINT=${{needs.create-hasura-preview-tenant.outputs.hasura-endpoint}} --env HASURA_GRAPHQL_ADMIN_SECRET=${{steps.decrypt-admin-secret.outputs.admin_secret}}
+
+  deploy-to-vercel-stg-prd:
+    permissions:
+      pull-requests: write
+      contents: write
+    name: Deploy Production to Vercel
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+    needs: [get-tool-versions, run-checks, build-web-app-prd]
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/download-artifact@v3
+        with:
+          name: build-web-app-${{ github.ref == 'refs/heads/prd' && 'prod' || 'preview' }}-${{ github.sha }}
+      - name: Extract tar build artifact for deployment
+        run: tar -xf vercel-build.tar
+      - name: Set vercel-args based on ref
+        id: set-vercel-args
+        run: echo "vercel-args=--prebuilt ${{ github.ref == 'refs/heads/prd' && '--prod' || '' }}" >> $GITHUB_OUTPUT
+      - name: Deploy Vercel Production
+        uses: amondnet/vercel-action@v25
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID_WEB_APP }}
+          vercel-args: ${{steps.set-vercel-args.outputs.vercel-args}}

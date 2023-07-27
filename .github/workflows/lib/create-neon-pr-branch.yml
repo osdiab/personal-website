@@ -1,0 +1,90 @@
+name: Create Neon PR Branch
+on:
+  workflow_call:
+    inputs:
+      head-ref:
+        type: string
+        description: "Git HEAD Ref"
+        required: true
+      pr-number:
+        type: string
+        description: "Github PR Number"
+        required: true
+      commit-hash:
+        type: string
+        description: "Git Commit SHA"
+        required: true
+    secrets:
+      neon-project-id:
+        description: "Neon Project ID"
+        required: true
+      neon-api-key:
+        description: "Neon API Key"
+        required: true
+    outputs:
+      db-host:
+        description: "Created Neon preview branch database host"
+        value: ${{ steps.parse-preview-branch-host.outputs.db_branch_host }}}
+
+jobs:
+  create-pr-branch:
+    name: Create Neon PR Branch
+    runs-on: ubuntu-latest
+    steps:
+      - name: List Neon branches
+        id: list-branches
+        env:
+          NEON_PROJECT_ID: ${{secrets.neon-project-id}}
+          NEON_API_KEY: ${{secrets.neon-api-key}}
+        run: |
+          curl "https://console.neon.tech/api/v2/projects/$NEON_PROJECT_ID/branches" \
+            --header 'accept: application/json' \
+            --header "Authorization: Bearer $NEON_API_KEY" \
+            --fail-with-body \
+            --output list-neon-branches-response.json
+      - name: Upload list branches failure
+        if: failure() && steps.list-branches.outcome == 'failure'
+        run: |
+          echo "Failed to list branches"
+          cat list-neon-branches-response.json
+      - name: Get main Neon branch
+        id: get-main-branch
+        run: |
+          echo "branch_id=$(
+            jq --raw-output '.branches[] | select(.name=="main").id' list-neon-branches-response.json
+          )" >> "$GITHUB_OUTPUT"
+      - name: Create Neon branch
+        id: create-branch
+        env:
+          NEON_PROJECT_ID: ${{secrets.neon-project-id}}
+          NEON_API_KEY: ${{secrets.neon-api-key}}
+        uses: nick-fields/retry@v2
+        with:
+          timeout_seconds: 10
+          max_attempts: 3
+          retry_on: error
+          command: |
+            curl "https://console.neon.tech/api/v2/projects/$NEON_PROJECT_ID/branches" \
+              --header 'Accept: application/json' \
+              --header "Authorization: Bearer $NEON_API_KEY" \
+              --header 'Content-Type: application/json' \
+              --fail-with-body \
+              --output create-neon-branch-response.json \
+              --data "{
+                \"endpoints\": [{ \"type\": \"read_write\" }],
+                \"branch\": {
+                  \"parent_id\": \"${{steps.get-main-branch.outputs.branch_id}}\",
+                  \"name\": \"PR #${{ input.pr-number }} (${{ input.head-ref }} SHA: ${{ input.commit-hash }})\"
+                }
+              }"
+      - name: Upload create branch failure
+        if: failure() && steps.create-branch.outcome == 'failure'
+        run: |
+          echo "Failed to create branch"
+          cat create-neon-branch-response.json
+      - name: Output preview Neon branch endpoint
+        id: parse-preview-branch-host
+        run: |
+          echo "db_branch_host=$(
+            jq --raw-output '.endpoints[0].host' create-neon-branch-response.json
+          )" >> "$GITHUB_OUTPUT"
