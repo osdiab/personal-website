@@ -50,12 +50,16 @@ jobs:
         with:
           node-version: ${{ inputs.node-version }}
 
+      - name: Install dependencies
+        run: pnpm install --filter "db-migrations..."
+
       - name: Wait for Hasura to be ready
         env:
           GQL_ENDPOINT: ${{ inputs.hasura-endpoint}}
+        # wait a minute max
         run: |
-          npx wait-on "${GQL_ENDPOINT/https:/https-get:}/healthz"
-          npx wait-on "${GQL_ENDPOINT/https:/https-get:}/v1/version"
+          pnpm run --filter db-migrations wait-on --timeout 60000 "${GQL_ENDPOINT/https:/https-get:}/healthz"
+          pnpm run --filter db-migrations wait-on --timeout 60000 "${GQL_ENDPOINT/https:/https-get:}/v1/version"
 
       - id: decrypt-admin-secret
         name: Decrypt Hasura GraphQL Admin Secret
@@ -81,9 +85,6 @@ jobs:
         uses: actions/checkout@v2
         with:
           ref: ${{ github.head_ref }}
-
-      - name: Install dependencies
-        run: pnpm install --filter "db-migrations..."
 
       - name: Apply Migrations
         uses: nick-fields/retry@v2
