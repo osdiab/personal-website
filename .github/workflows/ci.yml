@@ -199,7 +199,7 @@ jobs:
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID_WEB_APP }}
           # no --prod flag
-          vercel-args: vercel-args=--prebuilt
+          vercel-args: --prebuilt
 
   deploy-to-vercel-prd:
     name: Deploy Web App (Production) to Vercel
@@ -222,4 +222,4 @@ jobs:
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID_WEB_APP }}
           # --prod flag
-          vercel-args: vercel-args=--prebuilt --prod
+          vercel-args: --prebuilt --prod
