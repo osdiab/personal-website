@@ -6,6 +6,12 @@ on:
         type: string
         description: "Endpoint of the Hasura tenant"
         required: true
+      node-version:
+        type: string
+        required: true
+      pnpm-version:
+        type: string
+        required: true
     secrets:
       hasura-admin-secret-encrypted:
         description: "Admin secret of the Hasura tenant"
@@ -18,20 +24,7 @@ on:
         required: true
 
 jobs:
-  get-tool-versions:
-    name: Get Tool Versions
-    runs-on: ubuntu-latest
-    outputs:
-      pnpm: ${{ steps.versions.outputs.pnpm }}
-      nodejs: ${{ steps.versions.outputs.nodejs }}
-    steps:
-      - uses: actions/checkout@v3
-      - name: Read .tool-versions
-        uses: marocchino/tool-versions-action@v1
-        id: versions
-
   deploy-hasura-preview:
-    needs: [get-tool-versions]
     runs-on: ubuntu-latest
     name: Deploy Hasura Preview App
     steps:
@@ -46,12 +39,12 @@ jobs:
       - name: Install pnpm
         uses: pnpm/action-setup@v2
         with:
-          version: ${{ needs.get-tool-versions.outputs.pnpm }}
+          version: ${{ inputs.pnpm-version }}
 
       - name: Install Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: ${{ needs.get-tool-versions.outputs.nodejs }}
+          node-version: ${{ inputs.node-version }}
 
       - name: Wait for Hasura to be ready
         env:

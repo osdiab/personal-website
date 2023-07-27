@@ -78,6 +78,8 @@ jobs:
     needs: [get-tool-versions, create-hasura-preview-tenant, create-neon-branch]
     uses: "./.github/workflows/deploy-db-and-hasura.yml"
     with:
+      node-version: ${{needs.get-tool-versions.outputs.nodejs}}
+      pnpm-version: ${{needs.get-tool-versions.outputs.pnpm}}
       hasura-endpoint: ${{needs.create-hasura-preview-tenant.outputs.hasura-endpoint}}
     secrets:
       hasura-admin-secret-encrypted: ${{needs.create-hasura-preview-tenant.outputs.admin-secret-encrypted}}
@@ -89,9 +91,12 @@ jobs:
   build-web-app-preview:
     name: Build Web App (Preview)
     uses: "./.github/workflows/build-web-app.yml"
+    needs: [get-tool-versions]
     with:
       commit-hash: ${{github.sha}}
       production: false
+      node-version: ${{needs.get-tool-versions.outputs.nodejs}}
+      pnpm-version: ${{needs.get-tool-versions.outputs.pnpm}}
     secrets:
       vercel-project-id: ${{secrets.VERCEL_PROJECT_ID_WEB_APP}}
       vercel-org-id: ${{secrets.VERCEL_ORG_ID}}
@@ -102,10 +107,13 @@ jobs:
   build-web-app-prd:
     name: Build Web App (Production)
     if: github.event_name == 'push' && github.ref == 'refs/heads/prd'
+    needs: [get-tool-versions]
     uses: "./.github/workflows/build-web-app.yml"
     with:
       commit-hash: ${{github.sha}}
       production: false
+      node-version: ${{needs.get-tool-versions.outputs.nodejs}}
+      pnpm-version: ${{needs.get-tool-versions.outputs.pnpm}}
     secrets:
       vercel-project-id: ${{secrets.VERCEL_PROJECT_ID_WEB_APP}}
       vercel-org-id: ${{secrets.VERCEL_ORG_ID}}

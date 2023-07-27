@@ -2,9 +2,16 @@ name: Checks
 on:
   workflow_call:
     inputs:
+      node-version:
+        type: string
+        required: true
+      pnpm-version:
+        type: string
+        required: true
       commit-hash:
         type: string
         description: Git commit SHA
+        required: true
       production:
         type: boolean
         required: true
@@ -24,31 +31,19 @@ on:
         description: Token granting access to the doppler environment that the app will run in
 
 jobs:
-  get-tool-versions:
-    name: Get Tool Versions
-    runs-on: ubuntu-latest
-    outputs:
-      pnpm: ${{ steps.versions.outputs.pnpm }}
-      nodejs: ${{ steps.versions.outputs.nodejs }}
-    steps:
-      - uses: actions/checkout@v3
-      - name: Read .tool-versions
-        uses: marocchino/tool-versions-action@v1
-        id: versions
   build-web-app:
     name: Build Web App
     runs-on: ubuntu-latest
-    needs: [get-tool-versions]
     steps:
       - uses: actions/checkout@v3
       - name: Install pnpm
         uses: pnpm/action-setup@v2
         with:
-          version: ${{ needs.get-tool-versions.outputs.pnpm }}
+          version: ${{ inputs.pnpm-version }}
       - name: Install Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: ${{ needs.get-tool-versions.outputs.nodejs }}
+          node-version: ${{ inputs.node-version }}
           cache: "pnpm"
       - name: Install Doppler CLI
         uses: dopplerhq/cli-action@v2
