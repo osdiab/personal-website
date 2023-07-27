@@ -44,7 +44,7 @@ jobs:
       neon-api-key: ${{secrets.NEON_API_KEY}}
 
   generate-neon-branch-name:
-    name: Generate what the preview branch name should be for the preview Neon branch
+    name: Gen Neon Preview Branch Name
     runs-on: ubuntu-latest
     outputs:
       neon-branch-name: ${{ steps.branch-name.outputs.branch-name }}
@@ -54,7 +54,9 @@ jobs:
         run: |
           title_prefix="${{github.event_name == 'pull_request_target' && 'PR # ' || 'Preview '}}"
           title="${{github.event_name == 'pull_request_target' && github.event.number || github.ref_name}}"
-          echo "branch-name=$title_prefix$title (${{github.sha}})" >> "$GITHUB_OUTPUT"
+          branch_name="$title_prefix$title (${{github.sha}})"
+          echo "Branch name: $branch_name"
+          echo "branch-name=$branch_name" >> "$GITHUB_OUTPUT"
 
   create-neon-branch:
     name: Create new Neon preview postgres branch
