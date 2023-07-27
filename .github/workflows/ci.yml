@@ -20,7 +20,7 @@ jobs:
 
   delete-existing-neon-branch:
     name: "Delete old Neon postgres branch"
-    uses: "./.github/workflows/delete-neon-pr-branch.yml"
+    uses: "./.github/workflows/lib/delete-neon-pr-branch.yml"
     if: github.event_name == 'pull_request_target'
     with:
       pr-number: ${{github.event.number}}
