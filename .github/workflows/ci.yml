@@ -84,51 +84,33 @@ jobs:
       db-url: postgres://${{ secrets.APP_DB_USER_STG }}:${{ secrets.APP_DB_PASSWORD_STG }}@${{ needs.create-neon-branch.outputs.db-host }}/${{ secrets.APP_DB_DATABASE_STG }}
       gpg-crypto-secret: ${{secrets.GPG_CRYPTO_SECRET}}
 
-  build-web-app:
-    name: Build Web App
-    runs-on: ubuntu-latest
-    needs: [get-tool-versions]
-    steps:
-      - uses: actions/checkout@v3
-      - name: Install pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: ${{ needs.get-tool-versions.outputs.pnpm }}
-      - name: Install Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ needs.get-tool-versions.outputs.nodejs }}
-          cache: "pnpm"
-      - name: Install Doppler CLI
-        uses: dopplerhq/cli-action@v2
-      - name: Install dependencies
-        run: pnpm install --filter "web-app..." --filter "vercel"
-      - name: Pull Vercel config
-        run: pnpm vercel pull --yes --token=${VERCEL_TOKEN}
-        env:
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_WEB_APP }}
-          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-      - name: Preview Build
-        run: pnpm vercel build
-        if: github.event_name == 'pull_request_target' || github.ref != 'refs/heads/prd'
-        env:
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_WEB_APP }}
-          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-          DOPPLER_TOKEN: ${{ secrets.DOPPLER_TOKEN_WEB_APP_STG }}
-      - name: Production Build
-        run: pnpm vercel build --prod
-        if: github.event_name == 'push' && github.ref == 'refs/heads/prd'
-        env:
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_WEB_APP }}
-          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-          DOPPLER_TOKEN: ${{ secrets.DOPPLER_TOKEN_WEB_APP_PRD }}
-      - name: Tar build artifact for deployment
-        run: tar -cf vercel-build.tar ./.vercel
-      - uses: actions/upload-artifact@v3
-        with:
-          name: build-web-app-${{ github.sha }}
-          path: vercel-build.tar
+  # we will spin up a preview app before deploying production, so we do this
+  # regardless if it's a producton, staging, or preview build
+  build-web-app-preview:
+    name: Build Web App (Preview)
+    uses: "./.github/workflows/lib/build-web-app.yml"
+    with:
+      commit-hash: ${{github.sha}}
+      production: false
+    secrets:
+      vercel-project-id: ${{secrets.VERCEL_PROJECT_ID_WEB_APP}}
+      vercel-org-id: ${{secrets.VERCEL_ORG_ID}}
+      vercel-token: ${{secrets.VERCEL_TOKEN}}
+      doppler-token: ${{secrets.DOPPLER_TOKEN_WEB_APP_STG}}
+
+  # only prd branch needs production builds
+  build-web-app-prd:
+    name: Build Web App (Production)
+    if: github.event_name == 'push' && github.ref == 'refs/heads/prd'
+    uses: "./.github/workflows/lib/build-web-app.yml"
+    with:
+      commit-hash: ${{github.sha}}
+      production: false
+    secrets:
+      vercel-project-id: ${{secrets.VERCEL_PROJECT_ID_WEB_APP}}
+      vercel-org-id: ${{secrets.VERCEL_ORG_ID}}
+      vercel-token: ${{secrets.VERCEL_TOKEN}}
+      doppler-token: ${{secrets.DOPPLER_TOKEN_WEB_APP_PRD}}
 
   deploy-to-vercel-preview:
     permissions:
@@ -141,14 +123,14 @@ jobs:
       [
         get-tool-versions,
         run-checks,
-        build-web-app,
+        build-web-app-preview,
         create-hasura-preview-tenant,
       ]
     steps:
       - uses: actions/checkout@v3
       - uses: actions/download-artifact@v3
         with:
-          name: build-web-app-${{ github.sha }}
+          name: build-web-app-preview-${{ github.sha }}
       - name: Extract tar build artifact for deployment
         run: tar -xf vercel-build.tar
 
@@ -177,12 +159,12 @@ jobs:
     name: Deploy Production to Vercel
     runs-on: ubuntu-latest
     if: github.event_name == 'push'
-    needs: [get-tool-versions, run-checks, build-web-app]
+    needs: [get-tool-versions, run-checks, build-web-app-prd]
     steps:
       - uses: actions/checkout@v3
       - uses: actions/download-artifact@v3
         with:
-          name: build-web-app-${{ github.sha }}
+          name: build-web-app-${{ github.ref == 'refs/heads/prd' && 'prod' || 'preview' }}-${{ github.sha }}
       - name: Extract tar build artifact for deployment
         run: tar -xf vercel-build.tar
       - name: Set vercel-args based on ref

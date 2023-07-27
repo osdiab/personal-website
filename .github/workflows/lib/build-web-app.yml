@@ -1,0 +1,86 @@
+name: Checks
+on:
+  workflow_call:
+    inputs:
+      commit-hash:
+        type: string
+        description: Git commit SHA
+      production:
+        type: boolean
+        required: true
+        description: If true, makes a production build; else makes a preview build
+    secrets:
+      vercel-project-id:
+        type: string
+        required: true
+        description: ID of the Vercel project to make a build for
+      vercel-org-id:
+        type: string
+        required: true
+        description: ID of the Vercel organization housing the project to make a build for
+      vercel-token:
+        type: string
+        required: true
+        description: Token to authenticate with Vercel API
+      doppler-token:
+        type: string
+        required: true
+        description: Token granting access to the doppler environment that the app will run in
+
+jobs:
+  get-tool-versions:
+    name: Get Tool Versions
+    runs-on: ubuntu-latest
+    outputs:
+      pnpm: ${{ steps.versions.outputs.pnpm }}
+      nodejs: ${{ steps.versions.outputs.nodejs }}
+    steps:
+      - uses: actions/checkout@v3
+      - name: Read .tool-versions
+        uses: marocchino/tool-versions-action@v1
+        id: versions
+  build-web-app:
+    name: Build Web App
+    runs-on: ubuntu-latest
+    needs: [get-tool-versions]
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: ${{ needs.get-tool-versions.outputs.pnpm }}
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ needs.get-tool-versions.outputs.nodejs }}
+          cache: "pnpm"
+      - name: Install Doppler CLI
+        uses: dopplerhq/cli-action@v2
+      - name: Install dependencies
+        run: pnpm install --filter "web-app..." --filter "vercel"
+      - name: Pull Vercel config
+        run: pnpm vercel pull --yes --token=${VERCEL_TOKEN}
+        env:
+          VERCEL_PROJECT_ID: ${{ inputs.vercel-project-id }}
+          VERCEL_ORG_ID: ${{ inputs.vercel-org-id }}
+          VERCEL_TOKEN: ${{ secrets.vercel-token }}
+      - name: Preview Build
+        run: pnpm vercel build
+        if: ${{ !inputs.production }}
+        env:
+          VERCEL_PROJECT_ID: ${{ inputs.vercel-project-id }}
+          VERCEL_ORG_ID: ${{ inputs.vercel-org-id }}
+          DOPPLER_TOKEN: ${{ secrets.doppler-token }}
+      - name: Production Build
+        run: pnpm vercel build --prod
+        if: ${{ inputs.production }}
+        env:
+          VERCEL_PROJECT_ID: ${{ inputs.vercel-project-id }}
+          VERCEL_ORG_ID: ${{ inputs.vercel-org-id }}
+          DOPPLER_TOKEN: ${{ secrets.doppler-token }}
+      - name: Tar build artifact for deployment
+        run: tar -cf vercel-build.tar ./.vercel
+      - uses: actions/upload-artifact@v3
+        with:
+          name: build-web-app-${{inputs.prod && 'prod' || 'preview'}}-${{ inputs.commit-hash }}
+          path: vercel-build.tar
