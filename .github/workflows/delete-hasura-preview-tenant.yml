@@ -85,7 +85,7 @@ jobs:
             --arg gqlQuery "$GQL_QUERY" \
             --arg tenantId "$TENANT_ID" \
             --arg labelName "preview-${{inputs.git-ref-name}}" \
-            '{ "query": $gqlQuery, "variables": { "tenantId": $tenantId, "labelId": $labelName } }'
+            '{ "query": $gqlQuery, "variables": { "tenantId": $tenantId, "labelName": $labelName } }'
           )
 
           RESPONSE=$(curl --silent --show-error --fail-with-body -X POST 'https://data.pro.hasura.io/v1/graphql' \
