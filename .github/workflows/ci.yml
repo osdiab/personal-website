@@ -120,11 +120,13 @@ jobs:
       vercel-token: ${{secrets.VERCEL_TOKEN}}
       doppler-token: ${{secrets.DOPPLER_TOKEN_WEB_APP_PRD}}
 
+  # Difference from staging/production build is that we need to give it a Hasura
+  # GraphQL Endpoint and Secret dynamically
   deploy-to-vercel-preview:
+    name: Deploy Web App (Preview) to Vercel
     permissions:
       pull-requests: write
       contents: write
-    name: Deploy Preview to Vercel
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request_target'
     needs:
@@ -160,24 +162,21 @@ jobs:
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID_WEB_APP }}
           vercel-args: --prebuilt --env HASURA_GRAPHQL_ENDPOINT=${{needs.create-hasura-preview-tenant.outputs.hasura-endpoint}} --env HASURA_GRAPHQL_ADMIN_SECRET=${{steps.decrypt-admin-secret.outputs.admin_secret}}
 
-  deploy-to-vercel-stg-prd:
-    permissions:
-      pull-requests: write
-      contents: write
-    name: Deploy Production to Vercel
+  # Difference from Production is that we do not use a Production build
+  # (environment variables differ and the flag passed to Vercel differs)
+  deploy-to-vercel-stg:
+    name: Deploy Web App (Staging) to Vercel
     runs-on: ubuntu-latest
     if: github.event_name == 'push'
-    needs: [get-tool-versions, run-checks, build-web-app-prd]
+    needs: [get-tool-versions, run-checks, build-web-app-preview]
     steps:
       - uses: actions/checkout@v3
       - uses: actions/download-artifact@v3
         with:
-          name: build-web-app-${{ github.ref == 'refs/heads/prd' && 'prod' || 'preview' }}-${{ github.sha }}
+          # preview build
+          name: build-web-app-preview-${{ github.sha }}
       - name: Extract tar build artifact for deployment
         run: tar -xf vercel-build.tar
-      - name: Set vercel-args based on ref
-        id: set-vercel-args
-        run: echo "vercel-args=--prebuilt ${{ github.ref == 'refs/heads/prd' && '--prod' || '' }}" >> $GITHUB_OUTPUT
       - name: Deploy Vercel Production
         uses: amondnet/vercel-action@v25
         with:
@@ -185,4 +184,28 @@ jobs:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID_WEB_APP }}
-          vercel-args: ${{steps.set-vercel-args.outputs.vercel-args}}
+          # no --prod flag
+          vercel-args: vercel-args=--prebuilt
+
+  deploy-to-vercel-prd:
+    name: Deploy Web App (Production) to Vercel
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+    needs: [get-tool-versions, run-checks, build-web-app-prd]
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/download-artifact@v3
+        with:
+          # production build
+          name: build-web-app-prod-${{ github.sha }}
+      - name: Extract tar build artifact for deployment
+        run: tar -xf vercel-build.tar
+      - name: Deploy Vercel Production
+        uses: amondnet/vercel-action@v25
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID_WEB_APP }}
+          # --prod flag
+          vercel-args: vercel-args=--prebuilt --prod
