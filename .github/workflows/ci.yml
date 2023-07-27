@@ -96,6 +96,7 @@ jobs:
       node-version: ${{needs.get-tool-versions.outputs.nodejs}}
       pnpm-version: ${{needs.get-tool-versions.outputs.pnpm}}
       hasura-endpoint: ${{needs.create-hasura-preview-tenant.outputs.hasura-endpoint}}
+      base-ref: ${{github.event_name == 'pull_request_target' && github.base_ref || github.ref}}
     secrets:
       hasura-admin-secret-encrypted: ${{needs.create-hasura-preview-tenant.outputs.admin-secret-encrypted}}
       db-url: postgres://${{ secrets.APP_DB_USER_STG }}:${{ secrets.APP_DB_PASSWORD_STG }}@${{ needs.create-neon-branch.outputs.db-host }}/${{ secrets.APP_DB_DATABASE_STG }}

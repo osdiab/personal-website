@@ -6,6 +6,10 @@ on:
         type: string
         description: "Endpoint of the Hasura tenant"
         required: true
+      base-ref:
+        type: string
+        description: "Base branch that the database & Hasura are already synced to"
+        required: true
       node-version:
         type: string
         required: true
@@ -28,10 +32,10 @@ jobs:
     runs-on: ubuntu-latest
     name: Deploy Hasura Preview App
     steps:
-      - name: Checkout stg branch
+      - name: Checkout base branch
         uses: actions/checkout@v2
         with:
-          ref: stg
+          ref: ${{inputs.base-ref}}
 
       - name: Install Hasura CLI
         run: curl -L https://github.com/hasura/graphql-engine/raw/stable/cli/get.sh | bash
