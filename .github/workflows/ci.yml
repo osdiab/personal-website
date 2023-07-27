@@ -79,6 +79,7 @@ jobs:
       gpg-crypto-secret: ${{secrets.GPG_CRYPTO_SECRET}}
 
   deploy-preview-db-and-hasura:
+    name: Migrate Preview DB, Deploy Hasura Metadata
     needs: [get-tool-versions, create-hasura-preview-tenant, create-neon-branch]
     uses: "./.github/workflows/deploy-db-and-hasura.yml"
     with:
