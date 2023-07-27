@@ -34,7 +34,7 @@ on:
 jobs:
   create-hasura-preview-tenant:
     runs-on: ubuntu-latest
-    name: Get or Create Hasura Preview Tenant
+    name: Create Hasura Preview Tenant
     outputs:
       tenant-id: ${{ steps.create-tenant.outputs.tenant_id }}
       admin-secret-encrypted: ${{steps.get-admin-secret.outputs.admin_secret_encrypted}}}
