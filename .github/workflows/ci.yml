@@ -74,86 +74,15 @@ jobs:
       db-url: postgres://${{ secrets.APP_DB_USER_STG }}:${{ secrets.APP_DB_PASSWORD_STG }}@${{ needs.create-neon-branch.outputs.db-host }}/${{ secrets.APP_DB_DATABASE_STG }}
       gpg-crypto-secret: ${{secrets.GPG_CRYPTO_SECRET}}
 
-  deploy-hasura-preview:
+  deploy-preview-db-and-hasura:
     needs: [get-tool-versions, create-hasura-preview-tenant, create-neon-branch]
-    runs-on: ubuntu-latest
-    name: Deploy Hasura Preview App
-    steps:
-      - name: Checkout stg branch
-        uses: actions/checkout@v2
-        with:
-          ref: stg
-
-      - name: Install Hasura CLI
-        run: curl -L https://github.com/hasura/graphql-engine/raw/stable/cli/get.sh | bash
-
-      - name: Install pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: ${{ needs.get-tool-versions.outputs.pnpm }}
-
-      - name: Install Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ needs.get-tool-versions.outputs.nodejs }}
-
-      - name: Wait for Hasura to be ready
-        env:
-          GQL_ENDPOINT: ${{needs.create-hasura-preview-tenant.outputs.hasura-endpoint}}
-        run: |
-          npx wait-on "${GQL_ENDPOINT/https:/https-get:}/healthz"
-          npx wait-on "${GQL_ENDPOINT/https:/https-get:}/v1/version"
-
-      - id: decrypt-admin-secret
-        name: Decrypt Hasura GraphQL Admin Secret
-        env:
-          GPG_SECRET: ${{ secrets.GPG_CRYPTO_SECRET }}
-        run: |
-          ADMIN_SECRET=$(gpg --decrypt --quiet --batch --passphrase "$GPG_SECRET" --output - <(echo "${{needs.create-hasura-preview-tenant.outputs.admin-secret-encrypted}}" | base64 --decode))
-          echo "::add-mask::$ADMIN_SECRET"
-          echo "admin_secret=$ADMIN_SECRET" >> "$GITHUB_OUTPUT"
-
-      - name: Apply Hasura Staging Metadata
-        uses: nick-fields/retry@v2
-        with:
-          timeout_minutes: 5
-          max_attempts: 5
-          retry_on: error
-          command: pnpm run --filter gql-engine hasura:noDoppler metadata apply --disallow-inconsistent-metadata
-        env:
-          HASURA_GRAPHQL_ENDPOINT: ${{needs.create-hasura-preview-tenant.outputs.hasura-endpoint}}
-          HASURA_GRAPHQL_ADMIN_SECRET: ${{ steps.decrypt-admin-secret.outputs.admin_secret }}
-
-      - name: Checkout PR branch
-        uses: actions/checkout@v2
-        with:
-          ref: ${{ github.head_ref }}
-
-      - name: Install dependencies
-        run: pnpm install --filter "db-migrations..."
-
-      - name: Apply Migrations
-        uses: nick-fields/retry@v2
-        with:
-          timeout_minutes: 5
-          max_attempts: 3
-          retry_on: error
-          command: pnpm run --filter db-migrations migrate:noDoppler up
-        # consider using doppler if there ends up needing to be more than this
-        env:
-          DATABASE_URL: postgres://${{ secrets.APP_DB_USER_STG }}:${{ secrets.APP_DB_PASSWORD_STG }}@${{ needs.create-neon-branch.outputs.db-host }}/${{ secrets.APP_DB_DATABASE_STG }}
-          PGSSLMODE: require
-
-      - name: Apply Hasura Metadata
-        uses: nick-fields/retry@v2
-        with:
-          timeout_minutes: 5
-          max_attempts: 5
-          retry_on: error
-          command: pnpm run --filter gql-engine hasura:noDoppler metadata apply --disallow-inconsistent-metadata
-        env:
-          HASURA_GRAPHQL_ENDPOINT: ${{needs.create-hasura-preview-tenant.outputs.hasura-endpoint}}
-          HASURA_GRAPHQL_ADMIN_SECRET: ${{ steps.decrypt-admin-secret.outputs.admin_secret }}
+    uses: "./.github/workflows/lib/deploy-db-and-hasura.yml"
+    with:
+      hasura-endpoint: ${{needs.create-hasura-preview-tenant.outputs.hasura-endpoint}}
+    secrets:
+      hasura-admin-secret-encrypted: ${{needs.create-hasura-preview-tenant.outputs.admin-secret-encrypted}}
+      db-url: postgres://${{ secrets.APP_DB_USER_STG }}:${{ secrets.APP_DB_PASSWORD_STG }}@${{ needs.create-neon-branch.outputs.db-host }}/${{ secrets.APP_DB_DATABASE_STG }}
+      gpg-crypto-secret: ${{secrets.GPG_CRYPTO_SECRET}}
 
   build-web-app:
     name: Build Web App
