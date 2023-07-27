@@ -97,8 +97,8 @@ jobs:
         run: |
           GQL_QUERY=$(cat <<-GQL
             mutation UpdateTenantName {
-              updateTenant(
-                tenantId: "${{steps.create-tenant.outputs.tenant_id}}}}"
+              updateTenantName(
+                tenantId: "${{steps.create-tenant.outputs.tenant_id}}"
                 name: "${{inputs.tenant-name}}"
               ) {
                 tenant_id
