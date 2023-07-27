@@ -64,122 +64,18 @@ jobs:
 
   create-hasura-preview-tenant:
     name: Create new Hasura preview tenant
-    needs: [delete-hasura-preview-tenant]
+    needs: [delete-hasura-preview-tenant, create-neon-branch]
     if: github.event_name == 'pull_request_target' && github.event.action != 'closed'
     uses: "./.github/workflows/lib/create-hasura-preview-tenant.yml"
     with:
       pr-number: ${{github.event.number}}
     secrets:
       hasura-cloud-access-token: ${{secrets.HASURA_CLOUD_ACCESS_TOKEN}}
-
-  configure-hasura-preview-tenant:
-    runs-on: ubuntu-latest
-    name: Configure Hasura Preview Tenant
-    needs: [create-hasura-preview-tenant, create-neon-branch]
-    outputs:
-      endpoint: ${{ steps.updateTenantEnvAndName.outputs.endpoint }}
-      admin_secret_encrypted: ${{ steps.getTenantEnv.outputs.admin_secret_encrypted }}
-    steps:
-      - name: Get Tenant Env
-        id: getTenantEnv
-        env:
-          GPG_SECRET: ${{secrets.GPG_CRYPTO_SECRET}}
-        run: |
-          GQL_QUERY=$(cat <<-GQL
-            query GetTenantEnv(\$tenantId: uuid!) {
-              getTenantEnv(tenantId: \$tenantId) {
-                envVars
-                hash
-              }
-            }
-          GQL
-          )
-
-          REQUEST_PAYLOAD=$(jq -n \
-            --arg gqlQuery "$GQL_QUERY" \
-            --arg tenantId "${{ needs.create-hasura-preview-tenant.outputs.tenant_id }}" \
-            '{ "query": $gqlQuery, "variables": { "tenantId": $tenantId } }'
-          )
-
-          RESPONSE=$(curl --silent --show-error --fail-with-body -X POST 'https://data.pro.hasura.io/v1/graphql' \
-            -H 'Content-Type: application/json' \
-            -H 'Authorization: pat ${{ secrets.HASURA_CLOUD_ACCESS_TOKEN }}' \
-            -d "$REQUEST_PAYLOAD"
-          )
-
-          echo "Payload: $REQUEST_PAYLOAD"
-          echo "Response: $RESPONSE"
-
-          # Check if the response contains errors
-          if [[ $(echo "$RESPONSE" | jq -e '.errors') != "null" ]]; then
-            echo "Error occurred: $RESPONSE"
-            exit 1
-          fi
-
-          ENV_HASH=$(echo "${RESPONSE}" | jq -r '.data.getTenantEnv.hash')
-          GQL_ADMIN_SECRET=$(echo "${RESPONSE}" | jq -r '.data.getTenantEnv.envVars.HASURA_GRAPHQL_ADMIN_SECRET')
-          # https://nitratine.net/blog/post/how-to-pass-secrets-between-runners-in-github-actions/
-          echo "::add-mask::$GQL_ADMIN_SECRET"
-          ADMIN_SECRET_ENCRYPTED=$(gpg --symmetric --batch --passphrase "$GPG_SECRET" --output - <(echo "$GQL_ADMIN_SECRET") | base64 -w0)
-          echo "env_hash=$ENV_HASH" >> "$GITHUB_OUTPUT"
-          echo "admin_secret_encrypted=$ADMIN_SECRET_ENCRYPTED" >> "$GITHUB_OUTPUT"
-
-      - name: Update Tenant Env And Name
-        id: updateTenantEnvAndName
-        run: |
-          tenantName="personal-website-pr-${{ github.event.number }}"
-          dbUrl="postgres://${{ secrets.APP_DB_USER_STG }}:${{ secrets.APP_DB_PASSWORD_STG }}@${{ needs.create-neon-branch.outputs.preview-branch-id }}/${{ secrets.APP_DB_DATABASE_STG }}"
-          GQL_QUERY=$(cat <<-GQL
-            mutation UpdateTenantEnvAndName(\$tenantId: uuid!, \$tenantName: String!, \$dbUrl: String!, \$currentHash: String!) {
-              updateTenantEnv(
-                currentHash: \$currentHash
-                envs: [{key: "MAIN_POSTGRES_DB_URL", value: \$dbUrl}]
-                tenantId: \$tenantId
-              ) {
-                hash
-              }
-              updateTenantName(name: \$tenantName, tenantId: \$tenantId) {
-                tenant_id
-                tenant {
-                  project {
-                    endpoint
-                  }
-                }
-              }
-            }
-          GQL
-          )
-
-          REQUEST_PAYLOAD=$(jq -n \
-            --arg gqlQuery "$GQL_QUERY" \
-            --arg tenantId "${{ needs.create-hasura-preview-tenant.outputs.tenant_id }}" \
-            --arg tenantName "$tenantName" \
-            --arg dbUrl "$dbUrl" \
-            --arg currentHash "${{ steps.getTenantEnv.outputs.env_hash }}" \
-            '{ "query": $gqlQuery, "variables": { "tenantId": $tenantId, "tenantName": $tenantName, "dbUrl": $dbUrl, "currentHash": $currentHash } }'
-          )
-
-          echo "Payload: $REQUEST_PAYLOAD"
-          echo "Response: $RESPONSE"
-
-          RESPONSE=$(curl --silent --show-error --fail-with-body -X POST 'https://data.pro.hasura.io/v1/graphql' \
-            -H 'Content-Type: application/json' \
-            -H 'Authorization: pat ${{ secrets.HASURA_CLOUD_ACCESS_TOKEN }}' \
-            -d "$REQUEST_PAYLOAD"
-          )
-
-          # Check if the response contains errors
-          if [[ $(echo "$RESPONSE" | jq -e '.errors') != "null" ]]; then
-            echo "Error occurred: $RESPONSE"
-            exit 1
-          fi
-
-          ENDPOINT=$(echo "${RESPONSE}" | jq -r '.data.updateTenantName.tenant.project.endpoint')
-          echo "endpoint=$ENDPOINT" >> "$GITHUB_OUTPUT"
+      db-url: postgres://${{ secrets.APP_DB_USER_STG }}:${{ secrets.APP_DB_PASSWORD_STG }}@${{ needs.create-neon-branch.outputs.db-host }}/${{ secrets.APP_DB_DATABASE_STG }}
+      gpg-crypto-secret: ${{secrets.GPG_CRYPTO_SECRET}}
 
   deploy-hasura-preview:
-    needs:
-      [get-tool-versions, configure-hasura-preview-tenant, create-neon-branch]
+    needs: [get-tool-versions, create-hasura-preview-tenant, create-neon-branch]
     runs-on: ubuntu-latest
     name: Deploy Hasura Preview App
     steps:
@@ -203,7 +99,7 @@ jobs:
 
       - name: Wait for Hasura to be ready
         env:
-          GQL_ENDPOINT: ${{needs.configure-hasura-preview-tenant.outputs.endpoint}}
+          GQL_ENDPOINT: ${{needs.create-hasura-preview-tenant.outputs.hasura-endpoint}}
         run: |
           npx wait-on "${GQL_ENDPOINT/https:/https-get:}/healthz"
           npx wait-on "${GQL_ENDPOINT/https:/https-get:}/v1/version"
@@ -213,7 +109,7 @@ jobs:
         env:
           GPG_SECRET: ${{ secrets.GPG_CRYPTO_SECRET }}
         run: |
-          ADMIN_SECRET=$(gpg --decrypt --quiet --batch --passphrase "$GPG_SECRET" --output - <(echo "${{needs.configure-hasura-preview-tenant.outputs.admin_secret_encrypted}}" | base64 --decode))
+          ADMIN_SECRET=$(gpg --decrypt --quiet --batch --passphrase "$GPG_SECRET" --output - <(echo "${{needs.create-hasura-preview-tenant.outputs.admin-secret-encrypted}}" | base64 --decode))
           echo "::add-mask::$ADMIN_SECRET"
           echo "admin_secret=$ADMIN_SECRET" >> "$GITHUB_OUTPUT"
 
@@ -225,7 +121,7 @@ jobs:
           retry_on: error
           command: pnpm run --filter gql-engine hasura:noDoppler metadata apply --disallow-inconsistent-metadata
         env:
-          HASURA_GRAPHQL_ENDPOINT: ${{needs.configure-hasura-preview-tenant.outputs.endpoint}}
+          HASURA_GRAPHQL_ENDPOINT: ${{needs.create-hasura-preview-tenant.outputs.hasura-endpoint}}
           HASURA_GRAPHQL_ADMIN_SECRET: ${{ steps.decrypt-admin-secret.outputs.admin_secret }}
 
       - name: Checkout PR branch
@@ -245,7 +141,7 @@ jobs:
           command: pnpm run --filter db-migrations migrate:noDoppler up
         # consider using doppler if there ends up needing to be more than this
         env:
-          DATABASE_URL: postgres://${{ secrets.APP_DB_USER_STG }}:${{ secrets.APP_DB_PASSWORD_STG }}@${{ needs.create-neon-branch.outputs.preview-branch-id }}/${{ secrets.APP_DB_DATABASE_STG }}
+          DATABASE_URL: postgres://${{ secrets.APP_DB_USER_STG }}:${{ secrets.APP_DB_PASSWORD_STG }}@${{ needs.create-neon-branch.outputs.db-host }}/${{ secrets.APP_DB_DATABASE_STG }}
           PGSSLMODE: require
 
       - name: Apply Hasura Metadata
@@ -256,7 +152,7 @@ jobs:
           retry_on: error
           command: pnpm run --filter gql-engine hasura:noDoppler metadata apply --disallow-inconsistent-metadata
         env:
-          HASURA_GRAPHQL_ENDPOINT: ${{needs.configure-hasura-preview-tenant.outputs.endpoint}}
+          HASURA_GRAPHQL_ENDPOINT: ${{needs.create-hasura-preview-tenant.outputs.hasura-endpoint}}
           HASURA_GRAPHQL_ADMIN_SECRET: ${{ steps.decrypt-admin-secret.outputs.admin_secret }}
 
   build-web-app:
@@ -317,7 +213,7 @@ jobs:
         get-tool-versions,
         run-checks,
         build-web-app,
-        configure-hasura-preview-tenant,
+        create-hasura-preview-tenant,
       ]
     steps:
       - uses: actions/checkout@v3
@@ -332,7 +228,7 @@ jobs:
         env:
           GPG_SECRET: ${{ secrets.GPG_CRYPTO_SECRET }}
         run: |
-          ADMIN_SECRET=$(gpg --decrypt --quiet --batch --passphrase "$GPG_SECRET" --output - <(echo "${{needs.configure-hasura-preview-tenant.outputs.admin_secret_encrypted}}" | base64 --decode))
+          ADMIN_SECRET=$(gpg --decrypt --quiet --batch --passphrase "$GPG_SECRET" --output - <(echo "${{needs.create-hasura-preview-tenant.outputs.admin-secret-encrypted}}" | base64 --decode))
           echo "::add-mask::$ADMIN_SECRET"
           echo "admin_secret=$ADMIN_SECRET" >> "$GITHUB_OUTPUT"
 
@@ -343,7 +239,7 @@ jobs:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID_WEB_APP }}
-          vercel-args: --prebuilt --env HASURA_GRAPHQL_ENDPOINT=${{needs.configure-hasura-preview-tenant.outputs.endpoint}} --env HASURA_GRAPHQL_ADMIN_SECRET=${{steps.decrypt-admin-secret.outputs.admin_secret}}
+          vercel-args: --prebuilt --env HASURA_GRAPHQL_ENDPOINT=${{needs.create-hasura-preview-tenant.outputs.hasura-endpoint}} --env HASURA_GRAPHQL_ADMIN_SECRET=${{steps.decrypt-admin-secret.outputs.admin_secret}}
 
   deploy-to-vercel-stg-prd:
     permissions:

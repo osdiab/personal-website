@@ -22,9 +22,9 @@ on:
         description: "Neon API Key"
         required: true
     outputs:
-      preview-branch-id:
-        description: "Created Neon Preview Branch ID"
-        value: ${{ steps.parse-preview-branch-id.outputs.branch_id }}}
+      db-host:
+        description: "Created Neon preview branch database host"
+        value: ${{ steps.parse-preview-branch-host.outputs.db_branch_host }}}
 
 jobs:
   create-pr-branch:
@@ -83,8 +83,8 @@ jobs:
           echo "Failed to create branch"
           cat create-neon-branch-response.json
       - name: Output preview Neon branch endpoint
-        id: parse-preview-branch-id
+        id: parse-preview-branch-host
         run: |
-          echo "branch_id=$(
+          echo "db_branch_host=$(
             jq --raw-output '.endpoints[0].host' create-neon-branch-response.json
           )" >> "$GITHUB_OUTPUT"
