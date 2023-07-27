@@ -3,6 +3,7 @@ on:
   workflow_call:
     inputs:
       hasura-endpoint:
+        type: string
         description: "Endpoint of the Hasura tenant"
         required: true
     secrets:
@@ -10,11 +11,9 @@ on:
         description: "Admin secret of the Hasura tenant"
         required: true
       db-url:
-        type: string
         description: "Database URL to connect to"
         required: true
       gpg-crypto-secret:
-        type: string
         description: GPG secret used to encrypt/decrypt admin secret
         required: true
 

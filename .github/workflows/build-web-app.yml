@@ -11,19 +11,15 @@ on:
         description: If true, makes a production build; else makes a preview build
     secrets:
       vercel-project-id:
-        type: string
         required: true
         description: ID of the Vercel project to make a build for
       vercel-org-id:
-        type: string
         required: true
         description: ID of the Vercel organization housing the project to make a build for
       vercel-token:
-        type: string
         required: true
         description: Token to authenticate with Vercel API
       doppler-token:
-        type: string
         required: true
         description: Token granting access to the doppler environment that the app will run in
 
@@ -61,26 +57,26 @@ jobs:
       - name: Pull Vercel config
         run: pnpm vercel pull --yes --token=${VERCEL_TOKEN}
         env:
-          VERCEL_PROJECT_ID: ${{ inputs.vercel-project-id }}
-          VERCEL_ORG_ID: ${{ inputs.vercel-org-id }}
+          VERCEL_PROJECT_ID: ${{ secrets.vercel-project-id }}
+          VERCEL_ORG_ID: ${{ secrets.vercel-org-id }}
           VERCEL_TOKEN: ${{ secrets.vercel-token }}
       - name: Preview Build
         run: pnpm vercel build
         if: ${{ !inputs.production }}
         env:
-          VERCEL_PROJECT_ID: ${{ inputs.vercel-project-id }}
-          VERCEL_ORG_ID: ${{ inputs.vercel-org-id }}
+          VERCEL_PROJECT_ID: ${{ secrets.vercel-project-id }}
+          VERCEL_ORG_ID: ${{ secrets.vercel-org-id }}
           DOPPLER_TOKEN: ${{ secrets.doppler-token }}
       - name: Production Build
         run: pnpm vercel build --prod
         if: ${{ inputs.production }}
         env:
-          VERCEL_PROJECT_ID: ${{ inputs.vercel-project-id }}
-          VERCEL_ORG_ID: ${{ inputs.vercel-org-id }}
+          VERCEL_PROJECT_ID: ${{ secrets.vercel-project-id }}
+          VERCEL_ORG_ID: ${{ secrets.vercel-org-id }}
           DOPPLER_TOKEN: ${{ secrets.doppler-token }}
       - name: Tar build artifact for deployment
         run: tar -cf vercel-build.tar ./.vercel
       - uses: actions/upload-artifact@v3
         with:
-          name: build-web-app-${{inputs.prod && 'prod' || 'preview'}}-${{ inputs.commit-hash }}
+          name: build-web-app-${{inputs.production && 'prod' || 'preview'}}-${{ inputs.commit-hash }}
           path: vercel-build.tar

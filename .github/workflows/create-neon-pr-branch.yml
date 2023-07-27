@@ -24,12 +24,14 @@ on:
     outputs:
       db-host:
         description: "Created Neon preview branch database host"
-        value: ${{ steps.parse-preview-branch-host.outputs.db_branch_host }}}
+        value: ${{ jobs.create-pr-branch.outputs.db-host }}}
 
 jobs:
   create-pr-branch:
     name: Create Neon PR Branch
     runs-on: ubuntu-latest
+    outputs:
+      db-host: ${{ steps.parse-preview-branch-host.outputs.db_branch_host }}
     steps:
       - name: List Neon branches
         id: list-branches
@@ -74,7 +76,7 @@ jobs:
                 \"endpoints\": [{ \"type\": \"read_write\" }],
                 \"branch\": {
                   \"parent_id\": \"${{steps.get-main-branch.outputs.branch_id}}\",
-                  \"name\": \"PR #${{ input.pr-number }} (${{ input.head-ref }} SHA: ${{ input.commit-hash }})\"
+                  \"name\": \"PR #${{ inputs.pr-number }} (${{ inputs.head-ref }} SHA: ${{ inputs.commit-hash }})\"
                 }
               }"
       - name: Upload create branch failure

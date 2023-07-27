@@ -11,11 +11,9 @@ on:
         description: "Hasura Cloud Access Token"
         required: true
       db-url:
-        type: string
         description: "Database URL to connect to"
         required: true
       gpg-crypto-secret:
-        type: string
         description: GPG secret used to encrypt/decrypt admin secret
         required: true
     outputs:
@@ -24,7 +22,7 @@ on:
         value: ${{jobs.create-hasura-preview-tenant.outputs.tenant-id}}
       hasura-endpoint:
         description: "Endpoint of the Hasura tenant"
-        value: ${{}}
+        value: ${{ jobs.create-hasura-preview-tenant.outputs.endpoint }}
       admin-secret-encrypted:
         description: "Admin secret of the Hasura tenant, encrypted"
         value: ${{jobs.create-hasura-preview-tenant.outputs.admin-secret-encrypted}}
@@ -36,6 +34,7 @@ jobs:
     outputs:
       tenant-id: ${{ steps.create-tenant.outputs.tenant_id }}
       admin-secret-encrypted: ${{steps.get-admin-secret.outputs.admin_secret_encrypted}}}
+      endpoint: ${{steps.create-tenant.outputs.endpoint}}
     steps:
       - name: Create Tenant
         id: create-tenant

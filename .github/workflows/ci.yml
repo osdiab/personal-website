@@ -28,11 +28,11 @@ jobs:
 
   run-checks:
     name: Run Code Checks
-    uses: "./.github/workflows/lib/checks.yml"
+    uses: "./.github/workflows/checks.yml"
 
   delete-existing-neon-branch:
     name: "Delete existing Neon preview postgres branch"
-    uses: "./.github/workflows/lib/delete-neon-pr-branch.yml"
+    uses: "./.github/workflows/delete-neon-pr-branch.yml"
     if: github.event_name == 'pull_request_target'
     with:
       pr-number: ${{github.event.number}}
@@ -44,7 +44,7 @@ jobs:
     name: "Create new Neon preview postgres branch"
     if: github.event_name == 'pull_request_target'
     needs: [delete-existing-neon-branch]
-    uses: "./.github/workflows/lib/create-neon-pr-branch.yml"
+    uses: "./.github/workflows/create-neon-pr-branch.yml"
     with:
       pr-number: ${{github.event.number}}
       head-ref: ${{github.head_ref}}
@@ -56,7 +56,7 @@ jobs:
   delete-hasura-preview-tenant:
     name: Delete existing Hasura preview tenant
     if: github.event_name == 'pull_request_target'
-    uses: "./.github/workflows/lib/delete-hasura-preview-tenant.yml"
+    uses: "./.github/workflows/delete-hasura-preview-tenant.yml"
     with:
       pr-number: ${{github.event.number}}
     secrets:
@@ -66,7 +66,7 @@ jobs:
     name: Create new Hasura preview tenant
     needs: [delete-hasura-preview-tenant, create-neon-branch]
     if: github.event_name == 'pull_request_target' && github.event.action != 'closed'
-    uses: "./.github/workflows/lib/create-hasura-preview-tenant.yml"
+    uses: "./.github/workflows/create-hasura-preview-tenant.yml"
     with:
       pr-number: ${{github.event.number}}
     secrets:
@@ -76,7 +76,7 @@ jobs:
 
   deploy-preview-db-and-hasura:
     needs: [get-tool-versions, create-hasura-preview-tenant, create-neon-branch]
-    uses: "./.github/workflows/lib/deploy-db-and-hasura.yml"
+    uses: "./.github/workflows/deploy-db-and-hasura.yml"
     with:
       hasura-endpoint: ${{needs.create-hasura-preview-tenant.outputs.hasura-endpoint}}
     secrets:
@@ -88,7 +88,7 @@ jobs:
   # regardless if it's a producton, staging, or preview build
   build-web-app-preview:
     name: Build Web App (Preview)
-    uses: "./.github/workflows/lib/build-web-app.yml"
+    uses: "./.github/workflows/build-web-app.yml"
     with:
       commit-hash: ${{github.sha}}
       production: false
@@ -102,7 +102,7 @@ jobs:
   build-web-app-prd:
     name: Build Web App (Production)
     if: github.event_name == 'push' && github.ref == 'refs/heads/prd'
-    uses: "./.github/workflows/lib/build-web-app.yml"
+    uses: "./.github/workflows/build-web-app.yml"
     with:
       commit-hash: ${{github.sha}}
       production: false
