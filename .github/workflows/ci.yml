@@ -29,6 +29,10 @@ jobs:
   run-checks:
     name: Run Code Checks
     uses: "./.github/workflows/checks.yml"
+    needs: [get-tool-versions]
+    with:
+      node-version: ${{needs.get-tool-versions.outputs.nodejs}}
+      pnpm-version: ${{needs.get-tool-versions.outputs.pnpm}}
 
   delete-existing-neon-branch:
     name: "Delete existing Neon preview postgres branch"
