@@ -38,7 +38,7 @@ jobs:
     outputs:
       tenant-id: ${{ steps.create-tenant.outputs.tenant_id }}
       admin-secret-encrypted: ${{steps.get-admin-secret.outputs.admin_secret_encrypted}}}
-      endpoint: ${{steps.create-tenant.outputs.endpoint}}
+      endpoint: ${{steps.update-tenant-details.outputs.endpoint}}
     steps:
       - name: Create Tenant
         id: create-tenant
@@ -96,13 +96,9 @@ jobs:
           echo "Project ID: $project_id"
           echo "project_id=$project_id" >> "$GITHUB_OUTPUT"
 
-          endpoint=$(echo "$RESPONSE" | jq -r '.data.createTenant.tenant.project.endpoint')
-          echo "Endpoint: $endpoint"
-          echo "endpoint=$endpoint" >> "$GITHUB_OUTPUT"
-
       # we set the name above, but it doesn't work on Hasura's end, frustratingly
       - name: Assign preview label and update Tenant name
-        id: update-tenant-name
+        id: update-tenant-details
         run: |
           GQL_QUERY=$(cat <<-GQL
             mutation AssignLabelAndUpdateTenantName {
@@ -116,7 +112,11 @@ jobs:
                 tenantId: "${{steps.create-tenant.outputs.tenant_id}}"
                 name: "${{inputs.tenant-name}}"
               ) {
-                tenant_id
+                tenant {
+                  project {
+                    endpoint
+                  }
+                }
               }
             }
           GQL
@@ -145,6 +145,10 @@ jobs:
             echo "Error occurred: $RESPONSE"
             exit 1
           fi
+
+          endpoint=$(echo "$RESPONSE" | jq -r '.data.updateTenantName.tenant.project.endpoint')
+          echo "Endpoint: $endpoint"
+          echo "endpoint=$endpoint" >> "$GITHUB_OUTPUT"
 
       - name: Get Tenant Admin Secret
         id: get-admin-secret
