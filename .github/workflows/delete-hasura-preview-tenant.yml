@@ -2,9 +2,9 @@ name: Delete Hasura Preview Tenant
 on:
   workflow_call:
     inputs:
-      tenant-name:
+      git-ref-name:
         type: string
-        description: "Prefix for naming Hasura deploys"
+        description: "ref name to search for to identify the preview tenant; we look for preview-<ref-name> by convention"
         required: true
     secrets:
       hasura-cloud-access-token:
@@ -20,8 +20,8 @@ jobs:
         id: get-existing-tenant
         run: |
           GQL_QUERY=$(cat <<-GQL
-            query GetTenantByName(\$tenantName: String!) {
-              tenant(where: {project: {name: {_eq: \$tenantName}}}) {
+            query GetTenantByName(\$labelName: String!) {
+              tenant(where: {project: {labels: {label: {name: {_eq: $labelName}}}}}) {
                 id
               }
             }
@@ -30,8 +30,8 @@ jobs:
 
           REQUEST_PAYLOAD=$(jq -n \
             --arg gqlQuery "$GQL_QUERY" \
-            --arg tenantName "${{inputs.tenant-name}}" \
-            '{ "query": $gqlQuery, "variables": { "tenantName": $tenantName } }')
+            --arg labelName "preview-${{inputs.git-ref-name}}" \
+            '{ "query": $gqlQuery, "variables": { "labelName": $labelName} }')
 
           # Send the request using curl
           RESPONSE=$(curl \
@@ -70,9 +70,12 @@ jobs:
           TENANT_ID="${{ steps.get-existing-tenant.outputs.tenant_id}}"
 
           GQL_QUERY=$(cat <<-GQL
-            mutation DeleteTenant(\$tenantId: uuid!) {
+            mutation DeleteTenant(\$tenantId: uuid!, $labelName: String!) {
               deleteTenant(tenantId: \$tenantId) {
                 status
+              }
+              delete_label(where: {name: {_eq: $labelName}}) {
+                affected_rows
               }
             }
           GQL
@@ -81,7 +84,8 @@ jobs:
           REQUEST_PAYLOAD=$(jq -n \
             --arg gqlQuery "$GQL_QUERY" \
             --arg tenantId "$TENANT_ID" \
-            '{ "query": $gqlQuery, "variables": { "tenantId": $tenantId } }'
+            --arg labelName "preview-${{inputs.git-ref-name}}" \
+            '{ "query": $gqlQuery, "variables": { "tenantId": $tenantId, "labelId": $labelName } }'
           )
 
           RESPONSE=$(curl --silent --show-error --fail-with-body -X POST 'https://data.pro.hasura.io/v1/graphql' \

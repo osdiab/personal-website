@@ -4,7 +4,11 @@ on:
     inputs:
       tenant-name:
         type: string
-        description: Name for the Hasura tenant
+        description: Proposed name for the tenant. Must only contain alphanumeric characters, hyphens and underscores
+        required: true
+      git-ref-name:
+        type: string
+        description: Git ref name associated with this tenant; label will created and attached to the tenant as 'preview-<git-ref-name>'
         required: true
     secrets:
       hasura-cloud-access-token:
@@ -51,6 +55,7 @@ jobs:
                 id
                 tenant {
                   project {
+                    id
                     endpoint
                   }
                 }
@@ -87,16 +92,26 @@ jobs:
           echo "Tenant ID: $tenant_id"
           echo "tenant_id=$tenant_id" >> "$GITHUB_OUTPUT"
 
+          project_id=$(echo "$RESPONSE" | jq -r '.data.createTenant.tenant.project.id')
+          echo "Project ID: $project_id"
+          echo "project_id=$project_id" >> "$GITHUB_OUTPUT"
+
           endpoint=$(echo "$RESPONSE" | jq -r '.data.createTenant.tenant.project.endpoint')
           echo "Endpoint: $endpoint"
           echo "endpoint=$endpoint" >> "$GITHUB_OUTPUT"
 
       # we set the name above, but it doesn't work on Hasura's end, frustratingly
-      - name: Update Tenant name
+      - name: Assign preview label and update Tenant name
         id: update-tenant-name
         run: |
           GQL_QUERY=$(cat <<-GQL
-            mutation UpdateTenantName {
+            mutation AssignLabelAndUpdateTenantName {
+              insert_project_labels_one(
+                object: {label: {data: {color: "#ffff00", name: "preview-${{inputs.git-ref-name}}"}},
+                project_id: "${{steps.create-tenant.outputs.project_id}}"}
+              ) {
+                label_id
+              }
               updateTenantName(
                 tenantId: "${{steps.create-tenant.outputs.tenant_id}}"
                 name: "${{inputs.tenant-name}}"

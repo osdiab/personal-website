@@ -73,7 +73,7 @@ jobs:
     name: Delete existing Hasura preview tenant
     uses: "./.github/workflows/delete-hasura-preview-tenant.yml"
     with:
-      tenant-name: personal-website-preview-${{github.ref_name}}
+      git-ref-name: ${{github.ref_name}}
     secrets:
       hasura-cloud-access-token: ${{secrets.HASURA_CLOUD_ACCESS_TOKEN}}
 
@@ -82,7 +82,8 @@ jobs:
     needs: [delete-hasura-preview-tenant, create-neon-branch]
     uses: "./.github/workflows/create-hasura-preview-tenant.yml"
     with:
-      tenant-name: personal-website-preview-${{github.ref_name}}
+      tenant-name: preview-${{github.ref_name}}
+      git-ref-name: ${{github.ref_name}}
     secrets:
       hasura-cloud-access-token: ${{secrets.HASURA_CLOUD_ACCESS_TOKEN}}
       db-url: postgres://${{ secrets.APP_DB_USER_STG }}:${{ secrets.APP_DB_PASSWORD_STG }}@${{ needs.create-neon-branch.outputs.db-host }}/${{ secrets.APP_DB_DATABASE_STG }}
