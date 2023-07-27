@@ -2,9 +2,9 @@ name: Delete Neon PR Branch
 on:
   workflow_call:
     inputs:
-      pr-number:
+      git-ref-name:
         type: string
-        description: "PR Number"
+        description: "Git head ref; by convention, we put this in the branch name, and use this to determine which DB branch should be deleted"
         required: true
     secrets:
       neon-project-id:
@@ -39,7 +39,7 @@ jobs:
       - name: Get existing Neon branch for this PR
         id: get-existing-branch
         run: |
-          branch_id="$(jq --raw-output '.branches[] | select(.name | startswith("PR #${{ inputs.pr-number }} ")).id' list-neon-branches-response.json)"
+          branch_id="$(jq --raw-output '.branches[] | select(.name | contains("${{ inputs.git-ref-name }}")).id' list-neon-branches-response.json)"
           echo "Branch ID: $branch_id"
           echo "branch_id=$branch_id" >> "$GITHUB_OUTPUT"
       - name: Delete existing branch for this PR

@@ -2,9 +2,9 @@ name: Delete Hasura Preview Tenant
 on:
   workflow_call:
     inputs:
-      pr-number:
+      tenant-name:
         type: string
-        description: "PR Number"
+        description: "Prefix for naming Hasura deploys"
         required: true
     secrets:
       hasura-cloud-access-token:
@@ -31,7 +31,7 @@ jobs:
 
           REQUEST_PAYLOAD=$(jq -n \
             --arg gqlQuery "$GQL_QUERY" \
-            --arg tenantName "personal-website-pr-${{ inputs.pr-number }}" \
+            --arg tenantName "${{inputs.tenant-name}}" \
             '{ "query": $gqlQuery, "variables": { "tenantName": $tenantName } }')
 
           # Send the request using curl

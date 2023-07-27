@@ -2,16 +2,16 @@ name: Create Hasura Preview Tenant
 on:
   workflow_call:
     inputs:
-      pr-number:
+      tenant-name:
         type: string
-        description: "PR Number"
+        description: Name for the Hasura tenant
         required: true
     secrets:
       hasura-cloud-access-token:
-        description: "Hasura Cloud Access Token"
+        description: Hasura Cloud Access Token
         required: true
       db-url:
-        description: "Database URL to connect to"
+        description: Database URL to connect to
         required: true
       gpg-crypto-secret:
         description: GPG secret used to encrypt/decrypt admin secret
@@ -45,7 +45,7 @@ jobs:
                 cloud: "aws",
                 region: "eu-central-1",
                 plan: "cloud_free_v2",
-                name: "personal-website-pr-${{ inputs.pr-number }}"
+                name: "${{inputs.tenant-name}}"
                 envs: [{key: "MAIN_POSTGRES_DB_URL", value: "${{secrets.db-url}}"}]
               ) {
                 id

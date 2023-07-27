@@ -37,42 +37,50 @@ jobs:
   delete-existing-neon-branch:
     name: "Delete existing Neon preview postgres branch"
     uses: "./.github/workflows/delete-neon-pr-branch.yml"
-    if: github.event_name == 'pull_request_target'
     with:
-      pr-number: ${{github.event.number}}
+      git-ref-name: ${{ github.ref_name }}
     secrets:
       neon-project-id: ${{secrets.NEON_PROJECT_ID_APP_DB_STG}}
       neon-api-key: ${{secrets.NEON_API_KEY}}
 
+  generate-neon-branch-name:
+    name: Generate what the preview branch name should be for the preview Neon branch
+    runs-on: ubuntu-latest
+    outputs:
+      neon-branch-name: ${{ steps.branch-name.outputs.branch-name }}
+    steps:
+      - name: Decide branch name
+        id: branch-name
+        run: |
+          title_prefix="${{github.event_name == 'pull_request_target' && 'PR # ' || 'Preview '}}"
+          title="${{github.event_name == 'pull_request_target' && github.event.number || github.ref_name}}"
+          echo "branch-name=$title_prefix$title (${{github.sha}})" >> "$GITHUB_OUTPUT"
+
   create-neon-branch:
-    name: "Create new Neon preview postgres branch"
-    if: github.event_name == 'pull_request_target'
-    needs: [delete-existing-neon-branch]
+    name: Create new Neon preview postgres branch
+    needs: [delete-existing-neon-branch, generate-neon-branch-name]
     uses: "./.github/workflows/create-neon-pr-branch.yml"
     with:
-      pr-number: ${{github.event.number}}
-      head-ref: ${{github.head_ref}}
-      commit-hash: ${{github.sha}}
+      db-branch-name: ${{needs.generate-neon-branch-name.outputs.neon-branch-name}}
+      git-ref-name: ${{ github.ref_name }}
     secrets:
       neon-project-id: ${{secrets.NEON_PROJECT_ID_APP_DB_STG}}
       neon-api-key: ${{secrets.NEON_API_KEY}}
 
   delete-hasura-preview-tenant:
     name: Delete existing Hasura preview tenant
-    if: github.event_name == 'pull_request_target'
     uses: "./.github/workflows/delete-hasura-preview-tenant.yml"
     with:
-      pr-number: ${{github.event.number}}
+      tenant-name: personal-website-${{github.ref_name}}
     secrets:
       hasura-cloud-access-token: ${{secrets.HASURA_CLOUD_ACCESS_TOKEN}}
 
   create-hasura-preview-tenant:
     name: Create new Hasura preview tenant
     needs: [delete-hasura-preview-tenant, create-neon-branch]
-    if: github.event_name == 'pull_request_target' && github.event.action != 'closed'
     uses: "./.github/workflows/create-hasura-preview-tenant.yml"
     with:
-      pr-number: ${{github.event.number}}
+      tenant-name: personal-website-${{github.ref_name}}
     secrets:
       hasura-cloud-access-token: ${{secrets.HASURA_CLOUD_ACCESS_TOKEN}}
       db-url: postgres://${{ secrets.APP_DB_USER_STG }}:${{ secrets.APP_DB_PASSWORD_STG }}@${{ needs.create-neon-branch.outputs.db-host }}/${{ secrets.APP_DB_DATABASE_STG }}
@@ -133,7 +141,6 @@ jobs:
       pull-requests: write
       contents: write
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request_target'
     needs:
       [
         get-tool-versions,
@@ -172,7 +179,7 @@ jobs:
   deploy-to-vercel-stg:
     name: Deploy Web App (Staging) to Vercel
     runs-on: ubuntu-latest
-    if: github.event_name == 'push'
+    if: github.event_name == 'push' && github.ref == 'refs/heads/stg'
     needs: [get-tool-versions, run-checks, build-web-app-preview]
     steps:
       - uses: actions/checkout@v3

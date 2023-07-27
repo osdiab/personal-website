@@ -2,17 +2,13 @@ name: Create Neon PR Branch
 on:
   workflow_call:
     inputs:
-      head-ref:
+      db-branch-name:
         type: string
-        description: "Git HEAD Ref"
+        description: "Desired name for the DB Branch"
         required: true
-      pr-number:
+      git-ref-name:
         type: string
-        description: "Github PR Number"
-        required: true
-      commit-hash:
-        type: string
-        description: "Git Commit SHA"
+        description: "Git head ref; by convention, we put this in the branch name"
         required: true
     secrets:
       neon-project-id:
@@ -76,7 +72,7 @@ jobs:
                 \"endpoints\": [{ \"type\": \"read_write\" }],
                 \"branch\": {
                   \"parent_id\": \"${{steps.get-main-branch.outputs.branch_id}}\",
-                  \"name\": \"PR #${{ inputs.pr-number }} (${{ inputs.head-ref }} SHA: ${{ inputs.commit-hash }})\"
+                  \"name\": \"(${{inputs.git-ref-name}}) ${{inputs.db-branch-name}}\"
                 }
               }"
       - name: Upload create branch failure
