@@ -1,0 +1,63 @@
+name: Create Hasura Preview Tenant
+on:
+  workflow_call:
+    inputs:
+      pr-number:
+        type: string
+        description: "PR Number"
+        required: true
+    secrets:
+      hasura-cloud-access-token:
+        description: "Hasura Cloud Access Token"
+        required: true
+    outputs:
+      tenant_id:
+        description: "Created Hasura Tenant ID"
+        value: ${{jobs.create-hasura-preview-tenant.outputs.tenant_id}}
+
+jobs:
+  create-hasura-preview-tenant:
+    runs-on: ubuntu-latest
+    name: Get or Create Hasura Preview Tenant
+    outputs:
+      tenant_id: ${{ steps.createTenant.outputs.tenant_id }}
+    steps:
+      - name: Create Tenant
+        id: createTenant
+        run: |
+          GQL_QUERY=$(cat <<-GQL
+            mutation CreateTenant {
+              createTenant(cloud: "aws", region: "eu-central-1", plan: "cloud_free_v2") {
+                id
+              }
+            }
+          GQL
+          )
+
+          REQUEST_PAYLOAD=$(jq -n --arg gqlQuery "$GQL_QUERY" '{ "query": $gqlQuery }')
+
+          # Send the request using curl
+          RESPONSE=$(curl \
+            --fail-with-body \
+            --silent \
+            --show-error \
+            --location \
+            --request POST \
+            --header 'Content-Type: application/json' \
+            --header 'Authorization: pat ${{ secrets.HASURA_CLOUD_ACCESS_TOKEN }}' \
+            --data "$REQUEST_PAYLOAD" \
+            'https://data.pro.hasura.io/v1/graphql'
+          )
+
+          echo "Payload: $REQUEST_PAYLOAD"
+          echo "Response: $RESPONSE"
+
+          # Check if the response contains errors
+          if [[ $(echo "$RESPONSE" | jq -e '.errors') != "null" ]]; then
+            echo "Error occurred: $RESPONSE"
+            exit 1
+          fi
+
+          tenant_id=$(echo "$RESPONSE" | jq -r '.data.createTenant.id')
+          echo "Tenant ID: $tenant_id"
+          echo "tenant_id=$tenant_id" >> "$GITHUB_OUTPUT"
