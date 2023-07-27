@@ -14,77 +14,9 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  get-tool-versions:
-    name: Get Tool Versions
-    runs-on: ubuntu-latest
-    outputs:
-      pnpm: ${{ steps.versions.outputs.pnpm }}
-      nodejs: ${{ steps.versions.outputs.nodejs }}
-    steps:
-      - uses: actions/checkout@v3
-      - name: Read .tool-versions
-        uses: marocchino/tool-versions-action@v1
-        id: versions
-
-  check-web-types:
-    name: Check Web Types
-    runs-on: ubuntu-latest
-    needs: [get-tool-versions]
-    steps:
-      - uses: actions/checkout@v3
-      - name: Install pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: ${{ needs.get-tool-versions.outputs.pnpm }}
-      - name: Install Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ needs.get-tool-versions.outputs.nodejs }}
-          cache: "pnpm"
-      - name: Install dependencies
-        run: pnpm install --filter "web-app..."
-      - name: Check Web App Types
-        run: pnpm run --filter "web-app" typecheck
-
-  check-lint:
-    name: Lint
-    runs-on: ubuntu-latest
-    needs: [get-tool-versions]
-    steps:
-      - uses: actions/checkout@v3
-      - name: Install pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: ${{ needs.get-tool-versions.outputs.pnpm }}
-      - name: Install Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ needs.get-tool-versions.outputs.nodejs }}
-          cache: "pnpm"
-      - name: Install dependencies
-        run: pnpm install --filter "monorepo..."
-      - name: Run Lint
-        run: pnpm lint
-
-  check-format:
-    name: Check format
-    runs-on: ubuntu-latest
-    needs: [get-tool-versions]
-    steps:
-      - uses: actions/checkout@v3
-      - name: Install pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: ${{ needs.get-tool-versions.outputs.pnpm }}
-      - name: Install Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ needs.get-tool-versions.outputs.nodejs }}
-          cache: "pnpm"
-      - name: Install dependencies
-        run: pnpm install --filter monorepo
-      - name: Run Format
-        run: pnpm format:check
+  run-checks:
+    name: Run Code Checks
+    uses: "./.github/workflows/lib/checks.yml"
 
   delete-existing-neon-branch:
     name: "Delete old Neon postgres branch"
