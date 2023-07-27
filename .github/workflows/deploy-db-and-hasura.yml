@@ -58,6 +58,7 @@ jobs:
           GQL_ENDPOINT: ${{ inputs.hasura-endpoint}}
         # wait a minute max
         run: |
+          echo "Endpoint: $GQL_ENDPOINT"
           pnpm run --filter db-migrations wait-on --timeout 60000 "${GQL_ENDPOINT/https:/https-get:}/healthz"
           pnpm run --filter db-migrations wait-on --timeout 60000 "${GQL_ENDPOINT/https:/https-get:}/v1/version"
 
