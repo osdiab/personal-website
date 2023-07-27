@@ -14,7 +14,6 @@ on:
 jobs:
   delete-hasura-preview-tenant:
     name: Delete Hasura Preview Tenant
-    if: github.event_name == 'pull_request_target'
     runs-on: ubuntu-latest
     steps:
       - name: Get Existing Tenant

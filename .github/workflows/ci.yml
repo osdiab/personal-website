@@ -78,7 +78,7 @@ jobs:
       hasura-cloud-access-token: ${{secrets.HASURA_CLOUD_ACCESS_TOKEN}}
 
   create-hasura-preview-tenant:
-    name: Create new Hasura preview tenant
+    name: Create Hasura Preview Tenant
     needs: [delete-hasura-preview-tenant, create-neon-branch]
     uses: "./.github/workflows/create-hasura-preview-tenant.yml"
     with:
