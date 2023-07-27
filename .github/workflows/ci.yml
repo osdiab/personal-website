@@ -54,7 +54,7 @@ jobs:
       neon-api-key: ${{secrets.NEON_API_KEY}}
 
   delete-hasura-preview-tenant:
-    name: Delete Hasura Preview Tenant
+    name: Delete existing Hasura preview tenant
     if: github.event_name == 'pull_request_target'
     uses: "./.github/workflows/lib/delete-hasura-preview-tenant.yml"
     with:
@@ -63,7 +63,7 @@ jobs:
       hasura-cloud-access-token: ${{secrets.HASURA_CLOUD_ACCESS_TOKEN}}
 
   create-hasura-preview-tenant:
-    name: Create Hasura Preview Tenant
+    name: Create new Hasura preview tenant
     needs: [delete-hasura-preview-tenant]
     if: github.event_name == 'pull_request_target' && github.event.action != 'closed'
     uses: "./.github/workflows/lib/create-hasura-preview-tenant.yml"
