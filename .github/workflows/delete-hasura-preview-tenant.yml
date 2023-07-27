@@ -21,7 +21,7 @@ jobs:
         run: |
           GQL_QUERY=$(cat <<-GQL
             query GetTenantByName(\$labelName: String!) {
-              tenant(where: {project: {labels: {label: {name: {_eq: $labelName}}}}}) {
+              tenant(where: {project: {labels: {label: {name: {_eq: \$labelName}}}}}) {
                 id
               }
             }
@@ -70,11 +70,11 @@ jobs:
           TENANT_ID="${{ steps.get-existing-tenant.outputs.tenant_id}}"
 
           GQL_QUERY=$(cat <<-GQL
-            mutation DeleteTenant(\$tenantId: uuid!, $labelName: String!) {
+            mutation DeleteTenant(\$tenantId: uuid!, \$labelName: String!) {
               deleteTenant(tenantId: \$tenantId) {
                 status
               }
-              delete_label(where: {name: {_eq: $labelName}}) {
+              delete_label(where: {name: {_eq: \$labelName}}) {
                 affected_rows
               }
             }
