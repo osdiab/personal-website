@@ -183,6 +183,9 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event_name == 'push' && github.ref == 'refs/heads/stg'
     needs: [get-tool-versions, run-checks, build-web-app-preview]
+    permissions:
+      pull-requests: write
+      contents: write
     steps:
       - uses: actions/checkout@v3
       - uses: actions/download-artifact@v3
@@ -206,6 +209,9 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event_name == 'push'
     needs: [get-tool-versions, run-checks, build-web-app-prd]
+    permissions:
+      pull-requests: write
+      contents: write
     steps:
       - uses: actions/checkout@v3
       - uses: actions/download-artifact@v3
