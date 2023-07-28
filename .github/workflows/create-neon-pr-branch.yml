@@ -4,11 +4,11 @@ on:
     inputs:
       db-branch-name:
         type: string
-        description: "Desired name for the DB Branch"
+        description: Desired name for the DB Branch
         required: true
       git-ref-name:
         type: string
-        description: "Git head ref; by convention, we put this in the branch name"
+        description: Git head ref; by convention, we put this in the branch name
         required: true
     secrets:
       neon-project-id:
@@ -19,8 +19,8 @@ on:
         required: true
     outputs:
       db-host:
-        description: "Created Neon preview branch database host"
-        value: ${{ jobs.create-pr-branch.outputs.db-host }}}
+        description: Created Neon preview branch database host
+        value: ${{ jobs.create-pr-branch.outputs.db-host }}
 
 jobs:
   create-pr-branch:
