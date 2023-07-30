@@ -26,14 +26,24 @@ on:
         required: false
 
 jobs:
-  migrate-db-and-hasura:
+  migrate-db:
     runs-on: ubuntu-latest
-    name: Deploy Hasura Preview App
+    name: Migrate Database
     steps:
       - name: Checkout branch to deploy
         uses: actions/checkout@v2
         with:
           ref: ${{ github.head_ref }}
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: ${{ inputs.pnpm-version }}
+
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ inputs.node-version }}
 
       - name: Install migration package dependencies
         run: pnpm install --filter "db-migrations..."
@@ -50,6 +60,16 @@ jobs:
           DATABASE_URL: ${{secrets.db-url}}
           PGSSLMODE: require
 
+  apply-hasura-metadata:
+    runs-on: ubuntu-latest
+    name: Apply Hasura Metadata
+    needs: ["migrate-db"]
+    steps:
+      - name: Checkout branch to deploy
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.head_ref }}
+
       - name: Check if encrypted admin secret is provided
         id: check-secret-encrypted
         run: echo "ADMIN_SECRET_ENCRYPTED_PRESENT=$(if echo '${{secrets.hasura-admin-secret-encrypted}}' | grep -q .; then echo 'yes'; else echo 'no'; fi)" >> "$GITHUB_OUTPUT"
@@ -64,6 +84,19 @@ jobs:
           echo "::add-mask::$ADMIN_SECRET"
           echo "admin_secret=$ADMIN_SECRET" >> "$GITHUB_OUTPUT"
 
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: ${{ inputs.pnpm-version }}
+
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ inputs.node-version }}
+
+      - name: Install Hasura CLI
+        run: curl -L https://github.com/hasura/graphql-engine/raw/stable/cli/get.sh | bash
+
       - name: Apply Hasura Metadata
         uses: nick-fields/retry@v2
         with:
@@ -74,3 +107,5 @@ jobs:
         env:
           HASURA_GRAPHQL_ENDPOINT: ${{ secrets.hasura-endpoint }}
           HASURA_GRAPHQL_ADMIN_SECRET: ${{ secrets.hasura-admin-secret || steps.decrypt-admin-secret.outputs.admin_secret }}
+
+  # TODO: add a step to roll back migrations in case metadata application failed
