@@ -89,6 +89,21 @@ jobs:
       db-url: postgres://${{ secrets.APP_DB_USER_STG }}:${{ secrets.APP_DB_PASSWORD_STG }}@${{ needs.create-neon-branch.outputs.db-host }}/${{ secrets.APP_DB_DATABASE_STG }}
       gpg-crypto-secret: ${{secrets.GPG_CRYPTO_SECRET}}
 
+  setup-preview-hasura-app:
+    name: Setup Preview Hasura App
+    needs: [get-tool-versions, create-hasura-preview-tenant, create-neon-branch]
+    uses: "./.github/workflows/setup-preview-hasura-app.yml"
+    with:
+      node-version: ${{needs.get-tool-versions.outputs.nodejs}}
+      pnpm-version: ${{needs.get-tool-versions.outputs.pnpm}}
+      # if pull request, use the base ref; otherwise, this is a push to stg or
+      # prd; so use the state before the push occurred
+      base-ref: ${{github.event_name == 'pull_request_target' && github.base_ref || github.event.before}}
+    secrets:
+      hasura-endpoint: ${{needs.create-hasura-preview-tenant.outputs.hasura-endpoint}}
+      hasura-admin-secret-encrypted: ${{needs.create-hasura-preview-tenant.outputs.admin-secret-encrypted}}
+      gpg-crypto-secret: ${{secrets.GPG_CRYPTO_SECRET}}
+
   deploy-preview-db-and-hasura:
     name: Migrate Preview DB, Deploy Hasura Metadata
     needs: [get-tool-versions, create-hasura-preview-tenant, create-neon-branch]
@@ -96,11 +111,10 @@ jobs:
     with:
       node-version: ${{needs.get-tool-versions.outputs.nodejs}}
       pnpm-version: ${{needs.get-tool-versions.outputs.pnpm}}
-      hasura-endpoint: ${{needs.create-hasura-preview-tenant.outputs.hasura-endpoint}}
-      base-ref: ${{github.event_name == 'pull_request_target' && github.base_ref || github.ref}}
     secrets:
-      hasura-admin-secret-encrypted: ${{needs.create-hasura-preview-tenant.outputs.admin-secret-encrypted}}
       db-url: postgres://${{ secrets.APP_DB_USER_STG }}:${{ secrets.APP_DB_PASSWORD_STG }}@${{ needs.create-neon-branch.outputs.db-host }}/${{ secrets.APP_DB_DATABASE_STG }}
+      hasura-endpoint: ${{needs.create-hasura-preview-tenant.outputs.hasura-endpoint}}
+      hasura-admin-secret-encrypted: ${{needs.create-hasura-preview-tenant.outputs.admin-secret-encrypted}}
       gpg-crypto-secret: ${{secrets.GPG_CRYPTO_SECRET}}
 
   # we will spin up a preview app before deploying production, so we do this
@@ -139,7 +153,7 @@ jobs:
 
   # Difference from staging/production build is that we need to give it a Hasura
   # GraphQL Endpoint and Secret dynamically
-  deploy-to-vercel-preview:
+  deploy-preview-web-app-to-vercel:
     name: Deploy Web App (Preview) to Vercel
     permissions:
       pull-requests: write
@@ -177,6 +191,45 @@ jobs:
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID_WEB_APP }}
           vercel-args: --prebuilt --env HASURA_GRAPHQL_ENDPOINT=${{needs.create-hasura-preview-tenant.outputs.hasura-endpoint}} --env HASURA_GRAPHQL_ADMIN_SECRET=${{steps.decrypt-admin-secret.outputs.admin_secret}}
+
+  # TODO: run e2e tests
+  deploy-stg-db-and-hasura:
+    name: Migrate Staging DB, Deploy Hasura Metadata
+    if: github.event_name == 'push' && github.ref == 'refs/heads/stg'
+    # TODO: also require e2e tests pass
+    needs:
+      [
+        get-tool-versions,
+        deploy-preview-db-and-hasura,
+        deploy-preview-web-app-to-vercel,
+      ]
+    uses: "./.github/workflows/deploy-db-and-hasura.yml"
+    with:
+      node-version: ${{needs.get-tool-versions.outputs.nodejs}}
+      pnpm-version: ${{needs.get-tool-versions.outputs.pnpm}}
+    secrets:
+      hasura-endpoint: ${{secrets.HASURA_GRAPHQL_ENDPOINT_STG}}
+      hasura-admin-secret: ${{secrets.HASURA_GRAPHQL_ADMIN_SECRET_STG}}
+      db-url: ${{secrets.MAIN_POSTGRES_DB_URL_STG}}
+
+  deploy-prd-db-and-hasura:
+    name: Migrate Production DB, Deploy Hasura Metadata
+    if: github.event_name == 'push' && github.ref == 'refs/heads/prd'
+    # TODO: also require e2e tests pass
+    needs:
+      [
+        get-tool-versions,
+        deploy-preview-db-and-hasura,
+        deploy-preview-web-app-to-vercel,
+      ]
+    uses: "./.github/workflows/deploy-db-and-hasura.yml"
+    with:
+      node-version: ${{needs.get-tool-versions.outputs.nodejs}}
+      pnpm-version: ${{needs.get-tool-versions.outputs.pnpm}}
+    secrets:
+      hasura-endpoint: ${{secrets.HASURA_GRAPHQL_ENDPOINT_PRD}}
+      hasura-admin-secret: ${{secrets.HASURA_GRAPHQL_ADMIN_SECRET_PRD}}
+      db-url: ${{secrets.MAIN_POSTGRES_DB_URL_PRD}}
 
   # Difference from Production is that we do not use a Production build
   # (environment variables differ and the flag passed to Vercel differs)
