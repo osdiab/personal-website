@@ -106,7 +106,13 @@ jobs:
 
   deploy-preview-db-and-hasura:
     name: Migrate Preview DB, Deploy Hasura Metadata
-    needs: [get-tool-versions, create-hasura-preview-tenant, create-neon-branch]
+    needs:
+      [
+        get-tool-versions,
+        create-hasura-preview-tenant,
+        create-neon-branch,
+        setup-preview-hasura-app,
+      ]
     uses: "./.github/workflows/deploy-db-and-hasura.yml"
     with:
       node-version: ${{needs.get-tool-versions.outputs.nodejs}}
@@ -237,7 +243,13 @@ jobs:
     name: Deploy Web App (Staging) to Vercel
     runs-on: ubuntu-latest
     if: github.event_name == 'push' && github.ref == 'refs/heads/stg'
-    needs: [get-tool-versions, run-checks, build-web-app-preview]
+    needs:
+      [
+        get-tool-versions,
+        run-checks,
+        build-web-app-preview,
+        deploy-stg-db-and-hasura,
+      ]
     permissions:
       pull-requests: write
       contents: write
@@ -263,7 +275,13 @@ jobs:
     name: Deploy Web App (Production) to Vercel
     runs-on: ubuntu-latest
     if: github.event_name == 'push'
-    needs: [get-tool-versions, run-checks, build-web-app-prd]
+    needs:
+      [
+        get-tool-versions,
+        run-checks,
+        build-web-app-prd,
+        deploy-prd-db-and-hasura,
+      ]
     permissions:
       pull-requests: write
       contents: write
