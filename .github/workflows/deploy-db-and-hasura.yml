@@ -82,10 +82,14 @@ jobs:
           HASURA_GRAPHQL_ENDPOINT: ${{inputs.hasura-endpoint}}
           HASURA_GRAPHQL_ADMIN_SECRET: ${{ steps.decrypt-admin-secret.outputs.admin_secret }}
 
-      - name: Checkout PR branch
+      - name: Checkout branch to deploy
         uses: actions/checkout@v2
         with:
           ref: ${{ github.head_ref }}
+          clean: false # we want to reuse the existing installed dependencies to speed things up
+
+      - name: Re-install dependencies in case they changed
+        run: pnpm install --filter "db-migrations..."
 
       - name: Apply Migrations
         uses: nick-fields/retry@v2
