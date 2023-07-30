@@ -72,8 +72,8 @@ jobs:
         # wait a minute max
         run: |
           echo "Endpoint: $GQL_ENDPOINT"
-          pnpm exec --filter gql-engine wait-on --timeout 60000 "${GQL_ENDPOINT/https:/https-get:}/healthz"
-          pnpm exec --filter gql-engine wait-on --timeout 60000 "${GQL_ENDPOINT/https:/https-get:}/v1/version"
+          pnpm --filter gql-engine exec wait-on --timeout 60000 "${GQL_ENDPOINT/https:/https-get:}/healthz"
+          pnpm --filter gql-engine exec wait-on --timeout 60000 "${GQL_ENDPOINT/https:/https-get:}/v1/version"
 
       - name: Apply Hasura Metadata
         uses: nick-fields/retry@v2
