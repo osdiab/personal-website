@@ -243,13 +243,7 @@ jobs:
     name: Deploy Web App (Staging) to Vercel
     runs-on: ubuntu-latest
     if: github.event_name == 'push' && github.ref == 'refs/heads/stg'
-    needs:
-      [
-        get-tool-versions,
-        run-checks,
-        build-web-app-preview,
-        deploy-stg-db-and-hasura,
-      ]
+    needs: [run-checks, build-web-app-preview, deploy-stg-db-and-hasura]
     permissions:
       pull-requests: write
       contents: write
@@ -275,13 +269,7 @@ jobs:
     name: Deploy Web App (Production) to Vercel
     runs-on: ubuntu-latest
     if: github.event_name == 'push'
-    needs:
-      [
-        get-tool-versions,
-        run-checks,
-        build-web-app-prd,
-        deploy-prd-db-and-hasura,
-      ]
+    needs: [run-checks, build-web-app-prd, deploy-prd-db-and-hasura]
     permissions:
       pull-requests: write
       contents: write
