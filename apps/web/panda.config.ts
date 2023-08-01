@@ -99,7 +99,7 @@ export default defineConfig({
             },
           },
           bg: {
-            page: { value: { _light: zinc[50], _dark: zinc[700] } },
+            page: { value: { _light: zinc[50], _dark: zinc[800] } },
             highlight: {
               value: {
                 _light: `hsl(var(${primaryColorVariables.hue}), calc(.5 * var(${primaryColorVariables.saturation})), 90%)`,
