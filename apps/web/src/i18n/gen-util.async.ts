@@ -6,6 +6,8 @@ import type { Locales, Translations } from './gen-types'
 import { loadedFormatters, loadedLocales, locales } from './gen-util'
 
 const localeTranslationLoaders = {
+	de: () => import('./de'),
+	en: () => import('./en'),
 }
 
 const updateDictionary = (locale: Locales, dictionary: Partial<Translations>): Translations =>
