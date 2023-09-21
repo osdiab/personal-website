@@ -148,7 +148,7 @@ jobs:
     uses: "./.github/workflows/build-web-app.yml"
     with:
       commit-hash: ${{github.sha}}
-      production: false
+      production: true
       node-version: ${{needs.get-tool-versions.outputs.nodejs}}
       pnpm-version: ${{needs.get-tool-versions.outputs.pnpm}}
     secrets:
