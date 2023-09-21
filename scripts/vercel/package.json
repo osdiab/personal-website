@@ -6,6 +6,6 @@
     "start": "cd ../../ && vercel"
   },
   "devDependencies": {
-    "vercel": "^31.0.4"
+    "vercel": "^32.2.5"
   }
 }
