@@ -27,7 +27,7 @@ export function RootHeader() {
       ([entry]) => {
         setIsScrolled(entry ? !entry.isIntersecting : false);
       },
-      { threshold: [1] }
+      { threshold: [1] },
     );
 
     const { current: dummySpan } = dummyRef;

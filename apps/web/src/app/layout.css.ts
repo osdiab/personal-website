@@ -31,7 +31,7 @@ export const footerCss = cx(
       maskImage:
         "linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%)",
     },
-  })
+  }),
 );
 
 export const footerWrapperCss = css({
@@ -45,5 +45,5 @@ export const footerContentCss = cx(
     marginX: "auto",
     maxWidth: maxContentWidth,
   }),
-  hstack({ gap: "6", justifyContent: "space-between" })
+  hstack({ gap: "6", justifyContent: "space-between" }),
 );

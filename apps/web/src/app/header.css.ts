@@ -25,7 +25,7 @@ export const headerContentCss = cx(
     justifyContent: "space-between",
     alignItems: "center",
   }),
-  css({ marginX: "auto", maxWidth: maxContentWidth })
+  css({ marginX: "auto", maxWidth: maxContentWidth }),
 );
 const headerSectionCss = hstack({ gap: "6", alignItems: "center" });
 export const headerLeftCss = headerSectionCss;
@@ -38,5 +38,5 @@ export const siteTitleCss = css({ fontWeight: "bold" });
 
 export const navLinkCss = cx(
   buttonCss({ type: "plainText", padding: "none" }),
-  css({ "& svg": { height: "1em" } })
+  css({ "& svg": { height: "1em" } }),
 );

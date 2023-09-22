@@ -25,7 +25,7 @@ export const up: MigrationAction = (pgm) => {
       created_at: "lifecycleTimestamp",
       updated_at: "lifecycleTimestamp",
       email: { type: "text", unique: true, notNull: true },
-    }
+    },
   );
   pgm.createFunction(
     "trg_set_updated_at",
@@ -34,7 +34,7 @@ export const up: MigrationAction = (pgm) => {
       returns: "trigger",
       language: "plpgsql",
     },
-    "BEGIN NEW.updated_at := NOW(); RETURN NEW; END;"
+    "BEGIN NEW.updated_at := NOW(); RETURN NEW; END;",
   );
   pgm.createTrigger({ schema: "auth", name: "user" }, "set_updated_at", {
     operation: "update",

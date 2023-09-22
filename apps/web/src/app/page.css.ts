@@ -6,11 +6,11 @@ import { hstack, stack, vstack } from "~pandacss/patterns";
 export const pageCss = css({ paddingX: headerPaddingX, paddingY: "6" });
 export const pageContentCss = cx(
   vstack({ gap: "20", alignItems: "start" }),
-  css({ marginX: "auto", width: "full", maxWidth: maxContentWidth })
+  css({ marginX: "auto", width: "full", maxWidth: maxContentWidth }),
 );
 export const sectionCss = cx(
   vstack({ gap: "16", alignItems: "start" }),
-  css({ paddingY: "8" })
+  css({ paddingY: "8" }),
 );
 export const heroTitleCss = css({
   textStyle: "4xl",

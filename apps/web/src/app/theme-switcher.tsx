@@ -53,7 +53,7 @@ export const ThemeSwitcher = ({ className }: { className: string }) => {
               padding: "none",
               border: "none",
             }),
-            className
+            className,
           )}
         >
           <ThemeIcon theme={theme} />

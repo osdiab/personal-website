@@ -33,7 +33,7 @@ export const baseMenuItemCss = cx(
       pointerEvents: "none",
       opacity: 0.5,
     },
-  })
+  }),
 );
 
 export const baseMenuIndicatorWrapperCss = css({

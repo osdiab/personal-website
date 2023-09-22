@@ -58,7 +58,7 @@ export const DropdownMenuItem = forwardRef<
     className={cx(
       baseMenuItemCss,
       inset && css({ paddingInlineStart: 8 }),
-      className
+      className,
     )}
     {...props}
   />
@@ -115,7 +115,7 @@ export const DropdownMenuLabel = forwardRef<
         fontWeight: "semibold",
       }),
       inset && css({ paddingInlineStart: 8 }),
-      className
+      className,
     )}
     {...props}
   />
@@ -147,7 +147,7 @@ export const DropdownMenuShortcut = ({
           letterSpacing: "widest",
           opacity: 0.6,
         }),
-        className
+        className,
       )}
       {...props}
     />
@@ -170,7 +170,7 @@ export const DropdownMenuSubTrigger = forwardRef<
       buttonCss(),
       hstack(),
       inset && css({ paddingLeft: "8" }),
-      className
+      className,
     )}
     {...props}
   >
