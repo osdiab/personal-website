@@ -1,6 +1,5 @@
-nodejs 18.16.0
-hasura-cli 2.27.0
+nodejs 21.7.3
 doppler 3.61.0
 act 0.2.46
-pnpm 8.6.2
+bun 1.1.4
 actionlint 1.6.25
