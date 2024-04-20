@@ -19,7 +19,12 @@
     "vercel": "pnpm --filter vercel start"
   },
   "devDependencies": {
-    "typescript": "^5.2.2"
+    "@typescript-eslint/eslint-plugin": "^7.7.0",
+    "@typescript-eslint/parser": "^7.7.0",
+    "eslint": "^9.1.0",
+    "eslint-plugin-qwik": "^1.5.2",
+    "npm-run-all2": "^6.1.2",
+    "typescript": "5.4.5"
   },
   "workspaces": [
     "apps/*",
