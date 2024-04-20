@@ -1,5 +1,5 @@
 import { component$ } from "@builder.io/qwik";
-import { css } from "~/styled-system/css";
+import { css } from "~gen/pandacss/css";
 
 export default component$(() => {
   return (

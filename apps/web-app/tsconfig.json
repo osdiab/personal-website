@@ -19,7 +19,7 @@
     "types": ["node", "vite/client"],
     "paths": {
       "~/*": ["./src/*"],
-      "~pandacss/*": ["./gen/pandacss/*"]
+      "~gen/*": ["./gen/*"]
     }
   },
   "files": [".eslintrc.cjs.bak"],

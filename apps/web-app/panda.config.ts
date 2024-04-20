@@ -17,6 +17,8 @@ export default defineConfig({
     extend: {},
   },
 
+  importMap: "~gen/pandacss",
+
   // The output directory for your css system
   outdir: "./gen/pandacss",
 });
