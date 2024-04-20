@@ -4,8 +4,12 @@
 	"scripts": {
 		"build": "pnpm --recursive run build",
 		"dev": "pnpm --recursive run dev",
-		"lint": "jest",
-		"lint:fix": "eslint . --fix",
+		"lint:eslint:base": "eslint \"./**/*.{ts,js,tsx,jsx}\"",
+		"lint:eslint:fix": "pnpm lint:eslint:base --fix",
+		"lint:biome:base": "biome lint .",
+		"lint:biome:fix": "biome check --apply-unsafe .",
+		"lint": "pnpm run '/^lint:.*:base$/'",
+		"lint:fix": "pnpm run --workspace-concurrency=1 '/^lint:.*:fix$/'",
 		"format:base": "biome format .",
 		"format": "pnpm format:base --write",
 		"format:check": "pnpm format:base --check",
@@ -18,8 +22,8 @@
 		"@osdiab-website/tsconfig": "workspace:*",
 		"@typescript-eslint/eslint-plugin": "^7.7.0",
 		"@typescript-eslint/parser": "^7.7.0",
-		"eslint": "^9.1.0",
-		"eslint-plugin-qwik": "^1.5.2",
+    "eslint": "^8.57.0",
+    "eslint-plugin-qwik": "^1.5.2",
 		"typescript": "5.4.5"
 	}
 }
