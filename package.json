@@ -1,24 +1,25 @@
 {
-  "name": "@osdiab-website/monorepo",
-  "private": true,
-  "scripts": {
-    "build": "pnpm --recursive run build",
-    "dev": "pnpm --recursive run dev",
-    "lint": "jest",
-    "lint:fix": "eslint . --fix",
-    "format:base": "prettier \"**/*.{ts,tsx,md}\"",
-    "format": "pnpm format:base --write",
-    "format:check": "pnpm format:base --check",
-    "test": "pnpm --recursive run test",
-    "typecheck": "tsc --project",
-    "vercel": "pnpm --filter vercel start"
-  },
-  "devDependencies": {
-    "@osdiab-website/tsconfig": "workspace:*",
-    "@typescript-eslint/eslint-plugin": "^7.7.0",
-    "@typescript-eslint/parser": "^7.7.0",
-    "eslint": "^9.1.0",
-    "eslint-plugin-qwik": "^1.5.2",
-    "typescript": "5.4.5"
-  }
+	"name": "@osdiab-website/monorepo",
+	"private": true,
+	"scripts": {
+		"build": "pnpm --recursive run build",
+		"dev": "pnpm --recursive run dev",
+		"lint": "jest",
+		"lint:fix": "eslint . --fix",
+		"format:base": "biome format .",
+		"format": "pnpm format:base --write",
+		"format:check": "pnpm format:base --check",
+		"test": "pnpm --recursive run test",
+		"typecheck": "tsc --project",
+		"vercel": "pnpm --filter vercel start"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "^1.7.0",
+		"@osdiab-website/tsconfig": "workspace:*",
+		"@typescript-eslint/eslint-plugin": "^7.7.0",
+		"@typescript-eslint/parser": "^7.7.0",
+		"eslint": "^9.1.0",
+		"eslint-plugin-qwik": "^1.5.2",
+		"typescript": "5.4.5"
+	}
 }
