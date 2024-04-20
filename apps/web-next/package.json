@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev:noDoppler": "next dev",
-    "dev": "doppler run -- pnpm dev:noDoppler",
+    "dev:bak": "doppler run -- pnpm dev:noDoppler",
     "build:noDoppler": "next build",
     "build": "doppler run -- pnpm build:noDoppler",
     "start:noDoppler": "next start",
