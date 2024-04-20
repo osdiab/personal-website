@@ -1,14 +1,14 @@
+import { qwikCity } from "@builder.io/qwik-city/vite";
+import { qwikVite } from "@builder.io/qwik/optimizer";
+import { macroPlugin } from "@builder.io/vite-plugin-macro";
 /**
  * This is the base config for vite.
  * When building, the adapter config is used which loads this file and extends it.
  */
-import { defineConfig, type UserConfig } from "vite";
-import { qwikVite } from "@builder.io/qwik/optimizer";
-import { qwikCity } from "@builder.io/qwik-city/vite";
+import { type UserConfig, defineConfig } from "vite";
 import tsconfigPaths from "vite-tsconfig-paths";
 import pkg from "./package.json";
-import { macroPlugin } from "@builder.io/vite-plugin-macro";
-const { dependencies = {}, devDependencies = {} } = pkg as any as {
+const { dependencies = {}, devDependencies = {} } = pkg as unknown as {
 	dependencies: Record<string, string>;
 	devDependencies: Record<string, string>;
 	[key: string]: unknown;

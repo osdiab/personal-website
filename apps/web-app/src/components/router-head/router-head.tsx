@@ -26,10 +26,12 @@ export const RouterHead = component$(() => {
 			))}
 
 			{head.styles.map((s) => (
+				// biome-ignore lint/security/noDangerouslySetInnerHtml: needed for setting up styles
 				<style key={s.key} {...s.props} dangerouslySetInnerHTML={s.style} />
 			))}
 
 			{head.scripts.map((s) => (
+				// biome-ignore lint/security/noDangerouslySetInnerHtml: needed for setting up scripts
 				<script key={s.key} {...s.props} dangerouslySetInnerHTML={s.script} />
 			))}
 		</>

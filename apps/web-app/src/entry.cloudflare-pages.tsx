@@ -8,8 +8,8 @@
  *
  */
 import {
-	createQwikCity,
 	type PlatformCloudflarePages,
+	createQwikCity,
 } from "@builder.io/qwik-city/middleware/cloudflare-pages";
 import qwikCityPlan from "@qwik-city-plan";
 import { manifest } from "@qwik-client-manifest";
