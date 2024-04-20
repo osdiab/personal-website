@@ -18,9 +18,10 @@
     "noEmit": true,
     "types": ["node", "vite/client"],
     "paths": {
-      "~/*": ["./src/*"]
+      "~/*": ["./src/*"],
+      "~pandacss/*": ["./gen/pandacss/*"]
     }
   },
-  "files": ["./.eslintrc.cjs"],
+  "files": [".eslintrc.cjs.bak"],
   "include": ["src", "./*.d.ts", "./*.config.ts"]
 }

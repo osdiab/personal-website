@@ -40,8 +40,5 @@ lerna-debug.log*
 .yarn/*
 !.yarn/releases
 
-# Panda CSS
-src/styled-system
-
 # Cloudflare
 functions/**/*.js
