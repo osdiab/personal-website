@@ -1,34 +1,24 @@
 {
   "name": "@osdiab-website/monorepo",
   "private": true,
-  "engines": {
-    "node": "18.16.0"
-  },
   "scripts": {
-    "build": "turbo run build",
-    "dev": "turbo run dev",
-    "hasura": "pnpm run --filter gql-engine hasura",
+    "build": "pnpm --recursive run build",
+    "dev": "pnpm --recursive run dev",
     "lint": "jest",
     "lint:fix": "eslint . --fix",
     "format:base": "prettier \"**/*.{ts,tsx,md}\"",
     "format": "pnpm format:base --write",
     "format:check": "pnpm format:base --check",
-    "test": "turbo run test",
-    "typecheck": "turbo run typecheck",
-    "setup:doppler": "turbo run setup:doppler --concurrency=1",
+    "test": "pnpm --recursive run test",
+    "typecheck": "tsc --project",
     "vercel": "pnpm --filter vercel start"
   },
   "devDependencies": {
+    "@osdiab-website/tsconfig": "workspace:*",
     "@typescript-eslint/eslint-plugin": "^7.7.0",
     "@typescript-eslint/parser": "^7.7.0",
     "eslint": "^9.1.0",
     "eslint-plugin-qwik": "^1.5.2",
-    "npm-run-all2": "^6.1.2",
     "typescript": "5.4.5"
-  },
-  "workspaces": [
-    "apps/*",
-    "libs/*",
-    "scripts/*"
- ]
+  }
 }
