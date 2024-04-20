@@ -22,6 +22,5 @@
 			"~gen/*": ["./gen/*"]
 		}
 	},
-	"files": [".eslintrc.cjs.bak"],
-	"include": ["src", "./*.d.ts", "./*.config.ts"]
+	"include": ["src", "./*.d.ts", "./**/*.config.ts"]
 }
