@@ -14,8 +14,7 @@
 		"format": "pnpm format:base --write",
 		"format:check": "pnpm format:base --check",
 		"test": "pnpm --recursive run test",
-		"typecheck": "tsc --project",
-		"vercel": "pnpm --filter vercel start"
+		"typecheck": "tsc --project"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^1.7.0",
