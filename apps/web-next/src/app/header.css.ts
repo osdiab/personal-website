@@ -5,38 +5,38 @@ import type { SystemProperties } from "~pandacss/types/style-props";
 
 export const maxContentWidth = "800px";
 export const headerPaddingX: SystemProperties["paddingX"] = {
-  base: "5",
-  md: "6",
+	base: "5",
+	md: "6",
 };
 
 export const siteHeaderCss = css({
-  position: "sticky",
-  top: 0,
-  transition: "border-bottom 0.3s, background 0.2s ease-out",
-  fontSize: "lg",
-  paddingX: headerPaddingX,
-  paddingY: "2",
-  background: "bg.page",
-  borderBottom: `1px solid transparent`,
+	position: "sticky",
+	top: 0,
+	transition: "border-bottom 0.3s, background 0.2s ease-out",
+	fontSize: "lg",
+	paddingX: headerPaddingX,
+	paddingY: "2",
+	background: "bg.page",
+	borderBottom: `1px solid transparent`,
 });
 export const headerContentCss = cx(
-  hstack({
-    gap: "6",
-    justifyContent: "space-between",
-    alignItems: "center",
-  }),
-  css({ marginX: "auto", maxWidth: maxContentWidth }),
+	hstack({
+		gap: "6",
+		justifyContent: "space-between",
+		alignItems: "center",
+	}),
+	css({ marginX: "auto", maxWidth: maxContentWidth }),
 );
 const headerSectionCss = hstack({ gap: "6", alignItems: "center" });
 export const headerLeftCss = headerSectionCss;
 export const headerRightCss = headerSectionCss;
 export const siteHeaderScrolledCss = css({
-  borderBottomColor: "border.soft",
+	borderBottomColor: "border.soft",
 });
 export const logoCss = css({ height: "1em" });
 export const siteTitleCss = css({ fontWeight: "bold" });
 
 export const navLinkCss = cx(
-  buttonCss({ type: "plainText", padding: "none" }),
-  css({ "& svg": { height: "1em" } }),
+	buttonCss({ type: "plainText", padding: "none" }),
+	css({ "& svg": { height: "1em" } }),
 );

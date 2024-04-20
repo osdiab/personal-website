@@ -3,8 +3,8 @@
 
 // the default is to make it just return `any` all the time, which sucks
 declare module "*.svg" {
-  import type { ComponentProps } from "react";
-  const content: (props: ComponentProps<"svg">) => JSX.Element;
+	import type { ComponentProps } from "react";
+	const content: (props: ComponentProps<"svg">) => JSX.Element;
 
-  export default content;
+	export default content;
 }

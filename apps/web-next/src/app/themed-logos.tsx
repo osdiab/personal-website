@@ -15,54 +15,54 @@ type SvgComponent = FC<ComponentProps<"svg">>;
 const EmptySvg: SvgComponent = (props) => <svg {...props} />;
 
 interface ThemeDependentLogoProps extends ComponentProps<SvgComponent> {
-  DarkLogo: SvgComponent;
-  LightLogo: SvgComponent;
+	DarkLogo: SvgComponent;
+	LightLogo: SvgComponent;
 }
 
 function ThemeDependentLogo({
-  DarkLogo,
-  LightLogo,
-  ...props
+	DarkLogo,
+	LightLogo,
+	...props
 }: ThemeDependentLogoProps) {
-  const { resolvedTheme } = useTheme();
-  switch (resolvedTheme) {
-    case "dark": {
-      return <DarkLogo {...props} />;
-    }
-    case "light": {
-      return <LightLogo {...props} />;
-    }
-    default: {
-      return <EmptySvg {...props} />;
-    }
-  }
+	const { resolvedTheme } = useTheme();
+	switch (resolvedTheme) {
+		case "dark": {
+			return <DarkLogo {...props} />;
+		}
+		case "light": {
+			return <LightLogo {...props} />;
+		}
+		default: {
+			return <EmptySvg {...props} />;
+		}
+	}
 }
 export const EveryOrgLogo: SvgComponent = (props) => (
-  <WaitOnTheme>
-    <ThemeDependentLogo
-      DarkLogo={EveryOrgLogoLight}
-      LightLogo={EveryOrgLogoDark}
-      {...props}
-    />
-  </WaitOnTheme>
+	<WaitOnTheme>
+		<ThemeDependentLogo
+			DarkLogo={EveryOrgLogoLight}
+			LightLogo={EveryOrgLogoDark}
+			{...props}
+		/>
+	</WaitOnTheme>
 );
 
 export const SpinachLogo: SvgComponent = (props) => (
-  <WaitOnTheme>
-    <ThemeDependentLogo
-      DarkLogo={SpinachLogoInverted}
-      LightLogo={SpinachLogoNormal}
-      {...props}
-    />
-  </WaitOnTheme>
+	<WaitOnTheme>
+		<ThemeDependentLogo
+			DarkLogo={SpinachLogoInverted}
+			LightLogo={SpinachLogoNormal}
+			{...props}
+		/>
+	</WaitOnTheme>
 );
 
 export const CleverLogo: SvgComponent = (props) => (
-  <WaitOnTheme>
-    <ThemeDependentLogo
-      DarkLogo={CleverLogoWhite}
-      LightLogo={CleverLogoBlue}
-      {...props}
-    />
-  </WaitOnTheme>
+	<WaitOnTheme>
+		<ThemeDependentLogo
+			DarkLogo={CleverLogoWhite}
+			LightLogo={CleverLogoBlue}
+			{...props}
+		/>
+	</WaitOnTheme>
 );

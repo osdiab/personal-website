@@ -1,5 +1,8 @@
 {
 	"$schema": "https://biomejs.dev/schemas/1.7.0/schema.json",
+	"files": {
+		"ignore": ["**/gen/**", "**/package.json"]
+	},
 	"organizeImports": {
 		"enabled": true
 	},
