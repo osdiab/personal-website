@@ -1,6 +1,5 @@
 {
-	"extends": "@osdiab-website/tsconfig/base.json",
 	"compilerOptions": {},
-	"include": ["**/*.ts", "**/*.tsx"],
-	"exclude": ["node_modules"]
+	"files": [],
+	"references": [{ "path": "./apps/web-app/tsconfig.json" }]
 }
