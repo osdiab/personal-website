@@ -1,4 +1,8 @@
-import { defineConfig, defineGlobalStyles } from "@pandacss/dev";
+import {
+	defineConfig,
+	defineGlobalStyles,
+	defineTextStyles,
+} from "@pandacss/dev";
 
 export default defineConfig({
 	jsxFramework: "qwik",
@@ -17,6 +21,43 @@ export default defineConfig({
 	// Useful for theme customization
 	theme: {
 		extend: {
+			textStyles: defineTextStyles({
+				p: { value: { fontSize: "sm", lineHeight: "1.5em" } },
+				h1: {
+					value: {
+						fontSize: "2xl",
+						lineHeight: "1.2em",
+						fontWeight: "semibold",
+					},
+				},
+				h2: {
+					value: { fontSize: "2xl", lineHeight: "1.2em", fontWeight: "normal" },
+				},
+				h3: {
+					value: {
+						fontSize: "xl",
+						lineHeight: "1.3em",
+						fontWeight: "semibold",
+					},
+				},
+				h4: {
+					value: { fontSize: "xl", lineHeight: "1.3em", fontWeight: "normal" },
+				},
+				h5: {
+					value: {
+						fontSize: "lg",
+						lineHeight: "1.3em",
+						fontWeight: "semibold",
+					},
+				},
+				h6: {
+					value: {
+						fontSize: "md",
+						lineHeight: "1.4em",
+						fontWeight: "semibold",
+					},
+				},
+			}),
 			semanticTokens: {
 				colors: {
 					brand: { value: "#F6490D" },

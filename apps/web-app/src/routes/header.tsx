@@ -1,10 +1,10 @@
 import { component$, useComputed$, useContext } from "@builder.io/qwik";
 import { LuGithub, LuLinkedin, LuMail } from "@qwikest/icons/lucide";
-import { Logo } from "~/components/logo";
+import { SiteLogo } from "~/components/logos/site";
 import { pageScrolledYContext } from "~/components/scroll-detector";
 import { defaultIconCss } from "~/styles/icon";
-import { hyperlinkCss } from "~/styles/link";
 import { pageContentCss } from "~/styles/page";
+import { hyperlinkCss } from "~/styles/prose";
 import { css } from "~gen/pandacss/css";
 import { hstack } from "~gen/pandacss/patterns";
 
@@ -34,7 +34,7 @@ export const Header = component$(() => {
 			>
 				<a href="/">
 					<section class={hstack({ gap: "3", textStyle: "lg" })}>
-						<Logo class={css({ height: "1.5em", width: "auto" })} />
+						<SiteLogo css={css.raw({ height: "1.5em", width: "auto" })} />
 						<strong>Omar Diab</strong>
 					</section>
 				</a>
