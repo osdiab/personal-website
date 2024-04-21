@@ -20,10 +20,16 @@ export default defineConfig({
 			semanticTokens: {
 				colors: {
 					brand: { value: "#F6490D" },
+					background: {
+						page: { value: "#FFFFFF" },
+					},
 					text: {
 						body: { value: "{colors.slate.900}" },
 						primary: { value: "#F6490D" },
 						primaryHighlight: { value: "#FF7D50" },
+					},
+					border: {
+						soft: { value: "{colors.slate.200}" },
 					},
 				},
 			},
