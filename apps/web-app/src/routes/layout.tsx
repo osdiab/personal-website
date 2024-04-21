@@ -4,6 +4,8 @@ import type { RequestHandler } from "@builder.io/qwik-city";
 import {} from "@qwikest/icons/lucide";
 import { ScrollProvider } from "~/components/scroll-detector";
 import { Header } from "~/routes/header";
+import { pageContentCss } from "~/styles/page";
+import { css } from "~gen/pandacss/css";
 
 export const onGet: RequestHandler = async ({ cacheControl }) => {
 	// Control caching for this request for best performance and to reduce hosting costs:
@@ -28,6 +30,36 @@ export default component$(() => {
 			<main>
 				<Header />
 				<Slot />
+				<footer
+					class={css({
+						paddingBlockStart: "32",
+						paddingBlockEnd: "24",
+						position: "relative",
+						_before: {
+							content: "''",
+							bottom: 0,
+							width: "full",
+							height: "32",
+
+							position: "absolute",
+							display: "block",
+							zIndex: "-1",
+							opacity: "0.25",
+							marginBlockStart: "auto",
+							maskImage:
+								"linear-gradient(0deg, rgb(0, 0, 0) 0px, rgba(0, 0, 0, 0))",
+							background:
+								"linear-gradient(135deg,#ff7d0055 25%,transparent 0) -19px 0/38px 38px,linear-gradient(225deg,#ff7d00 25%,transparent 0) -19px 0/38px 38px,linear-gradient(315deg,#ff7d0055 25%,transparent 0) 0 0/38px 38px,linear-gradient(45deg,#ff7d00 25%,#e5e5f7 0) 0 0/38px 38px",
+						},
+					})}
+				>
+					<div class={css(pageContentCss, { color: "text.soft" })}>
+						<p>
+							© Omar Diab,{" "}
+							{new Date(useServerTimeLoader().value.date).getFullYear()}
+						</p>
+					</div>
+				</footer>
 			</main>
 		</ScrollProvider>
 	);
