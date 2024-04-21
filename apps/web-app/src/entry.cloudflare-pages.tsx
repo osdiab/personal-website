@@ -1,3 +1,4 @@
+// biome-ignore lint/style/useFilenamingConvention: qwik depends on this file having this sort of path
 /*
  * WHAT IS THIS FILE?
  *
