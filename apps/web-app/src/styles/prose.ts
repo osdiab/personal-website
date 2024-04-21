@@ -7,6 +7,7 @@ const paragraphSpacingStyle = {
 // this needs to be in this file so that panda can pick it up at compile time
 export const hyperlinkCss = css.raw({
 	textDecoration: "underline",
+	fontWeight: "bold",
 	transition: "color 0.1s linear",
 	color: "text.primary",
 	display: "inline-block",
