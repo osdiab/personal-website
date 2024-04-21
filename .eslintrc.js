@@ -9,6 +9,7 @@ module.exports = {
 			plugins: ["@typescript-eslint"],
 			parser: "@typescript-eslint/parser",
 			parserOptions: {
+				// biome-ignore lint/style/useNamingConvention: this is from @typescript-eslint
 				EXPERIMENTAL_useProjectService: true,
 				tsconfigRootDir: __dirname,
 				project: [

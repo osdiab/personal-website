@@ -9,7 +9,33 @@
 	"linter": {
 		"enabled": true,
 		"rules": {
-			"recommended": true
+			"recommended": true,
+			"correctness": {
+				"noUnusedVariables": "warn",
+				"noUnusedImports": "warn",
+				"noNewSymbol": "error"
+			},
+			"style": {
+				"noNegationElse": "warn",
+				"useBlockStatements": "warn",
+				"useCollapsedElseIf": "warn",
+				"useConsistentArrayType": "warn",
+				"useFilenamingConvention": {
+					"level": "warn",
+					"options": { "requireAscii": true, "filenameCases": ["kebab-case"] }
+				},
+				"useForOf": "warn",
+				"useFragmentSyntax": "warn",
+				"useNamingConvention": "warn",
+				"useNodeAssertStrict": "error",
+				"useShorthandAssign": "warn",
+				"useSingleCaseStatement": "warn"
+			},
+			"suspicious": {
+				"noConsoleLog": "warn",
+				"noEmptyBlockStatements": "warn",
+				"noSkippedTests": "warn"
+			}
 		}
 	},
 	"json": {
