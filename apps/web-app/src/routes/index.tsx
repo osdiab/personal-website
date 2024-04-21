@@ -18,7 +18,7 @@ export default component$(() => {
 				vstack.raw({ gap: "8", alignItems: "stretch" }),
 			)}
 		>
-			<section class={css({ paddingY: { lg: "8", lgDown: "4" } })}>
+			<section class={css({ paddingBlockStart: "16", paddingBlockEnd: "12" })}>
 				<h1 class={css({ textStyle: "4xl" })}>
 					I leverage technology to build sustainable businesses that change
 					industries.

@@ -66,6 +66,7 @@ export default defineConfig({
 					},
 					text: {
 						body: { value: "{colors.slate.900}" },
+						soft: { value: "{colors.slate.500}" },
 						primary: { value: "#F6490D" },
 						primaryHighlight: { value: "#FF7D50" },
 					},
