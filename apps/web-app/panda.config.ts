@@ -1,4 +1,4 @@
-import { defineConfig } from "@pandacss/dev";
+import { defineConfig, defineGlobalStyles } from "@pandacss/dev";
 
 export default defineConfig({
 	jsxFramework: "qwik",
@@ -12,9 +12,22 @@ export default defineConfig({
 	// Files to exclude
 	exclude: [],
 
+	globalCss: defineGlobalStyles({ html: { color: "text.body" } }),
+
 	// Useful for theme customization
 	theme: {
-		extend: {},
+		extend: {
+			semanticTokens: {
+				colors: {
+					brand: { value: "#F6490D" },
+					text: {
+						body: { value: "{colors.slate.900}" },
+						primary: { value: "#F6490D" },
+						primaryHighlight: { value: "#FF7D50" },
+					},
+				},
+			},
+		},
 	},
 
 	importMap: "~gen/pandacss",
