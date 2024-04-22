@@ -4,7 +4,7 @@ import { SiteLogo } from "~/components/logos/site";
 import { pageScrolledYContext } from "~/components/scroll-detector";
 import { defaultIconCss } from "~/styles/icon";
 import { pageContentCss } from "~/styles/page";
-import { hyperlinkCss } from "~/styles/prose";
+import { hyperlinkBaseCss, interactiveTransitionCss } from "~/styles/prose";
 import { css } from "~gen/pandacss/css";
 import { hstack } from "~gen/pandacss/patterns";
 
@@ -64,7 +64,9 @@ export const Header = component$(() => {
 	);
 });
 
-const linkIconCss = css(hyperlinkCss, {
+const linkIconCss = css(hyperlinkBaseCss, interactiveTransitionCss, {
 	textDecoration: "none",
+	transitionProperty: "color",
 	color: "text.body",
+	_hover: { color: "text.primary" },
 });

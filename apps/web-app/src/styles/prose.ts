@@ -4,19 +4,30 @@ const paragraphSpacingStyle = {
 	"&:not(:first-child)": { marginBlockStart: "1em" },
 };
 
-// this needs to be in this file so that panda can pick it up at compile time
-export const hyperlinkCss = css.raw({
+export const interactiveTransitionCss = css.raw({
+	transitionDuration: "interactive",
+	transitionTimingFunction: "linear",
+});
+
+export const hyperlinkBaseCss = css.raw({
 	textDecoration: "underline",
 	fontWeight: "bold",
-	transition: "color 0.1s linear",
-	color: "text.primary",
 	display: "inline-block",
 	cursor: "pointer",
 	border: "none",
 	background: "none",
-
-	"&:hover": { color: "text.primaryHighlight" },
 });
+
+// this needs to be in this file so that panda can pick it up at compile time
+export const hyperlinkCss = css.raw(
+	hyperlinkBaseCss,
+	interactiveTransitionCss,
+	{
+		transitionProperty: "color",
+		color: "text.primary",
+		"&:hover": { color: "text.primaryHighlight" },
+	},
+);
 
 export const proseCss = css.raw({
 	maxWidth: {
