@@ -32,6 +32,9 @@ importers:
 
   apps/web-app:
     dependencies:
+      '@qwik-ui/headless':
+        specifier: ^0.3.6
+        version: 0.3.6(@builder.io/qwik@1.5.2(@types/node@20.12.7)(lightningcss@1.23.0)(undici@6.13.0))
       '@qwikest/icons':
         specifier: ^0.0.13
         version: 0.0.13(@builder.io/qwik@1.5.2(@types/node@20.12.7)(lightningcss@1.23.0)(undici@6.13.0))
@@ -855,6 +858,12 @@ packages:
 
   '@pandacss/types@0.37.2':
     resolution: {integrity: sha512-1HYXrGSngm6wrRyiiEtF2nHl7sfVD9HDc0BVN+qD1Gpjo7uniz99jz9oYOPAVNAbPoll28ltx828Falh4XgvYg==}
+
+  '@qwik-ui/headless@0.3.6':
+    resolution: {integrity: sha512-21I+l0/x/4683nVdIxAmxxT2InUFnFICrHmsRERKRNBljbnowruETRUkzJNb9i/El+6h+qjyGJbqesJH5ZDbzw==}
+    engines: {node: '>=16.0.0'}
+    peerDependencies:
+      '@builder.io/qwik': ^1.4.0
 
   '@qwikest/icons@0.0.13':
     resolution: {integrity: sha512-e0wY8vmx0nDSUiuCATlk+ojTvdBV4txIGHHWjZW5SRkv4XB8H9+3WSDcLPz0ItUdRyzcrohE9k2jtQI/98aRPA==}
@@ -3544,6 +3553,10 @@ snapshots:
       ts-pattern: 5.0.8
 
   '@pandacss/types@0.37.2': {}
+
+  '@qwik-ui/headless@0.3.6(@builder.io/qwik@1.5.2(@types/node@20.12.7)(lightningcss@1.23.0)(undici@6.13.0))':
+    dependencies:
+      '@builder.io/qwik': 1.5.2(@types/node@20.12.7)(lightningcss@1.23.0)(undici@6.13.0)
 
   '@qwikest/icons@0.0.13(@builder.io/qwik@1.5.2(@types/node@20.12.7)(lightningcss@1.23.0)(undici@6.13.0))':
     dependencies:
