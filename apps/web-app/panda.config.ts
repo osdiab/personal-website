@@ -59,23 +59,48 @@ export default defineConfig({
 				},
 			}),
 			semanticTokens: {
+				durations: { interactive: { value: "0.1s" } },
 				colors: {
 					brand: { value: "#F6490D" },
 					background: {
-						page: { value: "#FFFFFF" },
+						page: {
+							value: {
+								_light: "#FFFFFF",
+								_dark: "{colors.slate.900}",
+							},
+						},
 					},
 					text: {
-						body: { value: "{colors.slate.900}" },
-						soft: { value: "{colors.slate.500}" },
+						body: {
+							value: {
+								_light: "{colors.slate.950}",
+								_dark: "{colors.slate.50}",
+							},
+						},
+						soft: {
+							value: {
+								_light: "{colors.slate.600}",
+								_dark: "{colors.slate.400}",
+							},
+						},
 						primary: { value: "#F6490D" },
 						primaryHighlight: { value: "#FF7D50" },
 					},
 					border: {
-						soft: { value: "{colors.slate.200}" },
+						soft: {
+							value: {
+								_light: "{colors.slate.200}",
+								_dark: "{colors.slate.700}",
+							},
+						},
 					},
 				},
 			},
 		},
+	},
+	conditions: {
+		light: "[data-color-mode=light] &",
+		dark: "[data-color-mode=dark] &",
 	},
 	patterns: {
 		extend: {
