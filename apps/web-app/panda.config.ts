@@ -77,6 +77,22 @@ export default defineConfig({
 			},
 		},
 	},
+	patterns: {
+		extend: {
+			invisible: {
+				description: "Visually hidden but accessible to screen readers",
+				transform() {
+					return {
+						position: "absolute",
+						height: 0,
+						width: 0,
+						opacity: 0,
+						transform: "translateX(100vw)",
+					};
+				},
+			},
+		},
+	},
 
 	importMap: "~gen/pandacss",
 
