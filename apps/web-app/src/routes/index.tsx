@@ -1,9 +1,11 @@
 import { Slot, component$ } from "@builder.io/qwik";
 import type { DocumentHead } from "@builder.io/qwik-city";
+import { LuLink } from "@qwikest/icons/lucide";
 import { BreezeLogo } from "~/components/logos/breeze";
 import { CleverLogo } from "~/components/logos/clever";
 import { EveryDotOrgLogo } from "~/components/logos/everydotorg";
 import { SpinachLogo } from "~/components/logos/spinach";
+import { defaultIconCss } from "~/styles/icon";
 import { pageContentCss } from "~/styles/page";
 import { proseCss } from "~/styles/prose";
 import { css } from "~gen/pandacss/css";
@@ -116,7 +118,16 @@ const JobDescription = component$(
 						href={jobHref}
 						target="_blank"
 						rel="noreferrer"
-						class={css({ flexGrow: "1" })}
+						class={css(
+							{
+								flexGrow: "1",
+								_hover: {
+									color: "text.primary",
+									transition: "color 0.1s linear",
+								},
+							},
+							hstack.raw({ gap: "2" }),
+						)}
 					>
 						<div
 							class={css({
@@ -126,6 +137,7 @@ const JobDescription = component$(
 						>
 							<Slot name="logo" />
 						</div>
+						<LuLink class={css(defaultIconCss)} />
 					</a>
 					<div
 						class={css(
