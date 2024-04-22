@@ -131,9 +131,7 @@ const JobDescription = component$<JobDescriptionProps>(
 							{
 								transitionProperty: "color",
 								flexGrow: "1",
-								_hover: {
-									color: "text.primary",
-								},
+								_hover: { color: "text.primary" },
 							},
 							hstack.raw({ gap: "2" }),
 						)}

@@ -1,7 +1,14 @@
-import { component$, useComputed$, useContext } from "@builder.io/qwik";
+import {
+	type PropsOf,
+	component$,
+	useComputed$,
+	useContext,
+} from "@builder.io/qwik";
+import { Tooltip } from "@qwik-ui/headless";
 import { LuGithub, LuLinkedin, LuMail } from "@qwikest/icons/lucide";
 import { SiteLogo } from "~/components/logos/site";
 import { pageScrolledYContext } from "~/components/scroll-detector";
+import { defaultTooltipProps } from "~/components/tooltip";
 import { defaultIconCss } from "~/styles/icon";
 import { pageContentCss } from "~/styles/page";
 import { hyperlinkBaseCss, interactiveTransitionCss } from "~/styles/prose";
@@ -39,25 +46,31 @@ export const Header = component$(() => {
 					</section>
 				</a>
 				<section class={hstack({ gap: "4", textStyle: "lg" })}>
-					<a class={linkIconCss} href="mailto:hello@omardiab.com">
-						<LuMail class={css(defaultIconCss)} />
-					</a>
-					<a
-						class={linkIconCss}
-						href="https://github.com/osdiab"
-						target="_blank"
-						rel="noreferrer"
-					>
-						<LuGithub class={css(defaultIconCss)} />
-					</a>
-					<a
-						class={linkIconCss}
-						href="https://linkedin.com/in/osdiab"
-						target="_blank"
-						rel="noreferrer"
-					>
-						<LuLinkedin class={css(defaultIconCss)} />
-					</a>
+					<Tooltip {...tooltipProps} content="Email Me">
+						<a class={linkIconCss} href="mailto:hello@omardiab.com">
+							<LuMail class={css(defaultIconCss)} />
+						</a>
+					</Tooltip>
+					<Tooltip {...tooltipProps} content="Github">
+						<a
+							class={linkIconCss}
+							href="https://github.com/osdiab"
+							target="_blank"
+							rel="noreferrer"
+						>
+							<LuGithub class={css(defaultIconCss)} />
+						</a>
+					</Tooltip>
+					<Tooltip {...tooltipProps} content="LinkedIn">
+						<a
+							class={linkIconCss}
+							href="https://linkedin.com/in/osdiab"
+							target="_blank"
+							rel="noreferrer"
+						>
+							<LuLinkedin class={css(defaultIconCss)} />
+						</a>
+					</Tooltip>
 				</section>
 			</div>
 		</header>
@@ -65,8 +78,14 @@ export const Header = component$(() => {
 });
 
 const linkIconCss = css(hyperlinkBaseCss, interactiveTransitionCss, {
+	display: "block",
 	textDecoration: "none",
 	transitionProperty: "color",
 	color: "text.body",
 	_hover: { color: "text.primary" },
 });
+
+const tooltipProps: Omit<PropsOf<typeof Tooltip>, "content"> = {
+	...defaultTooltipProps,
+	position: "bottom",
+};
