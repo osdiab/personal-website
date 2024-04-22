@@ -10,9 +10,8 @@
 		"lint:biome:fix": "biome check --apply-unsafe .",
 		"lint": "pnpm run '/^lint:.*:base$/'",
 		"lint:fix": "pnpm run --workspace-concurrency=1 '/^lint:.*:fix$/'",
-		"format:base": "biome format .",
-		"format": "pnpm format:base --write",
-		"format:check": "pnpm format:base --check",
+		"format": "pnpm format:check --write",
+		"format:check": "biome format .",
 		"test": "pnpm --recursive run test",
 		"typecheck": "tsc --build"
 	},
