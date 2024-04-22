@@ -7,7 +7,7 @@ import { EveryDotOrgLogo } from "~/components/logos/everydotorg";
 import { SpinachLogo } from "~/components/logos/spinach";
 import { defaultIconCss } from "~/styles/icon";
 import { pageContentCss } from "~/styles/page";
-import { proseCss } from "~/styles/prose";
+import { interactiveTransitionCss, proseCss } from "~/styles/prose";
 import { css } from "~gen/pandacss/css";
 import { hstack, invisible } from "~gen/pandacss/patterns";
 import { vstack } from "~gen/pandacss/patterns/vstack";
@@ -127,11 +127,12 @@ const JobDescription = component$<JobDescriptionProps>(
 						target="_blank"
 						rel="noreferrer"
 						class={css(
+							interactiveTransitionCss,
 							{
+								transitionProperty: "color",
 								flexGrow: "1",
 								_hover: {
 									color: "text.primary",
-									transition: "color 0.1s linear",
 								},
 							},
 							hstack.raw({ gap: "2" }),
