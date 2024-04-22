@@ -9,7 +9,7 @@ import { defaultIconCss } from "~/styles/icon";
 import { pageContentCss } from "~/styles/page";
 import { proseCss } from "~/styles/prose";
 import { css } from "~gen/pandacss/css";
-import { hstack } from "~gen/pandacss/patterns";
+import { hstack, invisible } from "~gen/pandacss/patterns";
 import { vstack } from "~gen/pandacss/patterns/vstack";
 
 export default component$(() => {
@@ -20,16 +20,18 @@ export default component$(() => {
 				vstack.raw({ gap: "8", alignItems: "stretch" }),
 			)}
 		>
+			<h1 class={invisible()}>Home</h1>
 			<section class={css({ paddingBlockStart: "16", paddingBlockEnd: "12" })}>
-				<h1 class={css({ textStyle: "4xl" })}>
+				<h2 class={css({ textStyle: "4xl" })}>
 					I leverage technology to build sustainable businesses that change
 					industries.
-				</h1>
+				</h2>
 			</section>
 			<section
 				class={vstack({ gap: "24", alignItems: "stretch", maxWidth: "600px" })}
 			>
 				<JobDescription
+					projectName="Breeze"
 					jobTitle="Cofounder, CTO"
 					timePeriod="2023-Present"
 					jobHref="https://breezehr.com"
@@ -45,6 +47,7 @@ export default component$(() => {
 					<BreezeLogo q:slot="logo" />
 				</JobDescription>
 				<JobDescription
+					projectName="Spinach"
 					jobTitle="Cofounder, Head of Engineering"
 					timePeriod="Since Born"
 					jobHref="https://gotofu.com"
@@ -61,6 +64,7 @@ export default component$(() => {
 					<SpinachLogo q:slot="logo" />
 				</JobDescription>
 				<JobDescription
+					projectName="Every.org"
 					jobTitle="Cofounder, Head of Engineering"
 					timePeriod="2018-2021"
 					jobHref="https://every.org"
@@ -76,6 +80,7 @@ export default component$(() => {
 					<EveryDotOrgLogo q:slot="logo" />
 				</JobDescription>
 				<JobDescription
+					projectName="Clever"
 					jobTitle="Full Stack Engineer"
 					timePeriod="2014-2017"
 					jobHref="https://clever.com"
@@ -100,12 +105,15 @@ export default component$(() => {
 	);
 });
 
-const JobDescription = component$(
-	({
-		jobTitle,
-		timePeriod,
-		jobHref,
-	}: { jobTitle: string; timePeriod: string; jobHref: string }) => {
+interface JobDescriptionProps {
+	projectName: string;
+	jobTitle: string;
+	timePeriod: string;
+	jobHref: string;
+}
+
+const JobDescription = component$<JobDescriptionProps>(
+	({ projectName, jobTitle, timePeriod, jobHref }) => {
 		return (
 			<article
 				class={css(
@@ -129,6 +137,7 @@ const JobDescription = component$(
 							hstack.raw({ gap: "2" }),
 						)}
 					>
+						<h3 class={invisible()}>{projectName}</h3>
 						<div
 							class={css({
 								height: "token(fontSizes.4xl)",
@@ -139,7 +148,7 @@ const JobDescription = component$(
 						</div>
 						<LuLink class={css(defaultIconCss)} />
 					</a>
-					<div
+					<aside
 						class={css(
 							{ whiteSpace: "nowrap", marginInlineStart: "auto" },
 							vstack.raw({ gap: "2", alignItems: "end" }),
@@ -147,7 +156,7 @@ const JobDescription = component$(
 					>
 						<span class={css({ fontWeight: "bold" })}>{jobTitle}</span>
 						<span class={css({ fontStyle: "italic" })}>{timePeriod}</span>
-					</div>
+					</aside>
 				</header>
 				<main class={css(proseCss)}>
 					<Slot name="body" />
