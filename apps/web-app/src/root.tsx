@@ -20,7 +20,11 @@ export default component$(() => {
 		<QwikCityProvider>
 			<head>
 				<meta charSet="utf-8" />
-				<link rel="manifest" href="/manifest.json" />
+				{/* https://evilmartians.com/chronicles/how-to-favicon-in-2021-six-files-that-fit-most-needs */}
+				<link rel="manifest" href="/manifest.webmanifest" />
+				<link rel="icon" href="/favicon.ico" sizes="32x32" />
+				<link rel="icon" href="/icon.svg" type="image/svg+xml" />
+				<link rel="apple-touch-icon" href="/apple-icon.png" />
 				<RouterHead />
 				<ServiceWorkerRegister />
 			</head>
