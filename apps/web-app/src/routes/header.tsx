@@ -1,14 +1,8 @@
-import {
-	type PropsOf,
-	component$,
-	useComputed$,
-	useContext,
-} from "@builder.io/qwik";
-import { Tooltip } from "@qwik-ui/headless";
+import { component$, useComputed$, useContext } from "@builder.io/qwik";
 import { LuGithub, LuLinkedin, LuMail } from "@qwikest/icons/lucide";
 import { SiteLogo } from "~/components/logos/site";
 import { pageScrolledYContext } from "~/components/scroll-detector";
-import { defaultTooltipProps } from "~/components/tooltip";
+import { Tooltip } from "~/components/tooltip";
 import { defaultIconCss } from "~/styles/icon";
 import { pageContentCss } from "~/styles/page";
 import { hyperlinkBaseCss, interactiveTransitionCss } from "~/styles/prose";
@@ -17,22 +11,21 @@ import { hstack } from "~gen/pandacss/patterns";
 
 export const Header = component$(() => {
 	const scrolledY = useContext(pageScrolledYContext);
+	const headerClass = useComputed$(() =>
+		css(
+			{
+				paddingY: "2",
+				position: "sticky",
+				insetBlockStart: "0",
+				background: "background.page",
+			},
+			scrolledY.value && {
+				borderBlockEnd: "1px solid token(colors.border.soft)",
+			},
+		),
+	);
 	return (
-		<header
-			class={useComputed$(() =>
-				css(
-					{
-						paddingY: "2",
-						position: "sticky",
-						insetBlockStart: "0",
-						background: "background.page",
-					},
-					scrolledY.value && {
-						borderBlockEnd: "1px solid token(colors.border.soft)",
-					},
-				),
-			)}
-		>
+		<header class={headerClass}>
 			<div
 				class={css(
 					pageContentCss,
@@ -46,13 +39,19 @@ export const Header = component$(() => {
 					</section>
 				</a>
 				<section class={hstack({ gap: "4", textStyle: "lg" })}>
-					<Tooltip {...tooltipProps} content="Email Me">
-						<a class={linkIconCss} href="mailto:hello@omardiab.com">
+					<Tooltip>
+						<a
+							q:slot="trigger"
+							class={linkIconCss}
+							href="mailto:hello@omardiab.com"
+						>
 							<LuMail class={css(defaultIconCss)} />
 						</a>
+						<span q:slot="content">Email Me</span>
 					</Tooltip>
-					<Tooltip {...tooltipProps} content="Github">
+					<Tooltip>
 						<a
+							q:slot="trigger"
 							class={linkIconCss}
 							href="https://github.com/osdiab"
 							target="_blank"
@@ -60,9 +59,11 @@ export const Header = component$(() => {
 						>
 							<LuGithub class={css(defaultIconCss)} />
 						</a>
+						<span q:slot="content">Github</span>
 					</Tooltip>
-					<Tooltip {...tooltipProps} content="LinkedIn">
+					<Tooltip>
 						<a
+							q:slot="trigger"
 							class={linkIconCss}
 							href="https://linkedin.com/in/osdiab"
 							target="_blank"
@@ -70,6 +71,7 @@ export const Header = component$(() => {
 						>
 							<LuLinkedin class={css(defaultIconCss)} />
 						</a>
+						<span q:slot="content">LinkedIn</span>
 					</Tooltip>
 				</section>
 			</div>
@@ -84,8 +86,3 @@ const linkIconCss = css(hyperlinkBaseCss, interactiveTransitionCss, {
 	color: "text.body",
 	_hover: { color: "text.primary" },
 });
-
-const tooltipProps: Omit<PropsOf<typeof Tooltip>, "content"> = {
-	...defaultTooltipProps,
-	position: "bottom",
-};

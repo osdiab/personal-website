@@ -6,7 +6,7 @@ import {
 	useSignal,
 } from "@builder.io/qwik";
 import { Popover, PopoverTrigger } from "@qwik-ui/headless";
-import { tooltipCss } from "~/components/tooltip";
+import { defaultTooltipCss } from "~/components/tooltip";
 import type { AddCssProp } from "~/utils/css";
 import { css } from "~gen/pandacss/css";
 
@@ -43,7 +43,7 @@ export const Tooltip = component$<
 				{...popoverProps}
 				anchorRef={anchorRefProp || anchorRef}
 			>
-				<div class={css(tooltipCss, popoverProps?.css)}>
+				<div class={css(defaultTooltipCss, popoverProps?.css)}>
 					<Slot name="content" />
 				</div>
 			</Popover>

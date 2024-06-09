@@ -1,3 +1,4 @@
-import type { SystemStyleObject } from "~gen/pandacss/types";
+import type { css } from "~gen/pandacss/css";
 
-export type AddCssProp<T> = Omit<T, "class"> & { css?: SystemStyleObject };
+export type CssProp = Parameters<typeof css>[0];
+export type AddCssProp<T> = Omit<T, "class"> & { css?: CssProp };
