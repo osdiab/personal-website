@@ -24,10 +24,23 @@ module.exports = {
 			},
 		},
 		{
-			files: ["./apps/web-app"],
+			files: ["./apps/web-app/src/**/*.{ts,tsx}"],
 			extends: ["plugin:qwik/recommended"],
 			env: { browser: true },
-			rules: {},
+			rules: {
+				"@typescript-eslint/no-restricted-imports": [
+					"error",
+					{
+						paths: [
+							{
+								name: "@qwik-ui/headless",
+								importNames: ["Tooltip"],
+								message: 'Use "~/components/tooltip" instead',
+							},
+						],
+					},
+				],
+			},
 		},
 	],
 };
