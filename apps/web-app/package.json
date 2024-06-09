@@ -30,20 +30,21 @@
     "qwik": "qwik"
   },
   "devDependencies": {
-    "@builder.io/qwik": "^1.5.2",
-    "@builder.io/qwik-city": "^1.5.2",
+    "@builder.io/qwik": "^1.5.5",
+    "@builder.io/qwik-city": "^1.5.5",
     "@builder.io/vite-plugin-macro": "~0.0.7",
-    "@pandacss/dev": "^0.37.2",
-    "@types/node": "^20.12.7",
+    "@pandacss/dev": "^0.40.1",
+    "@types/node": "^20.14.2",
+    "@types/ramda": "^0.30.0",
     "typescript": "5.4.5",
     "undici": "*",
-    "vite": "^5.2.10",
+    "vite": "^5.2.13",
     "vite-tsconfig-paths": "^4.3.2",
-    "wrangler": "^3.51.2"
+    "wrangler": "^3.60.0"
   },
   "dependencies": {
-    "@qwik-ui/headless": "^0.3.6",
+    "@qwik-ui/headless": "^0.4.4",
     "@qwikest/icons": "^0.0.13",
-    "radash": "^12.1.0"
+    "ramda": "^0.30.1"
   }
 }
