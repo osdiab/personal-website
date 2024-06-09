@@ -16,6 +16,8 @@ export const hyperlinkBaseCss = css.raw({
 	cursor: "pointer",
 	border: "none",
 	background: "none",
+	color: "text.primary",
+	"&:hover": { color: "text.primaryHighlight" },
 });
 
 // this needs to be in this file so that panda can pick it up at compile time
