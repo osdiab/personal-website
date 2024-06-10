@@ -32,6 +32,8 @@ export const ScrollProvider = component$(() => {
 	useContextProvider(pageScrolledToEndXContext, scrolledToEndX);
 	useContextProvider(pageScrolledYContext, scrolledY);
 
+	// needed in this case for to properly determine scroll position
+	// eslint-disable-next-line qwik/no-use-visible-task
 	useVisibleTask$(
 		({ track, cleanup }) => {
 			track(() => xStartRef.value);
@@ -54,6 +56,8 @@ export const ScrollProvider = component$(() => {
 		{ strategy: "document-ready" },
 	);
 
+	// needed in this case for to properly determine scroll position
+	// eslint-disable-next-line qwik/no-use-visible-task
 	useVisibleTask$(
 		({ track, cleanup }) => {
 			track(() => yRef.value);
@@ -78,6 +82,8 @@ export const ScrollProvider = component$(() => {
 		{ strategy: "document-ready" },
 	);
 
+	// needed in this case for to properly determine scroll position
+	// eslint-disable-next-line qwik/no-use-visible-task
 	useVisibleTask$(
 		({ track, cleanup }) => {
 			track(() => xEndRef.value);
