@@ -1,9 +1,11 @@
 import {
 	type PropsOf,
+	type Signal,
 	Slot,
 	component$,
 	useId,
 	useSignal,
+	useTask$,
 } from "@builder.io/qwik";
 import { Popover, usePopover } from "@qwik-ui/headless";
 import type { CssProp } from "~/utils/css";
@@ -22,16 +24,32 @@ export const defaultTooltipCss = css.raw({
 
 export interface TooltipProps
 	extends Omit<PropsOf<typeof Popover.Root>, "manual"> {
+	/**
+	 * Allows overriding the internal open state
+	 */
+	open?: Readonly<Signal<boolean | undefined>>;
 	panelProps?: Omit<PropsOf<typeof Popover.Panel>, "class">;
 	css?: CssProp;
 	tooltipCss?: CssProp;
 }
 export const Tooltip = component$<TooltipProps>(
-	({ id, css: cssProp, tooltipCss, panelProps, ...rest }) => {
+	({ id, css: cssProp, tooltipCss, panelProps, open, ...rest }) => {
 		const generatedId = useId();
 		const popoverId = id ?? generatedId;
 		const anchorRef = useSignal<HTMLElement | undefined>();
 		const { showPopover, hidePopover } = usePopover(popoverId);
+
+		useTask$(({ track }) => {
+			track(() => open?.value);
+			if (typeof open?.value !== "boolean") {
+				return;
+			}
+			if (open.value) {
+				showPopover();
+			} else {
+				hidePopover();
+			}
+		});
 
 		return (
 			<Popover.Root
@@ -46,9 +64,15 @@ export const Tooltip = component$<TooltipProps>(
 					ref={anchorRef}
 					class={css(cssProp)}
 					onMouseEnter$={async () => {
+						if (typeof open?.value === "boolean") {
+							return;
+						}
 						await showPopover();
 					}}
 					onMouseLeave$={async () => {
+						if (typeof open?.value === "boolean") {
+							return;
+						}
 						await hidePopover();
 					}}
 				>
