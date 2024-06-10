@@ -15,6 +15,7 @@
 				"noUnusedImports": "warn",
 				"noNewSymbol": "error"
 			},
+			"complexity": { "useLiteralKeys": "off" },
 			"style": {
 				"noNegationElse": "warn",
 				"useBlockStatements": "warn",
