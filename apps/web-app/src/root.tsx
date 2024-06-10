@@ -5,8 +5,6 @@ import {
 	ServiceWorkerRegister,
 } from "@builder.io/qwik-city";
 import { RouterHead } from "./components/router-head";
-
-import { css } from "~gen/pandacss/css";
 import "./global.css";
 
 export default component$(() => {
@@ -29,56 +27,7 @@ export default component$(() => {
 				<RouterHead />
 				<ServiceWorkerRegister />
 			</head>
-			<body lang="en" class={css({ background: "background.page" })}>
-				{/* put this before the HTML to ensure it blocks visibility */}
-				<script
-					type="text/javascript"
-					// biome-ignore lint/security/noDangerouslySetInnerHtml: necessary for setting up the color mode
-					dangerouslySetInnerHTML={`
-(function() {
-	var defaultColorMode = 'light';
-	function getStoredColorMode() {
-		if (typeof window.localStorage === 'undefined') {
-			return defaultColorMode;
-		}
-		var storedColorMode = localStorage.getItem('color-mode') ?? 'system';
-		if (!['system', 'light', 'dark'].includes(storedColorMode)) {
-			console.info('Invalid color mode stored:', storedColorMode);
-			return undefined;
-		}
-		return storedColorMode;
-	}
-
-	function getColorMode() {
-		if (typeof window.localStorage === 'undefined') {
-			return defaultColorMode;
-		}
-		var storedColorMode = getStoredColorMode() || 'system';
-		if (storedColorMode !== 'system') {
-			return storedColorMode;
-		}
-		if (typeof window.matchMedia === 'undefined') {
-			return defaultColorMode;
-		}
-		return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-	}
-
-	function setColorMode(mode) {
-		document.documentElement.setAttribute('data-color-mode', mode);
-	}
-
-	setColorMode(getColorMode());
-
-	if (typeof window.matchMedia !== 'undefined') {
-		window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
-			if (getStoredColorMode() === 'system') {
-				e.matches ? setColorMode('dark') : setColorMode('light');
-			}
-		});
-	}
-})();
-			`}
-				/>
+			<body lang="en">
 				<RouterOutlet />
 			</body>
 		</QwikCityProvider>
