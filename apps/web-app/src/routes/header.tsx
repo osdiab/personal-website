@@ -2,6 +2,7 @@ import { component$, useComputed$, useContext } from "@builder.io/qwik";
 import { LuGithub, LuLinkedin, LuMail } from "@qwikest/icons/lucide";
 import { SiteLogo } from "~/components/logos/site";
 import { pageScrolledYContext } from "~/components/scroll-detector";
+import { ThemeSwitcher } from "~/components/theme-switcher/component";
 import { Tooltip } from "~/components/tooltip";
 import { defaultIconCss } from "~/styles/icon";
 import { pageContentCss } from "~/styles/page";
@@ -39,10 +40,11 @@ export const Header = component$(() => {
 					</section>
 				</a>
 				<section class={hstack({ gap: "4", textStyle: "lg" })}>
+					<ThemeSwitcher css={css.raw(linkIconCss, { cursor: "pointer" })} />
 					<Tooltip>
 						<a
 							q:slot="trigger"
-							class={linkIconCss}
+							class={css(linkIconCss)}
 							href="mailto:hello@omardiab.com"
 						>
 							<LuMail class={css(defaultIconCss)} />
@@ -52,7 +54,7 @@ export const Header = component$(() => {
 					<Tooltip>
 						<a
 							q:slot="trigger"
-							class={linkIconCss}
+							class={css(linkIconCss)}
 							href="https://github.com/osdiab"
 							target="_blank"
 							rel="noreferrer"
@@ -64,7 +66,7 @@ export const Header = component$(() => {
 					<Tooltip>
 						<a
 							q:slot="trigger"
-							class={linkIconCss}
+							class={css(linkIconCss)}
 							href="https://linkedin.com/in/osdiab"
 							target="_blank"
 							rel="noreferrer"
@@ -79,7 +81,7 @@ export const Header = component$(() => {
 	);
 });
 
-const linkIconCss = css(hyperlinkBaseCss, interactiveTransitionCss, {
+const linkIconCss = css.raw(hyperlinkBaseCss, interactiveTransitionCss, {
 	display: "block",
 	textDecoration: "none",
 	transitionProperty: "color",
