@@ -20,7 +20,7 @@ export const defaultTooltipCss = css.raw({
 	background: "background.tooltip",
 	paddingX: "2",
 	paddingY: "1",
-	borderRadius: "md",
+	borderRadius: "sm",
 });
 
 export interface TooltipProps
@@ -29,12 +29,19 @@ export interface TooltipProps
 	 * Allows overriding the internal open state
 	 */
 	open?: Readonly<Signal<boolean | undefined>>;
-	panelProps?: Omit<PropsOf<typeof Popover.Panel>, "class">;
+	panelProps?: Omit<PropsOf<typeof Popover.Panel>, "class"> & { css?: CssProp };
 	css?: CssProp;
 	tooltipCss?: CssProp;
 }
 export const Tooltip = component$<TooltipProps>(
-	({ id, css: cssProp, tooltipCss, panelProps, open, ...rest }) => {
+	({
+		id,
+		css: cssProp,
+		tooltipCss,
+		panelProps: { css: panelCss, ...panelProps } = {},
+		open,
+		...rest
+	}) => {
 		const generatedId = useId();
 		const popoverId = id ?? generatedId;
 		const anchorRef = useSignal<HTMLElement | undefined>();
@@ -79,7 +86,10 @@ export const Tooltip = component$<TooltipProps>(
 				>
 					<Slot name="trigger" />
 				</div>
-				<Popover.Panel {...panelProps}>
+				<Popover.Panel
+					{...panelProps}
+					class={css({ background: "transparent" }, panelCss)}
+				>
 					<div class={css(defaultTooltipCss)}>
 						<Slot name="content" />
 					</div>
