@@ -101,8 +101,8 @@ const theme: Theme = {
 					select: {
 						highlight: {
 							value: {
-								_light: "blue",
-								_dark: "green",
+								_light: "{colors.slate.200}",
+								_dark: "{colors.slate.700}",
 							},
 						},
 					},
