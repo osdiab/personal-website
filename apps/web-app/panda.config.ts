@@ -159,6 +159,7 @@ export default defineConfig({
 				`:not([${rootThemeAttribute}]) &`,
 				"@media (prefers-color-scheme: dark)",
 			],
+			autoColorTheme: `body:not([${rootThemeAttribute}]) &`,
 		},
 	},
 
