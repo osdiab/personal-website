@@ -1,4 +1,5 @@
 import {
+	$,
 	type PropsOf,
 	type Signal,
 	Slot,
@@ -47,12 +48,34 @@ export const Tooltip = component$<TooltipProps>(
 		const anchorRef = useSignal<HTMLElement | undefined>();
 		const { showPopover, hidePopover } = usePopover(popoverId);
 
+		const focused = useSignal(false);
+		const hovered = useSignal(false);
+
+		const onHover = $(() => {
+			hovered.value = true;
+		});
+		const onHoverOut = $(() => {
+			hovered.value = false;
+		});
+		const onFocus = $(() => {
+			focused.value = true;
+		});
+		const onBlur = $(() => {
+			focused.value = false;
+		});
+
 		useTask$(({ track }) => {
+			track(focused);
+			track(hovered);
 			track(() => open?.value);
-			if (typeof open?.value !== "boolean") {
-				return;
-			}
-			if (open.value) {
+
+			if (typeof open?.value === "boolean") {
+				if (open.value) {
+					showPopover();
+				} else {
+					hidePopover();
+				}
+			} else if (focused.value || hovered.value) {
 				showPopover();
 			} else {
 				hidePopover();
@@ -66,24 +89,12 @@ export const Tooltip = component$<TooltipProps>(
 				id={popoverId}
 				bind:anchor={anchorRef}
 				manual
+				onFocusIn$={onFocus}
+				onFocusOut$={onBlur}
+				onMouseOver$={onHover}
+				onMouseOut$={onHoverOut}
 			>
-				{/* can be anywhere as long as ref is set */}
-				<div
-					ref={anchorRef}
-					class={css(cssProp)}
-					onMouseEnter$={async () => {
-						if (typeof open?.value === "boolean") {
-							return;
-						}
-						await showPopover();
-					}}
-					onMouseLeave$={async () => {
-						if (typeof open?.value === "boolean") {
-							return;
-						}
-						await hidePopover();
-					}}
-				>
+				<div ref={anchorRef} class={css(cssProp)}>
 					<Slot name="trigger" />
 				</div>
 				<Popover.Panel
