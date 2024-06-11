@@ -5,22 +5,9 @@ node_modules
 .pnp
 .pnp.js
 
-# testing
-coverage
-
-# next.js
-.next/
-out/
-build
-
 # misc
 .DS_Store
 *.pem
-
-# debug
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
 
 # local env files
 .env
@@ -28,12 +15,6 @@ yarn-error.log*
 .env.development.local
 .env.test.local
 .env.production.local
-
-# turbo
-.turbo
-
-# vercel
-.vercel
 
 # typescript
 *.tsbuildinfo

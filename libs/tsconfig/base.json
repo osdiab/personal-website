@@ -1,22 +1,23 @@
 {
-  "extends": "@tsconfig/strictest",
-  "$schema": "https://json.schemastore.org/tsconfig",
-  "display": "Default",
-  "compilerOptions": {
-    "target": "ES2022",
-    "lib": ["ES2022"],
-    "module": "NodeNext",
-    "composite": false,
-    "declaration": true,
-    "declarationMap": true,
-    "inlineSources": false,
-    "isolatedModules": true,
-    "moduleResolution": "node",
-    "preserveWatchOutput": true,
-    "strictNullChecks": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "noEmit": true
-  },
-  "exclude": ["node_modules"]
+	"extends": "@tsconfig/strictest",
+	"$schema": "https://json.schemastore.org/tsconfig",
+	"display": "Default",
+	"compilerOptions": {
+		"target": "ES2022",
+		"lib": ["ES2022"],
+		"module": "NodeNext",
+		"composite": true,
+		"declaration": true,
+		"declarationMap": true,
+		"inlineSources": false,
+		"isolatedModules": true,
+		"moduleResolution": "node",
+		"preserveWatchOutput": true,
+		"exactOptionalPropertyTypes": false, // providing undefined to optional fields is useful
+		"strictNullChecks": true,
+		"esModuleInterop": true,
+		"skipLibCheck": true,
+		"noEmit": true
+	},
+	"exclude": ["node_modules"]
 }

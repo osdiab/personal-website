@@ -1,0 +1,47 @@
+{
+	"$schema": "https://biomejs.dev/schemas/1.7.0/schema.json",
+	"files": {
+		"ignore": ["**/gen/**", "**/package.json", "node_modules/**/*"]
+	},
+	"organizeImports": {
+		"enabled": true
+	},
+	"linter": {
+		"enabled": true,
+		"rules": {
+			"recommended": true,
+			"correctness": {
+				"noUnusedVariables": "warn",
+				"noUnusedImports": "warn",
+				"noNewSymbol": "error"
+			},
+			"complexity": { "useLiteralKeys": "off" },
+			"style": {
+				"noNegationElse": "warn",
+				"useBlockStatements": "warn",
+				"useCollapsedElseIf": "warn",
+				"useConsistentArrayType": "warn",
+				"useFilenamingConvention": {
+					"level": "warn",
+					"options": { "requireAscii": true, "filenameCases": ["kebab-case"] }
+				},
+				"useForOf": "warn",
+				"useFragmentSyntax": "warn",
+				"useNamingConvention": "warn",
+				"useNodeAssertStrict": "error",
+				"useShorthandAssign": "warn",
+				"useSingleCaseStatement": "warn"
+			},
+			"suspicious": {
+				"noConsoleLog": "warn",
+				"noEmptyBlockStatements": "warn",
+				"noSkippedTests": "warn"
+			}
+		}
+	},
+	"json": {
+		"parser": {
+			"allowComments": true
+		}
+	}
+}
