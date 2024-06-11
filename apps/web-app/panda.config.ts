@@ -1,8 +1,4 @@
-import {
-	defineConfig,
-	defineGlobalStyles,
-	defineTextStyles,
-} from "@pandacss/dev";
+import { defineConfig, defineTextStyles } from "@pandacss/dev";
 import type { Config } from "@pandacss/dev";
 import * as R from "ramda";
 import { rootThemeAttribute } from "~/components/theme-switcher/constants";
