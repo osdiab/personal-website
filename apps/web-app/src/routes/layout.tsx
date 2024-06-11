@@ -57,7 +57,9 @@ export default component$(() => {
 					})}
 				>
 					<div class={css(pageContentCss, { color: "text.soft" })}>
-						<p>© Omar Diab{date.value ? ", date.value.getFullYear()" : ""}</p>
+						<p>
+							© Omar Diab{date.value ? `, ${date.value.getFullYear()}` : ""}
+						</p>
 					</div>
 				</footer>
 			</main>
