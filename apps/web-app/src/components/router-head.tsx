@@ -1,6 +1,7 @@
 import { useDocumentHead, useLocation } from "@builder.io/qwik-city";
 
 import { component$ } from "@builder.io/qwik";
+import { isNotNil } from "ramda";
 
 /**
  * The RouterHead component is placed inside of the document `<head>` element.
@@ -26,13 +27,25 @@ export const RouterHead = component$(() => {
 			))}
 
 			{head.styles.map((s) => (
-				// biome-ignore lint/security/noDangerouslySetInnerHtml: needed for setting up styles
-				<style key={s.key} {...s.props} dangerouslySetInnerHTML={s.style} />
+				<style
+					key={s.key}
+					{...s.props}
+					// biome-ignore lint/security/noDangerouslySetInnerHtml: needed for setting up styles
+					dangerouslySetInnerHTML={[s.props?.dangerouslySetInnerHTML, s.style]
+						.filter(isNotNil)
+						.join("")}
+				/>
 			))}
 
 			{head.scripts.map((s) => (
-				// biome-ignore lint/security/noDangerouslySetInnerHtml: needed for setting up scripts
-				<script key={s.key} {...s.props} dangerouslySetInnerHTML={s.script} />
+				<script
+					key={s.key}
+					{...s.props}
+					// biome-ignore lint/security/noDangerouslySetInnerHtml: needed for setting up styles
+					dangerouslySetInnerHTML={[s.props?.dangerouslySetInnerHTML, s.script]
+						.filter(isNotNil)
+						.join("")}
+				/>
 			))}
 		</>
 	);
