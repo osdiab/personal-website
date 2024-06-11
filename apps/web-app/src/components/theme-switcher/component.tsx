@@ -66,6 +66,7 @@ export const ThemeSwitcher = component$<ThemeSwitcherProps>(
 										padding: "2",
 										gap: "2",
 										cursor: "pointer",
+										_focusVisible: { outline: "none" },
 									}),
 									{
 										"&[data-highlighted]": {
