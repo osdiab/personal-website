@@ -38,10 +38,10 @@ export default component$(() => {
 				>
 					<div q:slot="body">
 						<p>
-							A global payroll platform to systematize the payroll process from
-							A-Z, across countries, without compromise. Designed with local
-							payroll vendors in mind, to level the playing field with large
-							global firms.
+							A global payroll platform to systematize the payroll process
+							across countries and vendors, from A-Z. Building the product, as
+							well as the engineering team from scratch, and conducted the ISO
+							27001 compliance process from zero to successful audit.
 						</p>
 					</div>
 					<BreezeLogo q:slot="logo" />
@@ -74,7 +74,8 @@ export default component$(() => {
 							The easiest and most efficient way to donate to any U.S.
 							nonprofit. I helped research issues in philanthropy, and built the
 							core of the app. By the time I departed, it was facilitating tens
-							of millions of dollars in donations yearly. Still running!
+							of millions of dollars in donations yearly, and is still running
+							strong.
 						</p>
 					</div>
 					<EveryDotOrgLogo q:slot="logo" />
