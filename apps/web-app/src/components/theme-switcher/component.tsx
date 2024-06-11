@@ -1,18 +1,11 @@
-import {
-	$,
-	component$,
-	useComputed$,
-	useContext,
-	useSignal,
-} from "@builder.io/qwik";
+import { $, component$, useComputed$, useSignal } from "@builder.io/qwik";
 import { Select } from "@qwik-ui/headless";
 import { LuMoon, LuSun, LuSunMoon } from "@qwikest/icons/lucide";
-import jsCookie from "js-cookie";
 import {
 	type ThemeOption,
+	rootThemeAttribute,
 	selectedThemeCookie,
 } from "~/components/theme-switcher/constants";
-import { ThemeContext } from "~/components/theme-switcher/context";
 import { Tooltip } from "~/components/tooltip";
 import { defaultIconCss } from "~/styles/icon";
 import type { CssProp } from "~/utils/css";
@@ -25,16 +18,16 @@ export interface ThemeSwitcherProps {
 }
 export const ThemeSwitcher = component$<ThemeSwitcherProps>(
 	({ css: cssProp }) => {
-		const theme = useContext(ThemeContext);
 		const handleChange = $((selected: string): void => {
 			if (!selected || typeof window === "undefined") {
 				return;
 			}
-			// update the context theme value, causing the root layout to update the
-			// theme by setting an attribute at the top-level
-			// See panda.config.ts for the condition details
-			theme.value = selected as ThemeOption;
-			jsCookie.set(selectedThemeCookie, theme.value);
+			localStorage.setItem(selectedThemeCookie, selected);
+			if (selected === "auto") {
+				document.body.removeAttribute(rootThemeAttribute);
+			} else {
+				document.body.setAttribute(rootThemeAttribute, selected);
+			}
 		});
 
 		const disableTooltip = useSignal(false);
@@ -46,16 +39,12 @@ export const ThemeSwitcher = component$<ThemeSwitcherProps>(
 		});
 
 		return (
-			<Select.Root
-				value={theme.value}
-				onChange$={handleChange}
-				onOpenChange$={handleOpenChange}
-			>
+			<Select.Root onChange$={handleChange} onOpenChange$={handleOpenChange}>
 				<Select.Label class={invisible()}>Theme</Select.Label>
 				<Tooltip open={tooltipOpen}>
 					<div q:slot="content">Select Theme</div>
 					<Select.Trigger q:slot="trigger" class={css(cssProp)}>
-						<ThemeIcon theme={theme.value} />
+						<CurrentThemeIcon />
 						<Select.DisplayValue class={invisible()} />
 					</Select.Trigger>
 				</Tooltip>
@@ -137,3 +126,34 @@ const themeOptionOrderMap: Record<ThemeOption, number> = {
 export const themeOptionsOrdered = objectKeys(themeOptionOrderMap).sort(
 	(a, b) => themeOptionOrderMap[a] - themeOptionOrderMap[b],
 );
+
+const CurrentThemeIcon = component$(() => {
+	return (
+		<>
+			<ThemeIcon
+				css={css.raw({
+					_light: { display: "none" },
+					_dark: { display: "none" },
+					_autoColorTheme: { display: "block" },
+				})}
+				theme={"auto"}
+			/>
+			<ThemeIcon
+				css={css.raw({
+					_dark: { display: "none" },
+					_autoColorTheme: { display: "none" },
+					_light: { display: "block" },
+				})}
+				theme={"light"}
+			/>
+			<ThemeIcon
+				css={css.raw({
+					_light: { display: "none" },
+					_autoColorTheme: { display: "none" },
+					_dark: { display: "block" },
+				})}
+				theme={"dark"}
+			/>
+		</>
+	);
+});

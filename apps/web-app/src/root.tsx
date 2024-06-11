@@ -4,6 +4,11 @@ import {
 	RouterOutlet,
 	ServiceWorkerRegister,
 } from "@builder.io/qwik-city";
+import {
+	rootThemeAttribute,
+	selectedThemeCookie,
+} from "~/components/theme-switcher/constants";
+import { css } from "~gen/pandacss/css";
 import { RouterHead } from "./components/router-head";
 import "./global.css";
 
@@ -27,7 +32,21 @@ export default component$(() => {
 				<RouterHead />
 				<ServiceWorkerRegister />
 			</head>
-			<body lang="en">
+			<body
+				lang="en"
+				class={css({ background: "background.page", color: "text.body" })}
+			>
+				<script
+					// biome-ignore lint/security/noDangerouslySetInnerHtml: needed before page is rendered to set theme on client properly
+					dangerouslySetInnerHTML={`
+(() => {
+	const theme = localStorage.getItem("${selectedThemeCookie}");
+	if (["light", "dark"].includes(theme)) {
+		document.body.setAttribute("${rootThemeAttribute}", theme);
+	}
+})()
+					`}
+				/>
 				<RouterOutlet />
 			</body>
 		</QwikCityProvider>
