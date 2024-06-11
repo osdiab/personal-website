@@ -1,4 +1,4 @@
-import { $, component$, useComputed$, useSignal } from "@builder.io/qwik";
+import { $, component$, useSignal } from "@builder.io/qwik";
 import { Select } from "@qwik-ui/headless";
 import { LuMoon, LuSun, LuSunMoon } from "@qwikest/icons/lucide";
 import {
@@ -6,7 +6,6 @@ import {
 	rootThemeAttribute,
 	selectedThemeCookie,
 } from "~/components/theme-switcher/constants";
-import { Tooltip } from "~/components/tooltip";
 import { defaultIconCss } from "~/styles/icon";
 import type { CssProp } from "~/utils/css";
 import { objectKeys } from "~/utils/types";
@@ -31,9 +30,6 @@ export const ThemeSwitcher = component$<ThemeSwitcherProps>(
 		});
 
 		const disableTooltip = useSignal(false);
-		const tooltipOpen = useComputed$(() =>
-			disableTooltip.value ? false : undefined,
-		);
 		const handleOpenChange = $((open: boolean) => {
 			disableTooltip.value = open;
 		});
@@ -41,13 +37,10 @@ export const ThemeSwitcher = component$<ThemeSwitcherProps>(
 		return (
 			<Select.Root onChange$={handleChange} onOpenChange$={handleOpenChange}>
 				<Select.Label class={invisible()}>Theme</Select.Label>
-				<Tooltip open={tooltipOpen}>
-					<div q:slot="content">Select Theme</div>
-					<Select.Trigger q:slot="trigger" class={css(cssProp)}>
-						<CurrentThemeIcon />
-						<Select.DisplayValue class={invisible()} />
-					</Select.Trigger>
-				</Tooltip>
+				<Select.Trigger class={css(cssProp)}>
+					<CurrentThemeIcon />
+					<Select.DisplayValue class={invisible()} />
+				</Select.Trigger>
 				<Select.Popover gutter={8} class={css({ background: "transparent" })}>
 					<Select.Listbox
 						class={css({
@@ -66,7 +59,6 @@ export const ThemeSwitcher = component$<ThemeSwitcherProps>(
 										padding: "2",
 										gap: "2",
 										cursor: "pointer",
-										_focusVisible: { outline: "none" },
 									}),
 									{
 										"&[data-highlighted]": {
