@@ -48,19 +48,15 @@ export const ThemeSwitcher = component$<ThemeSwitcherProps>(
 						<Select.DisplayValue class={invisible()} />
 					</Select.Trigger>
 				</Tooltip>
-				<Select.Popover
-					gutter={8}
-					class={css({
-						background: "background.tooltip",
-						borderWidth: "1px",
-						borderStyle: "solid",
-						borderColor: "border.soft",
-						borderRadius: "sm",
-						padding: "4",
-						color: "text.body",
-					})}
-				>
-					<Select.Listbox>
+				<Select.Popover gutter={8} class={css({ background: "transparent" })}>
+					<Select.Listbox
+						class={css({
+							background: "background.tooltip",
+							border: "1px solid token(colors.border.soft)",
+							borderRadius: "sm",
+							color: "text.body",
+						})}
+					>
 						{themeOptionsOrdered.map((themeOption) => (
 							<Select.Item
 								key={themeOption}
