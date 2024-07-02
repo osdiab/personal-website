@@ -1,7 +1,14 @@
 module.exports = {
 	root: true,
 	env: { es2021: true, node: true },
-	ignorePatterns: [".eslintrc.cjs", "generated/", "build/", "gen/"],
+	ignorePatterns: [
+		".eslintrc.cjs",
+		"generated/",
+		"build/",
+		"gen/",
+		"dist/",
+		"apps/web-app/server/",
+	],
 	rules: {},
 	overrides: [
 		{
