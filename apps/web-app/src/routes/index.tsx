@@ -38,10 +38,11 @@ export default component$(() => {
 				>
 					<div q:slot="body">
 						<p>
-							A global payroll platform to systematize the payroll process
-							across countries and vendors, from A-Z. Building the product, as
-							well as the engineering team from scratch, and conducted the ISO
-							27001 compliance process from zero to successful audit.
+							A global payroll platform that systematizes the payroll process
+							across countries and vendors, from A-Z. I'm designing the product
+							and building the engineering team from scratch; facilitating
+							client leads; and managing our compliance, pentests and audits for
+							ISO 27001, GDPR and beyond.
 						</p>
 					</div>
 					<BreezeLogo q:slot="logo" />
@@ -49,14 +50,14 @@ export default component$(() => {
 				<JobDescription
 					projectName="Spinach"
 					jobTitle="Cofounder, Head of Engineering"
-					timePeriod="Since Born"
+					timePeriod="2021-2023"
 					jobHref="https://gotofu.com"
 				>
 					<div q:slot="body">
 						<p>
-							A whitelabel platform that powers the operations of major Employer
-							of Record global payroll companies, from sales pipeline to payroll
-							to invoicing. I designed the initial product concept, and built a
+							A whitelabel platform that powers the operations of major global
+							Employer of Record companies, from sales pipeline to payroll to
+							invoicing. I designed the initial product concept, and built a
 							team that implemented and successfully deployed it at scale at
 							multiple companies. Acquired 2023.
 						</p>
@@ -72,10 +73,9 @@ export default component$(() => {
 					<div q:slot="body">
 						<p>
 							The easiest and most efficient way to donate to any U.S.
-							nonprofit. I helped research issues in philanthropy, and built the
-							core of the app. By the time I departed, it was facilitating tens
-							of millions of dollars in donations yearly, and is still running
-							strong.
+							nonprofit. I researched opportunities to improve philanthropy and
+							built the core of the app. By the time I departed, it enabled tens
+							of millions of dollars in donations yearly, and continues to grow.
 						</p>
 					</div>
 					<EveryDotOrgLogo q:slot="logo" />
@@ -87,7 +87,8 @@ export default component$(() => {
 					jobHref="https://clever.com"
 				>
 					<p q:slot="body">
-						Single sign-on and simple APIs to query dived student databases. I{" "}
+						Single sign-on and simple APIs to query data across fragmented
+						student databases in the USA. I{" "}
 						<a
 							href="https://www.clever.com/products/badges"
 							target="_blank"
@@ -95,9 +96,16 @@ export default component$(() => {
 						>
 							implemented Clever Badges
 						</a>
-						, allowing young children to access education tech at school.
-						Majority U.S. public school market share and powers millions of
-						student logins daily. Acquired 2021.
+						, enabling young children to access education tech at school. We won
+						the majority of the U.S. public school market, and Clever continues
+						to power millions of student logins daily.{" "}
+						<a
+							href="https://www.edsurge.com/news/2021-05-06-kahoot-acquires-clever-for-500m-hoping-to-expand-its-presence-in-the-u-s"
+							target="_blank"
+							rel="noreferrer"
+						>
+							Acquired 2021.
+						</a>
 					</p>
 					<CleverLogo q:slot="logo" />
 				</JobDescription>
