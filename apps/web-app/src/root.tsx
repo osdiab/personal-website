@@ -4,12 +4,14 @@ import {
 	RouterOutlet,
 	ServiceWorkerRegister,
 } from "@builder.io/qwik-city";
+
+import { RouterHead } from "~/components/router-head";
 import {
 	rootThemeAttribute,
 	selectedThemeCookie,
 } from "~/components/theme-switcher/constants";
 import { css } from "~gen/pandacss/css";
-import { RouterHead } from "./components/router-head";
+
 import "./global.css";
 
 export default component$(() => {

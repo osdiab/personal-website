@@ -1,5 +1,4 @@
 import {
-	$,
 	type PropsOf,
 	type Signal,
 	Slot,
@@ -8,6 +7,7 @@ import {
 	useSignal,
 	useTask$,
 } from "@builder.io/qwik";
+import { isServer } from "@builder.io/qwik/build";
 import { Popover, usePopover } from "@qwik-ui/headless";
 import type { CssProp } from "~/utils/css";
 import { css } from "~gen/pandacss/css";
@@ -43,39 +43,24 @@ export const Tooltip = component$<TooltipProps>(
 		open,
 		...rest
 	}) => {
-		const generatedId = useId();
-		const popoverId = id ?? generatedId;
 		const anchorRef = useSignal<HTMLElement | undefined>();
-		const { showPopover, hidePopover } = usePopover(popoverId);
-
 		const focused = useSignal(false);
 		const hovered = useSignal(false);
 
-		const onHover = $(() => {
-			hovered.value = true;
-		});
-		const onHoverOut = $(() => {
-			hovered.value = false;
-		});
-		const onFocus = $(() => {
-			focused.value = true;
-		});
-		const onBlur = $(() => {
-			focused.value = false;
-		});
+		const generatedId = useId();
+		const popoverId = id ?? generatedId;
+		const { showPopover, hidePopover } = usePopover(popoverId);
 
 		useTask$(({ track }) => {
-			track(focused);
-			track(hovered);
+			track(() => focused.value);
+			track(() => hovered.value);
 			track(() => open?.value);
 
-			if (typeof open?.value === "boolean") {
-				if (open.value) {
-					showPopover();
-				} else {
-					hidePopover();
-				}
-			} else if (focused.value || hovered.value) {
+			if (isServer) {
+				return;
+			}
+			const shouldShowPopover = open?.value ?? (focused.value || hovered.value);
+			if (shouldShowPopover) {
 				showPopover();
 			} else {
 				hidePopover();
@@ -89,12 +74,23 @@ export const Tooltip = component$<TooltipProps>(
 				id={popoverId}
 				bind:anchor={anchorRef}
 				manual
-				onFocusIn$={onFocus}
-				onFocusOut$={onBlur}
-				onMouseOver$={onHover}
-				onMouseOut$={onHoverOut}
 			>
-				<div ref={anchorRef} class={css(cssProp)}>
+				<div
+					ref={anchorRef}
+					class={css(cssProp)}
+					onFocusIn$={() => {
+						focused.value = true;
+					}}
+					onFocusOut$={() => {
+						focused.value = false;
+					}}
+					onMouseOver$={() => {
+						hovered.value = true;
+					}}
+					onMouseOut$={() => {
+						hovered.value = false;
+					}}
+				>
 					<Slot name="trigger" />
 				</div>
 				<Popover.Panel
