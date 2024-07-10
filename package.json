@@ -7,7 +7,7 @@
 		"lint:eslint:base": "eslint \"./**/*.{ts,js,tsx,jsx}\"",
 		"lint:eslint:fix": "pnpm lint:eslint:base --fix",
 		"lint:biome:base": "biome lint .",
-		"lint:biome:fix": "biome check --apply-unsafe .",
+		"lint:biome:fix": "biome check --write --unsafe .",
 		"lint": "pnpm run '/^lint:.*:base$/'",
 		"lint:fix": "pnpm run --workspace-concurrency=1 '/^lint:.*:fix$/'",
 		"format": "pnpm format:check --write",
