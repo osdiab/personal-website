@@ -17,7 +17,7 @@
     "build.preview": "vite build --ssr src/entry.preview.tsx",
     "build.server": "vite build -c adapters/cloudflare-pages/vite.config.ts",
     "build.types": "tsc --incremental --noEmit",
-    "deploy": "wrangler pages deploy ./dist",
+    "deploy": "pnpm build && wrangler pages deploy ./dist",
     "dev:pandacss": "panda --watch",
     "dev.normal:server": "vite --mode ssr",
     "dev.debug:server": "NODE_OPTIONS=\"--inspect-brk\" vite --mode ssr --force",
