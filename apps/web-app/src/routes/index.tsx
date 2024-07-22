@@ -175,11 +175,11 @@ const JobDescription = component$<JobDescriptionProps>(
 );
 
 export const head: DocumentHead = {
-	title: "Welcome to Qwik",
+	title: "Omar Diab",
 	meta: [
 		{
 			name: "description",
-			content: "Qwik site description",
+			content: "Omar Diab's personal website",
 		},
 	],
 };
