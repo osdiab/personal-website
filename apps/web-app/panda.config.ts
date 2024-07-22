@@ -1,40 +1,11 @@
 import { defineConfig, defineTextStyles } from "@pandacss/dev";
 import type { Config } from "@pandacss/dev";
-import * as R from "ramda";
-import { rootThemeAttribute } from "~/components/theme-switcher/constants";
+import {
+	colorSchemeAttribute,
+	rootThemeAttribute,
+} from "~/components/theme-switcher/constants";
 
 type Theme = Config["theme"];
-
-type NestedObject = {
-	[key: string]: string | NestedObject;
-};
-
-/**
- * Duplicates the _light and _dark values in the theme object to _osLight and
- * _osDark (recursively) so that the prefers-color-scheme preference behavs as
- * expected
- */
-function addOsColorThemes(theme: NestedObject): NestedObject {
-	if (!theme || typeof theme !== "object") {
-		return theme;
-	}
-	const entries = Object.entries(theme);
-	const additionalEntries = [
-		"_light" in theme && typeof theme["_light"] === "string"
-			? ["_osLight", theme["_light"]]
-			: null,
-		"_dark" in theme && typeof theme["_dark"] === "string"
-			? ["_osDark", theme["_dark"]]
-			: null,
-	].filter(R.isNotNil);
-	return Object.fromEntries([
-		...additionalEntries,
-		...entries.map(([key, value]) => [
-			key,
-			addOsColorThemes(value as NestedObject),
-		]),
-	]);
-}
 
 const brandColor = "#F6490D";
 
@@ -145,25 +116,28 @@ export default defineConfig({
 
 	conditions: {
 		extend: {
-			light: `[${rootThemeAttribute}=light] &`,
-			dark: `[${rootThemeAttribute}=dark] &`,
-			osLight: [
-				`:not([${rootThemeAttribute}]) &`,
-				"@media (prefers-color-scheme: light)",
-			],
-			osDark: [
-				`:not([${rootThemeAttribute}]) &`,
-				"@media (prefers-color-scheme: dark)",
-			],
-			autoColorTheme: `body:not([${rootThemeAttribute}]) &`,
+			light: `[${colorSchemeAttribute}=light] &`,
+			dark: `[${colorSchemeAttribute}=dark] &`,
+			lightThemeEnabled: `[${rootThemeAttribute}=light] &`,
+			darkThemeEnabled: `[${rootThemeAttribute}=dark] &`,
+			autoThemeEnabled: `[${rootThemeAttribute}=auto] &`,
 		},
 	},
 
 	// Useful for theme customization
-	theme: addOsColorThemes(theme as NestedObject) as Theme,
+	theme,
 
 	patterns: {
 		extend: {
+			themeTransition: {
+				description: "Transition to apply when the theme changes",
+				transform() {
+					return {
+						transitionProperty: "background-color, border-color, color",
+						transitionDuration: "slow",
+					};
+				},
+			},
 			invisible: {
 				description: "Visually hidden but accessible to screen readers",
 				transform() {

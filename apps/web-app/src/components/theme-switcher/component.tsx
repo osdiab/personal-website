@@ -3,6 +3,7 @@ import { Select } from "@qwik-ui/headless";
 import { LuMoon, LuSun, LuSunMoon } from "@qwikest/icons/lucide";
 import {
 	type ThemeOption,
+	colorSchemeAttribute,
 	rootThemeAttribute,
 	selectedThemeCookie,
 } from "~/components/theme-switcher/constants";
@@ -23,10 +24,17 @@ export const ThemeSwitcher = component$<ThemeSwitcherProps>(
 				return;
 			}
 			localStorage.setItem(selectedThemeCookie, selected);
+			document.body.setAttribute(rootThemeAttribute, selected);
+
 			if (selected === "auto") {
-				document.body.removeAttribute(rootThemeAttribute);
+				document.body.setAttribute(
+					colorSchemeAttribute,
+					window.matchMedia("(prefers-color-scheme: dark)").matches
+						? "dark"
+						: "light",
+				);
 			} else {
-				document.body.setAttribute(rootThemeAttribute, selected);
+				document.body.setAttribute(colorSchemeAttribute, selected);
 			}
 		});
 
@@ -129,25 +137,22 @@ const CurrentThemeIcon = component$(() => {
 		<>
 			<ThemeIcon
 				css={css.raw({
-					_light: { display: "none" },
-					_dark: { display: "none" },
-					_autoColorTheme: { display: "block" },
+					display: "none",
+					_autoThemeEnabled: { display: "block" },
 				})}
 				theme={"auto"}
 			/>
 			<ThemeIcon
 				css={css.raw({
-					_dark: { display: "none" },
-					_autoColorTheme: { display: "none" },
-					_light: { display: "block" },
+					display: "none",
+					_lightThemeEnabled: { display: "block" },
 				})}
 				theme={"light"}
 			/>
 			<ThemeIcon
 				css={css.raw({
-					_light: { display: "none" },
-					_autoColorTheme: { display: "none" },
-					_dark: { display: "block" },
+					display: "none",
+					_darkThemeEnabled: { display: "block" },
 				})}
 				theme={"dark"}
 			/>

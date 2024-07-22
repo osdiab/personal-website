@@ -7,12 +7,14 @@ import {
 
 import { RouterHead } from "~/components/router-head";
 import {
+	colorSchemeAttribute,
 	rootThemeAttribute,
 	selectedThemeCookie,
 } from "~/components/theme-switcher/constants";
 import { css } from "~gen/pandacss/css";
 
 import "./global.css";
+import { themeTransition } from "~gen/pandacss/patterns";
 
 export default component$(() => {
 	/**
@@ -36,7 +38,13 @@ export default component$(() => {
 			</head>
 			<body
 				lang="en"
-				class={css({ background: "background.page", color: "text.body" })}
+				class={css(
+					{
+						background: "background.page",
+						color: "text.body",
+					},
+					themeTransition.raw(),
+				)}
 			>
 				<script
 					// biome-ignore lint/security/noDangerouslySetInnerHtml: needed before page is rendered to set theme on client properly
@@ -45,7 +53,21 @@ export default component$(() => {
 	const theme = localStorage.getItem("${selectedThemeCookie}");
 	if (["light", "dark"].includes(theme)) {
 		document.body.setAttribute("${rootThemeAttribute}", theme);
-	}
+		document.body.setAttribute("${colorSchemeAttribute}", theme);
+	} else {
+		document.body.setAttribute("${rootThemeAttribute}", "auto");
+		const prefersColorSchemeMatch = window.matchMedia('(prefers-color-scheme: dark)');
+		document.body.setAttribute(
+			"${colorSchemeAttribute}",
+			prefersColorSchemeMatch.matches ? "dark" : "light"
+		);
+		prefersColorSchemeMatch.addEventListener("change", event => {
+		  const newPreference = event.matches ? "dark" : "light";
+			if (document.body.getAttribute("${rootThemeAttribute}") === "auto") {
+				document.body.setAttribute("${colorSchemeAttribute}", newPreference);
+			}
+		});
+	 }
 })()
 					`}
 				/>

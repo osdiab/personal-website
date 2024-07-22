@@ -8,7 +8,7 @@ import { defaultIconCss } from "~/styles/icon";
 import { pageContentCss } from "~/styles/page";
 import { hyperlinkBaseCss, interactiveTransitionCss } from "~/styles/prose";
 import { css } from "~gen/pandacss/css";
-import { hstack } from "~gen/pandacss/patterns";
+import { hstack, themeTransition } from "~gen/pandacss/patterns";
 
 export const Header = component$(() => {
 	const scrolledY = useContext(pageScrolledYContext);
@@ -20,6 +20,7 @@ export const Header = component$(() => {
 				insetBlockStart: "0",
 				background: "background.page",
 			},
+			themeTransition.raw(),
 			scrolledY.value && {
 				borderBlockEnd: "1px solid token(colors.border.soft)",
 			},
