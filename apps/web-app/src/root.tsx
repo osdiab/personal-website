@@ -27,7 +27,7 @@ export default component$(() => {
 	return (
 		<QwikCityProvider>
 			<head>
-				<meta charSet="utf-8" />
+				<meta charset="utf-8" />
 				{/* https://evilmartians.com/chronicles/how-to-favicon-in-2021-six-files-that-fit-most-needs */}
 				<link rel="manifest" href="/manifest.webmanifest" />
 				<link rel="icon" href="/favicon.ico" sizes="32x32" />
