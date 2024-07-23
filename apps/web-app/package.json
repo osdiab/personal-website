@@ -12,24 +12,29 @@
   "trustedDependencies-annotation": "Needed for bun to allow running install scripts",
   "type": "module",
   "scripts": {
-    "build": "qwik build",
-    "build.client": "vite build",
+    "build": "pnpm i18n-extract && qwik build",
+    "build.client": "vite build && npm run i18n-translate",
     "build.preview": "vite build --ssr src/entry.preview.tsx",
     "build.server": "vite build -c adapters/cloudflare-pages/vite.config.ts",
     "build.types": "tsc --incremental --noEmit",
     "deploy": "pnpm build && wrangler pages deploy ./dist",
-    "dev:pandacss": "panda --watch",
-    "dev.normal:server": "vite --mode ssr",
-    "dev.debug:server": "NODE_OPTIONS=\"--inspect-brk\" vite --mode ssr --force",
     "dev": "pnpm run '/^(dev:.*|dev.normal:server)/'",
     "dev.debug": "pnpm run '/^(dev:.*|dev.debug:server)/'",
+    "dev.debug:server": "NODE_OPTIONS=\"--inspect-brk\" vite --mode ssr --force",
+    "dev.normal:server": "vite --mode ssr",
+    "dev:pandacss": "panda --watch",
+    "i18n-extract": "node_modules/.bin/localize-extract -s \"dist/build/*.js\" -f json -o src/locales/message.en.json",
+    "i18n-translate": "node_modules/.bin/localize-translate -s \"*.js\" -t src/locales/message.*.json -o dist/build/{{LOCALE}} -r ./dist/build",
     "prebuild.pandacss": "panda codegen --silent",
+    "prei18n-extract": "vite build",
     "preview": "qwik build preview && vite preview --open",
     "serve": "wrangler pages dev ./dist --compatibility-flags=nodejs_als",
     "start": "vite --open --mode ssr",
     "qwik": "qwik"
   },
   "devDependencies": {
+    "@angular/compiler": "^16.2.2",
+    "@angular/compiler-cli": "^16.2.2",
     "@builder.io/qwik": "^1.7.1",
     "@builder.io/qwik-city": "^1.7.0",
     "@builder.io/vite-plugin-macro": "~0.0.7",
@@ -49,5 +54,8 @@
     "vite": "^5.3.3",
     "vite-tsconfig-paths": "^4.2.1",
     "wrangler": "^3.63.1"
+  },
+  "dependencies": {
+    "@angular/localize": "^16.2.2"
   }
 }
